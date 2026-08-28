@@ -2,14 +2,14 @@
 
 A memecoin landing page whose ticker is the Chinese word for "memecoin".
 
-Baidu Baike's entry for 土狗币 opens: 「土狗币，中文名亦作『MeMe币』」 — *tugou coin, also
+Baidu Baike's entry for 土狗币 opens: “土狗币，中文名亦作‘MeMe币’” — *tugou coin, also
 rendered in Chinese as MeMe coin*. The Chinese internet finished translating "memecoin" years
 ago, and what it landed on is not a loanword: 土狗 is a village mongrel, the dog at the end of
 the road that everybody knows. So the coin is named after its own category. That is the joke,
 and the page says so out loud in [the honest section](#the-honest-section).
 
 The visual language is **土酷 (tǔkù)**, phonetically **"Too Cool"** — the term popularised
-around 2016 by the artist working as 「养鸭」 in a film called *Too Cool To Be True*. The stress
+around 2016 by the artist working as 养鸭 in a film called *Too Cool To Be True*. The stress
 is on **TOO**, not on 土: not "slightly tacky" but *cool taken all the way*. Its sincere layer is
 small-town and older-generation taste — hyper-saturated landscape wallpaper pasted floor to
 ceiling, gold calligraphy boards, and the blinged-out 早安 image an elder sends to everyone at
@@ -38,6 +38,8 @@ i18n dictionary lives in `script.js` as a plain object rather than in a fetched 
 | `script.js` | i18n dictionary + engine, the almanac, and the 早安 card generator |
 | `DESIGN.md` | The design contract — read this before changing anything visual |
 | `content.json` | A larger copy bank than the page currently uses; source material for new sections |
+| `assets/proto-*.html` | Standalone prototypes for the landscape and the type treatments, kept because they are the fastest way to iterate on either in isolation |
+| `test/` | Playwright checks — not shipped, not a dependency of the page. See `test/README.md` |
 
 > **On `DESIGN.md` and `content.json`:** both were written against a *larger* version of this page
 > — one with a nav, a mascot, an LED price strip, a plaque wall and a community section. They
@@ -47,8 +49,6 @@ i18n dictionary lives in `script.js` as a plain object rather than in a fetched 
 > are a superset. Where they disagree on **principles** — the cultural contract, the elevation
 > philosophy, the antipatterns, the register rules — the documents win, and those are the parts
 > worth reading. Treat both as a backlog and a rulebook rather than a spec of the current page.
-| `assets/proto-*.html` | Standalone prototypes for the landscape and the type treatments, kept because they are the fastest way to iterate on either in isolation |
-| `test/` | Playwright checks — not shipped, not a dependency of the page. See `test/README.md` |
 
 ## How it is built
 
