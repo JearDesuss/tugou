@@ -812,9 +812,21 @@ function loadCanvasFonts() {
     ['400 40px "Noto Sans SC"', '致'],
     ['900 40px "Noto Serif SC"', '土狗']
   ];
-  return Promise.all(
-    specs.map(([spec, text]) => document.fonts.load(spec, text).catch(() => {}))
-  ).catch(() => {});
+  /* Wait for `ready` FIRST, then ask for each face by name. `ready` on its own is
+     not enough — it resolves once the fonts used in layout have settled, and a
+     face the page only draws to canvas is never referenced in layout, so nothing
+     would ever fetch it. But asking for a face before the cross-origin
+     stylesheet has registered its @font-face rules races that stylesheet, and
+     the resulting request intermittently goes out without CORS mode and is
+     rejected by fonts.gstatic.com. Sequencing them gets both properties. */
+  const ready = document.fonts.ready
+    ? document.fonts.ready.catch(() => {})
+    : Promise.resolve();
+  return ready
+    .then(() => Promise.all(
+      specs.map(([spec, text]) => document.fonts.load(spec, text).catch(() => {}))
+    ))
+    .catch(() => {});
 }
 
 if (document.readyState === 'loading') {
