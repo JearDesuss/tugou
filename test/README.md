@@ -8,6 +8,7 @@ npm i playwright        # browsers already present? add PLAYWRIGHT_SKIP_BROWSER_
 node verify.mjs      "../index.html" ./out
 node subset-check.mjs "../index.html"
 node font-cost.mjs   "../index.html"
+node live-check.mjs  "https://tugoubi.vercel.app"
 ```
 
 **`verify.mjs`** — both languages: no JS errors, no untranslated keys, no empty
@@ -30,3 +31,12 @@ parameter in `index.html` and the sets at the top of this script together.
 per language. The browser fetches only the `unicode-range` subsets it needs, so a
 family's published size is a ceiling and not a page cost; measure rather than
 guess. Current: **813 KB zh / 499 KB en.**
+
+**`live-check.mjs`** — the same page over HTTPS rather than `file://`, which is
+the only way to catch things that cannot happen locally. It found one: calling
+`document.fonts.load()` before the cross-origin Google stylesheet had registered
+its `@font-face` rules raced that stylesheet, and the font request intermittently
+went out without CORS mode and was rejected by fonts.gstatic.com. It asserts all
+four faces actually reach `status: "loaded"` in both languages, so a silent
+fallback fails the run. **Run it after every deploy** — it reproduced roughly one
+time in two, so a single green run is not evidence.

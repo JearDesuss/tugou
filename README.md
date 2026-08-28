@@ -17,6 +17,8 @@ six in the morning as a genuine blessing.
 
 The source was [this reel](https://www.instagram.com/reel/DcdbF-JueeA/) by @fakeplasticbrands.
 
+**Live: <https://tugoubi.vercel.app>**
+
 ## Running it
 
 Static. No build, no dependencies, no server required.
