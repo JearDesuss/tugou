@@ -415,21 +415,44 @@ html[data-lang="en"] .langbtn__zh { opacity: .45; }
 /* ============================================================================
    SECTIONS
    ========================================================================== */
-.section { padding-block: var(--sec); position: relative; }
+/* ============================================================================
+   SCENERY
+   The wallpaper in a 土酷 room covers the whole wall, floor to ceiling, behind
+   the furniture. Scenery only in the hero was the wrong read — so every themed
+   section carries its own band, and the content sits on top of it in framed,
+   opaque cards the way objects sit against a papered wall.
+
+   `#truth` is the exception and stays bare, because that is the section where
+   every effect drops.
+   ========================================================================== */
+.artdefs { position: absolute; width: 0; height: 0; overflow: hidden; }
+
+.section { padding-block: var(--sec); position: relative; overflow: hidden; }
+
+/* The band sits along the BOTTOM rather than filling the section. A 3.8:1 scene
+   stretched to cover a 1250px-tall section has to scale ~4x to cover, and you
+   end up looking at one enormous hillside with every readable detail cropped
+   away. Anchoring it as a horizon strip keeps the art at its intended scale;
+   the section's own sky gradient carries the space above it, which is also how
+   the wall it imitates actually works. */
+.section__scene {
+  position: absolute; left: 0; right: 0; bottom: 0;
+  height: clamp(240px, 42%, 440px);
+  z-index: 0; pointer-events: none;
+}
+.section__scene svg {
+  width: 100%; height: 100%; display: block;
+  /* Same "enhance" pass as the hero, so a band and the hero read as one room. */
+  filter: saturate(1.3) contrast(1.1);
+}
+/* Content rides above the scenery. */
+.section > .wrap { position: relative; z-index: 1; }
 .section > .wrap > .wordart { display: block; margin-inline: auto; }
-.section--paper { background: var(--xuan); }
-.section--jade  {
-  background:
-    repeating-linear-gradient(45deg, rgba(255,255,255,.06) 0 14px, transparent 14px 28px),
-    linear-gradient(var(--fei), #0a93b8);
-  color: var(--xue);
-}
-.section--red {
-  background:
-    repeating-linear-gradient(-45deg, rgba(0,0,0,.05) 0 14px, transparent 14px 28px),
-    linear-gradient(var(--zhu), var(--zhu-d));
-  color: var(--xue);
-}
+/* Sky above the horizon band. Each themed section is the upper half of one
+   continuous picture, so these have to hand off to the top of their band. */
+.section--paper { background: linear-gradient(#1e93da, #79cbf3 45%, #c8ecff 100%); }
+.section--jade  { background: linear-gradient(#1580c4, #57b8e8 45%, #b6e6f6 100%); }
+.section--red   { background: linear-gradient(#5c1470, #8e2bb0 30%, #e0426a 72%, #ff8b3d 100%); color: var(--xue); }
 .section--plain { background: var(--mi); }
 .section--jade .sub, .section--red .sub { /* the blue box holds its own on any ground */ }
 
@@ -461,14 +484,28 @@ html[data-lang="en"] .langbtn__zh { opacity: .45; }
 .dict__body { font-size: 18px; }
 .dict__src { margin-top: var(--gap); font-size: 15px; color: var(--tan); }
 
+/* Loose text over scenery is the one thing that stops being legible, so the
+   small prose that is not already inside a card gets its own chip. Opaque, hard
+   keyline, hard shadow — the same object as everything else on the page, just
+   small. */
+.chip {
+  display: inline-block;
+  padding: 10px 18px;
+  background: var(--xue);
+  border: 2px solid var(--mo);
+  border-radius: var(--r-1);
+  box-shadow: var(--lift-1);
+  color: var(--tan);
+}
 .credit {
-  margin-top: var(--sec); text-align: center;
-  font-size: 14px; color: var(--tao-n);
+  display: block; width: fit-content;
+  margin: var(--sec) auto 0; text-align: center;
+  font-size: 14px;
 }
 .warning {
+  display: block; width: fit-content;
   max-width: 640px; margin: var(--pad) auto 0;
   text-align: center; font-size: 16px;
-  color: var(--xue);
 }
 
 /* ---- Cards ---- */
@@ -732,6 +769,8 @@ html[data-lang="en"] .langbtn__zh { opacity: .45; }
   .hero__scene svg animateTransform,
   .hero__scene svg animateMotion { display: none; }
 
-  /* The koi and cranes stop where they are; the sparkles stay lit. */
-  .hero__scene svg [fill="#ffffff"] > path { opacity: 1 !important; }
+  /* The koi and cranes stop where they are; the sparkles stay lit. Matched on a
+     class, not on a fill value — an attribute selector here broke silently the
+     moment the artwork was rewritten with #fff instead of #ffffff. */
+  .sparks path { opacity: 1 !important; }
 }

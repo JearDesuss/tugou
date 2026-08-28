@@ -54,12 +54,31 @@ i18n dictionary lives in `script.js` as a plain object rather than in a fetched 
 
 ## How it is built
 
-**No images.** Every pixel is CSS, SVG or canvas. The hero landscape is one inline SVG, and the
-thing that makes it read as a photo-collage rather than flat vector art is `feTurbulence` +
-`feDisplacementMap` on every organic mass — foliage, rock, falling water and the lake all get
-their edges broken by fractal noise. Without it the same geometry reads as Corporate Memphis.
-The whole SVG then goes through `filter: saturate(1.45) contrast(1.12)`, which is the "enhance"
-button every one of these wallpapers has been through.
+**No images.** Every pixel is CSS, SVG or canvas.
+
+The scenery is **drawn geometry, not filter output** — and that is a correction. The first version
+made every organic mass by taking a smooth ellipse and running it through `feDisplacementMap` at
+`scale="34"`. That does produce an irregular edge, but filter output is rasterised into a buffer
+and then scaled to the viewport, so a full-bleed hero came out visibly soft: an airbrushed green
+blob where the reference has crisp, dense canopy. Now the shapes are drawn — canopy is clusters of
+overlapping circles, pines are hard triangular tiers, waterfalls are flat bodies with hard stripes
+— and noise survives only as a light edge-roughening pass at `scale="5"`–`7`, which breaks the
+regularity without dissolving it.
+
+Every filter also carries **`color-interpolation-filters="sRGB"`**. The SVG default is `linearRGB`,
+which visibly desaturates and flattens anything filtered; that one attribute is most of the
+difference in punch. The whole scene then goes through `filter: saturate(1.35) contrast(1.14)`,
+which is the "enhance" button every one of these wallpapers has been through.
+
+**Scenery runs the length of the page, not just the hero.** 土酷 wallpaper covers the whole wall,
+so five sections carry their own horizon band and the content sits on top in framed, opaque cards.
+Each band is anchored along the *bottom* of its section rather than filling it: a 3.8:1 scene
+stretched to cover a 1250px-tall section has to scale about 4× to do it, and you end up looking at
+one enormous hillside with every readable detail cropped away. The section's own sky gradient
+carries the space above the band, which is also how the wall it imitates actually works. All the
+scenes share one hidden `<svg>` of defs, since `url(#id)` resolves document-wide.
+
+`#truth` has no scenery, because that is the section where every effect drops.
 
 **Six chromatics, three radii, one elevation philosophy.** The house design method preaches
 accent scarcity; 土酷 is the opposite of scarcity. The resolution is to keep the *discipline* and

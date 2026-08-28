@@ -123,7 +123,7 @@ console.log('\n[prefers-reduced-motion]');
   await p.goto(url, { waitUntil: 'networkidle' });
   await p.waitForTimeout(2000);
   const vis = await p.evaluate(() => {
-    const stars = document.querySelectorAll('.hero__scene svg g[fill="#ffffff"] > path');
+    const stars = document.querySelectorAll('.sparks path');
     let lit = 0;
     stars.forEach(s => { if (parseFloat(getComputedStyle(s).opacity) > 0.5) lit++; });
     return { total: stars.length, lit };
