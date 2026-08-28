@@ -16,7 +16,16 @@
      as much as asking for three. Weight on this page comes from switching
      family (Noto Serif SC 900 / ZCOOL KuaiLe), never from asking Noto Sans SC
      for a bold it would have to ship a variable font to provide. -->
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400&family=Noto+Serif+SC:wght@900&family=ZCOOL+KuaiLe&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400&family=ZCOOL+KuaiLe&display=swap" rel="stylesheet">
+<!-- Heavy serif, subset to 正宗土狗币宜忌一二三四 + digits — 3,760 bytes instead of
+     the 499 KB the full family actually pulled on the Chinese view, measured.
+     This face is a REGISTER, not a weight: it is only ever the seal, the
+     certificate crest, the 宜/忌 marks, the almanac day, the step numerals and
+     the dictionary headword. Every one of those strings is hardcoded in the
+     markup and never translated, which is what makes subsetting safe here.
+     Do not point anything translatable at it — a string outside this set
+     renders in the fallback with no error. -->
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@900&text=%E6%AD%A3%E5%AE%97%E5%9C%9F%E7%8B%97%E5%B8%81%E5%AE%9C%E5%BF%8C%E4%B8%80%E4%BA%8C%E4%B8%89%E5%9B%9B0123456789&display=swap" rel="stylesheet">
 <!-- Calligraphy, subset to exactly 土狗酷早安 — 2,928 bytes instead of ~2 MB.
      `&text=` is a REQUEST-level parameter: it applies to every family in the URL
      it appears in. Merging this into the link above would silently subset all

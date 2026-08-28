@@ -72,9 +72,24 @@
      window a bare `sans-serif` shows a screen of tofu on a machine with no
      CJK font installed. */
   --f-body:  "Noto Sans SC", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
-  --f-heavy: "Noto Serif SC", "Songti SC", "SimSun", serif;   /* always weight 900 */
+
+  /* Chunky display. This carries all the WEIGHT on the page — buttons, headings,
+     the marquee, the certificate. A rounded shopfront face doing that job is
+     both more authentic than a bold sans and free, because it is already loaded
+     for the WordArt. */
   --f-disp:  "ZCOOL KuaiLe", "PingFang SC", "Microsoft YaHei", cursive;
-  --f-brush: "Ma Shan Zheng", "Noto Serif SC", "Songti SC", serif;
+
+  /* Heavy serif as a REGISTER, not a weight — seals, crests, 宜/忌, numerals,
+     the dictionary headword. Subset to twelve hanzi plus digits (see index.html),
+     so it must only ever be pointed at hardcoded, untranslated strings. */
+  --f-seal:  "Noto Serif SC", "Songti SC", "SimSun", serif;
+
+  /* System serif, zero bytes. The honest section stops every effect, and the
+     webfont is one of them. A system 宋体 is also exactly what the real printed
+     objects this page imitates are actually set in. */
+  --f-serif: "Songti SC", "SimSun", "Noto Serif CJK SC", serif;
+
+  --f-brush: "Ma Shan Zheng", "Songti SC", "SimSun", serif;
   /* The blue box only. Arial leads because the burned-in-subtitle look IS Arial —
      but Arial carries no CJK, and in Chinese this box is full of it. A bare
      `sans-serif` tail would drop those characters into whatever the system
@@ -161,7 +176,7 @@ img, svg, canvas { display: block; max-width: 100%; }
   border-radius: var(--r-0);
   transform: rotate(-7deg);
   box-shadow: var(--lift-1);
-  font-family: var(--f-heavy); font-weight: 900;
+  font-family: var(--f-seal); font-weight: 900;
   font-size: 26px; line-height: 1.02; color: #fff6ec;
   writing-mode: vertical-rl; text-orientation: upright;
 }
@@ -234,7 +249,7 @@ html[data-lang="en"] .wordart::after { white-space: normal; }
 
 /* TREATMENT 6 — 标签 LABEL. Small, heavy, tracked. Metadata only. */
 .label {
-  font-family: var(--f-heavy); font-weight: 900; font-size: 13px; letter-spacing: .16em;
+  font-size: 13px; letter-spacing: .16em;
   text-transform: uppercase;
 }
 
@@ -269,14 +284,14 @@ html[data-lang="en"] .wordart::after { white-space: normal; }
    ========================================================================== */
 .langbar { position: fixed; top: 16px; right: 16px; z-index: 60; }
 .langbtn {
-  display: flex; align-items: center; gap: 6px;
-  padding: 8px 16px;
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+  min-height: 44px; padding: 8px 16px;
   background: linear-gradient(var(--zhu), var(--zhu-d));
   color: var(--jin);
   border: var(--key) solid var(--jin);
   border-radius: var(--r-1);
   box-shadow: var(--lift-1);
-  font-family: var(--f-heavy); font-weight: 900; font-size: 16px;
+  font-family: var(--f-disp); font-size: 16px;
   letter-spacing: .04em;
   cursor: pointer;
   transition: transform .08s steps(2), box-shadow .08s steps(2);
@@ -321,7 +336,7 @@ html[data-lang="en"] .langbtn__zh { opacity: .45; }
   border: var(--key) solid var(--mo);
   border-radius: var(--r-full);
   box-shadow: var(--lift-1);
-  font-family: var(--f-heavy); font-weight: 900;
+  font-family: var(--f-disp);
 }
 .ticker-badge__label { font-size: 13px; letter-spacing: .14em; color: var(--tao-n); }
 .ticker-badge__value { font-size: 22px; letter-spacing: .06em; color: var(--zhu); }
@@ -332,14 +347,18 @@ html[data-lang="en"] .langbtn__zh { opacity: .45; }
 /* ============================================================================
    BUTTONS
    ========================================================================== */
+/* min-height, not padding alone: the display face has shorter metrics than the
+   serif it replaced, and padding-derived height quietly dropped these under the
+   44px tap target. */
 .btn {
-  display: inline-block;
-  padding: 14px 30px;
+  display: inline-flex; align-items: center; justify-content: center;
+  min-height: 44px;
+  padding: 12px 30px;
   border: var(--key) solid var(--mo);
   border-radius: var(--r-1);
   box-shadow: var(--lift-1);
-  font-family: var(--f-heavy);
-  font-weight: 900; font-size: 17px; letter-spacing: .04em;
+  font-family: var(--f-disp);
+  font-size: 17px; letter-spacing: .04em;
   text-decoration: none;
   cursor: pointer;
   transition: transform .08s steps(2), box-shadow .08s steps(2);
@@ -348,7 +367,7 @@ html[data-lang="en"] .langbtn__zh { opacity: .45; }
 .btn:active { transform: translate(2px,2px);   box-shadow: 1px 1px 0 rgba(26,16,8,.45); }
 .btn--red   { background: var(--zhu); color: var(--jin); }
 .btn--gold  { background: var(--jin); color: var(--zhu-d); }
-.btn--small { padding: 8px 16px; font-size: 14px; background: var(--mi); color: var(--mo); }
+.btn--small { min-height: 44px; padding: 8px 16px; font-size: 14px; background: var(--mi); color: var(--mo); }
 /* A button that cannot do anything has to look like it. There is no address to
    copy yet, and a live-looking control there invites someone to paste nothing
    into a wallet. */
@@ -387,7 +406,7 @@ html[data-lang="en"] .langbtn__zh { opacity: .45; }
 .marquee__track {
   display: inline-block; white-space: nowrap; padding-left: 100%;
   animation: slide 26s linear infinite;
-  font-family: var(--f-heavy); font-weight: 900; font-size: clamp(17px, 2.4vw, 26px);
+  font-family: var(--f-disp); font-size: clamp(17px, 2.4vw, 26px);
   color: #ffe14a; letter-spacing: .06em;
   text-shadow: 2px 2px 0 #6d0d06;
 }
@@ -426,8 +445,8 @@ html[data-lang="en"] .langbtn__zh { opacity: .45; }
 }
 .dict__head { display: flex; align-items: baseline; gap: var(--gap); flex-wrap: wrap;
   border-bottom: 2px solid var(--mi); padding-bottom: var(--gap); margin-bottom: var(--gap); }
-.dict__word { font-family: var(--f-heavy); font-weight: 900; font-size: 38px; }
-.dict__pinyin { font-family: var(--f-heavy); font-weight: 900; color: var(--tao-n); font-size: 20px; }
+.dict__word { font-family: var(--f-seal); font-weight: 900; font-size: 38px; }
+.dict__pinyin { font-family: var(--f-serif); color: var(--tao-n); font-size: 20px; }
 /* The load-bearing line, quoted verbatim. The whole coin is downstream of it. */
 .dict__quote {
   margin-bottom: var(--gap);
@@ -435,7 +454,7 @@ html[data-lang="en"] .langbtn__zh { opacity: .45; }
   border-left: 5px solid var(--zhu);
 }
 .dict__quoteline {
-  font-family: var(--f-heavy); font-weight: 900;
+  font-family: var(--f-serif); font-weight: 700;
   font-size: clamp(19px, 2.4vw, 25px); line-height: 1.6;
 }
 .dict__quotesrc { display: block; margin-top: 6px; font-size: 14px; color: var(--tao-n); font-style: normal; }
@@ -472,7 +491,7 @@ html[data-lang="en"] .langbtn__zh { opacity: .45; }
   text-shadow: 3px 3px 0 var(--jin);
   margin-bottom: var(--gap);
 }
-.card__title { font-family: var(--f-heavy); font-size: 22px; font-weight: 900; margin-bottom: 8px; }
+.card__title { font-family: var(--f-disp); font-size: 22px; margin-bottom: 8px; }
 .card__body  { font-size: 16px; color: var(--tan); }
 
 /* ---- Certificate ---- */
@@ -511,13 +530,13 @@ html[data-lang="en"] .langbtn__zh { opacity: .45; }
 }
 .cert-badge > span {
   position: relative; z-index: 1;
-  font-family: var(--f-heavy); font-weight: 900; font-size: 24px; line-height: 1.2;
+  font-family: var(--f-seal); font-weight: 900; font-size: 24px; line-height: 1.2;
   color: var(--zhu); text-shadow: 2px 2px 0 #fff6c9;
 }
 @keyframes spin { to { transform: rotate(360deg); } }
 
 .certificate__title {
-  font-family: var(--f-heavy); font-weight: 900; font-size: 42px; color: var(--zhu-d);
+  font-family: var(--f-disp); font-size: 42px; color: var(--zhu-d);
   margin-bottom: var(--pad);
 }
 /* Four fixed columns, not auto-fit — four stats orphaning one onto a second row
@@ -531,8 +550,8 @@ html[data-lang="en"] .langbtn__zh { opacity: .45; }
   border: 2px solid var(--tan);
   border-radius: var(--r-1);
 }
-.stat dt { font-family: var(--f-heavy); font-size: 13px; letter-spacing: .1em; color: var(--tao-n); font-weight: 900; }
-.stat dd { font-family: var(--f-heavy); font-size: 21px; font-weight: 900; color: var(--mo); }
+.stat dt { font-size: 13px; letter-spacing: .14em; color: var(--tao-n); }
+.stat dd { font-family: var(--f-disp); font-size: 21px; color: var(--mo); }
 .certificate__note { margin-top: var(--pad); font-size: 15px; color: var(--tan); }
 
 /* ---- Almanac ---- */
@@ -553,13 +572,13 @@ html[data-lang="en"] .langbtn__zh { opacity: .45; }
   display: grid; align-content: center; gap: 4px;
   border-right: var(--key) solid var(--mo);
 }
-.almanac__day { font-family: var(--f-heavy); font-weight: 900; font-size: 88px; line-height: 1; }
+.almanac__day { font-family: var(--f-seal); font-weight: 900; font-size: 88px; line-height: 1; }
 .almanac__month, .almanac__weekday { font-size: 15px; letter-spacing: .1em; }
 .almanac__cols { display: grid; grid-template-columns: 1fr 1fr; }
 .almanac__col { padding: var(--pad); }
 .almanac__col--yi { border-right: 2px dashed var(--mi); }
 .almanac__mark {
-  font-family: var(--f-heavy); font-weight: 900; font-size: 46px;
+  font-family: var(--f-seal); font-weight: 900; font-size: 46px;
   line-height: 1; margin-bottom: var(--gap);
 }
 .almanac__col--yi .almanac__mark { color: var(--qing); }
@@ -581,7 +600,7 @@ html[data-lang="en"] .langbtn__zh { opacity: .45; }
 }
 .gen__controls { display: grid; gap: var(--gap); }
 .field { display: grid; gap: 6px; text-align: left; }
-.field__label { font-family: var(--f-heavy); font-weight: 900; font-size: 14px; letter-spacing: .08em; }
+.field__label { font-size: 14px; letter-spacing: .12em; color: var(--tan); }
 .field input, .field select {
   width: 100%; padding: 12px 14px;
   font-family: inherit; font-size: 16px;
@@ -627,9 +646,9 @@ html[data-lang="en"] .langbtn__zh { opacity: .45; }
   width: 46px; height: 46px; margin-bottom: var(--gap);
   background: var(--zhu); color: var(--jin);
   border-radius: var(--r-full);
-  font-family: var(--f-heavy); font-weight: 900; font-size: 22px;
+  font-family: var(--f-seal); font-weight: 900; font-size: 22px;
 }
-.step h3 { font-family: var(--f-heavy); font-weight: 900; font-size: 19px; margin-bottom: 6px; }
+.step h3 { font-family: var(--f-disp); font-size: 19px; margin-bottom: 6px; }
 .step p  { font-size: 15px; color: var(--tan); }
 
 .contract {
@@ -642,7 +661,7 @@ html[data-lang="en"] .langbtn__zh { opacity: .45; }
   border-radius: var(--r-1);
   box-shadow: var(--lift-2);
 }
-.contract__label { font-family: var(--f-heavy); font-weight: 900; font-size: 13px; letter-spacing: .12em; }
+.contract__label { font-size: 13px; letter-spacing: .14em; color: var(--tao-n); }
 .contract__addr {
   font-family: ui-monospace, "SFMono-Regular", Menlo, monospace;
   font-size: 15px; word-break: break-all;
@@ -651,7 +670,7 @@ html[data-lang="en"] .langbtn__zh { opacity: .45; }
 /* ---- The honest section. Deliberately the quietest thing on the page:
         it is the one part that is not a joke, so it does not wear a costume. ---- */
 .section--plain .truth__title {
-  font-family: var(--f-heavy); font-weight: 900;
+  font-family: var(--f-serif); font-weight: 700;
   font-size: clamp(26px, 4vw, 38px);
   margin-bottom: 6px;
 }
@@ -661,7 +680,7 @@ html[data-lang="en"] .langbtn__zh { opacity: .45; }
   margin-top: var(--pad); padding-left: var(--gap);
   border-left: 3px solid var(--tao-n);
 }
-.truth__quote p { font-family: var(--f-heavy); font-weight: 900; font-size: 21px; color: var(--mo); }
+.truth__quote p { font-family: var(--f-serif); font-weight: 700; font-size: 21px; color: var(--mo); }
 .truth__quote cite { display: block; margin-top: 6px; font-size: 14px; color: var(--tao-n); font-style: normal; }
 .truth__sign { margin-top: var(--pad); font-size: 17px; color: var(--mo); }
 

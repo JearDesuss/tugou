@@ -1,5 +1,5 @@
 {
-  "$comment": "土狗 $TUGOU — every user-facing string, both languages. Consumed by the vanilla-JS i18n layer described in DESIGN.md#i18n-contract: data-i18n=\"key\" -> textContent, data-i18n-attr=\"attr:key; attr:key\" -> setAttribute. Fallback chain is en -> zh -> key; zh is the fallback, NOT en. strings.zh and strings.en carry identical key sets. Arrays under data[] are consumed directly by JS and every entry carries both zh and en. NOTHING here may be injected with innerHTML.",
+  "$comment": "土狗 $TUGOU — every user-facing string, both languages. Consumed by the vanilla-JS i18n layer described in DESIGN.md#i18n-contract: data-i18n=\"key\" -> textContent, data-i18n-attr=\"attr:key; attr:key\" -> setAttribute. Fallback chain is en -> zh -> key; zh is the fallback, NOT en. strings.zh and strings.en carry identical key sets. Arrays under data[] are consumed directly by JS and every entry carries both zh and en. NOTHING here may be injected with innerHTML. PARITY RULE, checked before launch: en is a translation of zh and may not carry a proposition, joke or citation that its zh counterpart does not — zh is the original and must read as complete without the en (DESIGN.md#industry, #donts \"Don't let English lead\"). PUNCTUATION: simplified body copy quotes with “…” and nests with ‘…’, the mainland convention; the corner brackets U+300C/U+300D and U+300E/U+300F appear nowhere in this file, including inside quoted sources — Baidu Baike itself sets that line with “”.",
   "version": 1,
   "defaultLang": "zh",
   "fallbackLang": "zh",
@@ -7,24 +7,27 @@
   "htmlLang": { "zh": "zh-Hans", "en": "en" },
   "ogLocale": { "zh": "zh_CN", "en": "en_US" },
   "traditionalRuns": {
-    "$comment": "Strings that are intentionally written in traditional characters because they are plaques, seals or certificate headers. Wrap each in lang=\"zh-Hant\" so a zh-Hans root does not pull Hans glyph variants out of a CJK-unified font.",
+    "$comment": "Strings intentionally written in traditional characters because that is how the OBJECT is written: 匾额 plaques, 对联 door-couplet lintels, 印章 seals. That is the entire list — the 荣誉证书 is deliberately not on it, because a 荣誉证书 is a mainland institutional object and is printed simplified, header included (DESIGN.md#Cultural-contract §8). Traditional characters appear ONLY in these strings: running simplified body copy never quotes a plaque in traditional, it quotes it in simplified (see plaques[].zhSimplified). Wrap each in lang=\"zh-Hant\" so a zh-Hans root does not pull Hans glyph variants out of a CJK-unified font.",
     "keys": [
       "hero.plaque",
       "hero.sealA",
       "hero.sealB",
-      "tokenomics.certTitle",
+      "honest.plaque",
+      "family.plaque",
+      "buy.lintelLeft",
+      "buy.lintelRight",
       "plaques[].zh"
     ]
   },
   "strings": {
     "zh": {
       "meta.title": "土狗 $TUGOU｜最土的狗，最酷的币",
-      "meta.desc": "土狗币，中文名亦作「MeMe币」。一只土生土长的狗，一枚土生土长的币。祝您一夜暴富，年年有U，出入平安。",
+      "meta.desc": "土狗币，中文名亦作“MeMe币”。一只土生土长的狗，一枚土生土长的币。祝您一夜暴富，年年有U，出入平安。",
       "meta.ogTitle": "土狗 $TUGOU｜中华土狗币",
-      "meta.ogDesc": "百度百科：「土狗币，中文名亦作『MeMe币』」。这个项目的名字，就是这类东西的名字。",
+      "meta.ogDesc": "百度百科：“土狗币，中文名亦作‘MeMe币’”。这个项目的名字，就是这类东西的名字。",
       "meta.siteName": "土狗 $TUGOU",
 
-      "a11y.skipToHonest": "跳到「说句老实话」",
+      "a11y.skipToHonest": "跳到“说句老实话”",
       "a11y.langChanged": "已切换为中文",
       "a11y.calmChanged": "已切换显示模式",
       "a11y.wallLabel": "山水壁纸背景，装饰用",
@@ -51,19 +54,19 @@
       "nav.calmAria": "开启安静模式：关闭动效与闪光，只保留文字",
       "nav.menuAria": "主菜单",
 
-      "ticker.announcement": "★ 热烈庆祝 $土狗 隆重上线 ★ 恭喜发财 ★ 招财进宝 ★ 出入平安 ★ 童叟无欺 ★ 本站永久免费 ★ 您是第 88,888 位贵宾 ★ 转发本页，福气加一 ★ 和气生财 ★",
-      "ticker.stats": "总量 1,000,000,000 ★ 买卖税 0% ★ 合约已弃权 ★ 流动池已销毁 ★ 数据请自行上链核验 ★",
+      "ticker.announcement": "★ 热烈欢迎光临 $土狗 ★ 恭喜发财 ★ 招财进宝 ★ 出入平安 ★ 童叟无欺 ★ 本站永久免费 ★ 您是第 88,888 位贵宾 ★ 转发本页，福气加一 ★ 和气生财 ★",
+      "ticker.stats": "★ 合约地址待公布 ★ 上线后请自行到链上核验 ★",
       "ticker.pauseLabel": "暂停",
 
       "hero.eyebrow": "中华土狗币",
       "hero.h1": "土狗",
       "hero.ticker": "$TUGOU",
       "hero.plaque": "富水長流",
-      "hero.plaqueGloss": "原句是「细水长流」，劝人省着花。改一个字，就成了这一页的中心思想。",
+      "hero.plaqueGloss": "原句是“细水长流”，劝人省着花。改一个字，就成了这一页的中心思想。",
       "hero.sealA": "招財進寶",
       "hero.sealB": "大吉",
       "hero.sub": "太酷了，酷到不像真的",
-      "hero.body": "欢迎回家！\n$土狗 正式上线，一只土生土长的狗，一枚土生土长的币。\n无团队、无路线图、无实用性——只有满堂金玉，和一句真心实意的祝福。",
+      "hero.body": "欢迎回家！\n$土狗 是一只土生土长的狗，一枚土生土长的币。\n无团队、无路线图、无实用性——只有金玉满堂，和一句真心实意的祝福。",
       "hero.blessing": "祝您：一夜暴富，年年有U，出入平安。",
       "hero.ctaPrimary": "冲",
       "hero.ctaPrimaryAria": "购买 $土狗 代币",
@@ -78,35 +81,35 @@
       "whatis.toolbarTalk": "讨论",
       "whatis.toolbarFav": "收藏",
       "whatis.lead": "土狗，本指中华田园犬——不纯种、不名贵、看家护院、活得久。",
-      "whatis.quote": "土狗币，中文名亦作「MeMe币」",
-      "whatis.quoteSource": "——百度百科「土狗币」词条开篇",
-      "whatis.p1": "请把这句话再读一遍。中文互联网早就把 memecoin 翻译完了，翻译结果是「土狗」。不是「模因币」，不是「迷因幣」——是一条乡下的杂种狗。",
-      "whatis.p2": "所以本项目的名字，就是本项目这一类东西的名字。你现在看的，是一个用「垃圾币」这个词本身开的玩笑。",
+      "whatis.quote": "土狗币，中文名亦作“MeMe币”",
+      "whatis.quoteSource": "——百度百科“土狗币”词条开篇",
+      "whatis.p1": "这词你早就在用了。冲土狗的那个土狗。中文互联网早就把 memecoin 翻译完了，翻出来的不是音译词，是一条村里的土狗。",
+      "whatis.p2": "所以这个项目的名字，就是这类东西的统称。你现在看的，是一个拿“土狗币”这三个字本身开的玩笑。",
       "whatis.p3": "它继承了 DOGE 和 SHIB 的血统。它也继承了它们的结局。",
       "whatis.p4": "顺便说一句：土狗在中文里从来不是骂狗的话。土狗皮实、好养、命长，村里人是拿它当夸奖用的。",
 
       "toocool.title": "土酷 · 土到极致便是潮",
       "toocool.sub": "太酷了，酷到不像真的",
-      "toocool.p1": "土酷（Too Cool），约2016年由「养鸭」在短片《Too Cool To Be True》里提出。",
-      "toocool.p2": "土，是山水壁纸贴满整面墙；是姥姥六点转发来的鎏金早安；是KTV顶上转的彩灯；是烫金匾额上的「富水長流」。土，本来是句骂人的话。\n酷，落在那个「太」字上——太酷了。不是「土得可爱」，是酷到最高级。",
+      "toocool.p1": "土酷（Too Cool），约2016年由“养鸭”在短片《Too Cool To Be True》里提出。",
+      "toocool.p2": "土，是山水壁纸贴满整面墙；是姥姥六点转发来的鎏金早安；是KTV顶上转的彩灯；是烫金匾额上的“富水长流”。土，本来是句骂人的话。\n酷，在于“土”念出来就是英文的 too。所以土酷不是“土得可爱”，是 too cool——酷到最高级，太酷了，酷到不像真的。",
       "toocool.p3": "这里没有一个字是嘲笑。长辈发来的那张大字闪光祝福图，是真心的；那是他们用自己会用的语言，跟你说他们想你。我们把它做成一个网站，是因为我们喜欢它，不是因为我们瞧不起它。",
       "toocool.p4": "这面墙不是背景。在真正的屋子里，山水是从地板贴到天花板的，沙发就摆在瀑布前面。所以这一页也没有留白。",
-      "toocool.comment": "没文化，也是一种文化。",
-      "toocool.credit": "概念出处：「养鸭」，《Too Cool To Be True》，约 2016 年。",
+      "toocool.comment": "视频底下的一条评论：“没文化，也是一种文化。”这就是整份设计说明。",
+      "toocool.credit": "概念出处：“养鸭”，《Too Cool To Be True》，约 2016 年。",
 
       "plaques.title": "吉言匾额",
       "plaques.sub": "十块金匾，一句一个念想",
       "plaques.intro": "匾额上是繁体，正文里是简体——真的匾额就是这么写的。点一下匾，看它背后那句。",
       "plaques.flipHint": "点击翻面",
-      "plaques.noteRed": "关于「大展紅圖」：在中国股市和币圈，红是涨，绿是跌，跟你的看盘软件正好相反。所以「愿你满屏通红」是一句祝福。我们知道它翻成英文有多吓人。我们不改。",
-      "plaques.noteFish": "关于「年年有U」：原句「年年有餘」，餘和魚同音，所以这类画里永远有鱼。我们把餘换成了U——U 就是中文币圈说的 USDT。",
+      "plaques.noteRed": "关于“大展红图”：在中国股市和币圈，红是涨，绿是跌，跟你的看盘软件正好相反。所以“愿你满屏通红”是一句祝福。我们知道它翻成英文有多吓人。我们不改。",
+      "plaques.noteFish": "关于“年年有U”：原句“年年有余”，余和鱼同音，所以这类画里永远有鱼。我们把余换成了U——U 就是中文币圈说的 USDT。",
 
       "tokenomics.title": "荣誉证书 · 代币经济",
       "tokenomics.sub": "代币经济，发成一张奖状",
-      "tokenomics.certTitle": "榮　譽　證　書",
+      "tokenomics.certTitle": "荣　誉　证　书",
       "tokenomics.certLead": "兹证明：",
       "tokenomics.certAward": "特发此证，以资鼓励。",
-      "tokenomics.certVerify": "以上各项，均可自行上链核验——请核验，别信我们。",
+      "tokenomics.certVerify": "以上各项，均可自行到链上核验——请核验，别信我们。",
       "tokenomics.issuerLabel": "颁发单位",
       "tokenomics.issuer": "全体家人们",
       "tokenomics.serialLabel": "证书编号",
@@ -117,7 +120,7 @@
       "tokenomics.sticker2": "第一名",
       "tokenomics.placeholderWarning": "上面的数字是模板占位。上线前必须换成链上真实数值，或者整条删掉。",
       "tokenomics.pixiuTitle": "貔貅盘",
-      "tokenomics.pixiuBody": "貔貅有嘴无肛，只进不出——所以它既是玉器店里正经的招财神兽，也是「能买不能卖」的合约的名字。同一尊像，摆在架子上是祝福，写进合约里是骗局。这一页讲的就是这件事。",
+      "tokenomics.pixiuBody": "貔貅有嘴无肛，只进不出——所以它既是玉器店里正经的招财神兽，也是“能买不能卖”的合约的名字。同一尊像，摆在架子上是祝福，写进合约里是骗局。这一页讲的就是这件事。",
 
       "almanac.title": "土狗老黄历",
       "almanac.sub": "这就是路线图",
@@ -166,7 +169,7 @@
       "buy.title": "上车指南",
       "buy.sub": "怎么买",
       "buy.lintelLeft": "出入平安",
-      "buy.lintelRight": "生意兴隆",
+      "buy.lintelRight": "生意興隆",
       "buy.addrLabel": "合约地址",
       "buy.addrPending": "合约地址待公布",
       "buy.copy": "复制",
@@ -174,12 +177,12 @@
       "buy.copyFail": "复制失败，请手动选中",
       "buy.selectHint": "复制不了就长按选中，别去私信要地址。",
       "buy.warning": "只用你亏得起的钱。这句话是这一页上唯一不打折的话。",
-      "buy.slippageNote": "认准本页的地址。任何私信、任何「客服」、任何空投链接，都是假的。",
+      "buy.slippageNote": "认准本页的地址。任何私信、任何“客服”、任何空投链接，都是假的。",
 
       "family.title": "家人们",
       "family.sub": "家族群",
       "family.intro": "进群，发早安，转发是美德。",
-      "family.plaque": "和气生财",
+      "family.plaque": "和氣生財",
       "family.rulesTitle": "群规三条",
       "family.unread": "99+",
       "family.joinWechat": "微信群",
@@ -188,21 +191,21 @@
 
       "honest.title": "说句老实话",
       "honest.sub": "这一段没有金光，也没有闪。",
-      "honest.plaque": "童叟无欺",
-      "honest.p1": "$土狗 就是一只土狗。土狗币在中文里的意思，就是「meme币」——一个没有技术、没有团队、没有用途的币。所以你从头到尾看的，是一个拿「垃圾币」这个词本身开的玩笑。这就是全部的产品。",
+      "honest.plaque": "童叟無欺",
+      "honest.p1": "$土狗 就是一只土狗。土狗币在中文里的意思，就是“meme币”——一个没有技术、没有团队、没有用途的币。所以你从头到尾看的，是一个拿“土狗币”这三个字本身开的玩笑。这就是全部的产品。",
       "honest.p2": "它没有实用性。它没有路线图——上面那个是黄历。黄历不是承诺，黄历每天都换。它不会让你财富自由。",
       "honest.p3": "数据是公开的：这类项目里，约 99% 在热度过去之后接近归零，有的只活了十几天。发一个币在链上的成本，是几百块。你不是特别的那一个，我们也不是。",
       "honest.p4": "唯一不是玩笑的，是上面那些祝福。你姥姥发的那张早安图是真心的，我们这些也是。玩笑开的是金融，不是那份心意——这两件事我们分得很清楚。",
       "honest.p5": "所以：只花你输得起的钱。买之前自己去看合约。别借钱。别跟自己说这次不一样。",
       "honest.p6": "证书上的数字，请自己去链上核验。我们写在那儿是为了让你查，不是为了让你信。",
-      "honest.laozi": "「金玉满堂，莫之能守。」",
+      "honest.laozi": "“金玉满堂，莫之能守。”",
       "honest.laoziSource": "——《老子·第九章》",
       "honest.sign": "祝好。真的。",
 
       "footer.title": "免责声明",
       "footer.legal1": "本站为文化玩笑与美学致敬，不构成任何投资建议。$土狗 无实用性、无内在价值、无团队承诺。加密资产风险极高，可能全部归零。请自行研究，并遵守所在地法律法规。",
       "footer.legal2": "本站不收集任何个人信息。所有图片均由代码生成，无一张外部图片。",
-      "footer.legal3": "本站美学取材于「土酷」。概念出处：「养鸭」，《Too Cool To Be True》，约 2016 年。词条引用：百度百科「土狗币」。",
+      "footer.legal3": "本站美学取材于“土酷”。概念出处：“养鸭”，《Too Cool To Be True》，约 2016 年。词条引用：百度百科“土狗币”。",
       "footer.joke": "土狗不保本，本站不保本，人生不保本。祝您出入平安。",
       "footer.resolution": "最佳浏览分辨率 1024×768",
       "footer.visitorPrefix": "您是第",
@@ -251,8 +254,8 @@
       "nav.calmAria": "turn on calm mode: no motion, no glitter, text only",
       "nav.menuAria": "main menu",
 
-      "ticker.announcement": "★ WARMLY CELEBRATING THE GRAND LAUNCH OF $TUGOU ★ CONGRATULATIONS AND BE PROSPEROUS ★ FORTUNE ENTERS ★ SAFE DEPOSITS AND WITHDRAWALS ★ WE DO NOT CHEAT CHILDREN OR THE ELDERLY ★ THIS WEBSITE IS FREE FOREVER ★ YOU ARE VISITOR NUMBER 88,888 ★ FORWARD THIS PAGE, BLESSINGS +1 ★ HARMONY BREEDS WEALTH ★",
-      "ticker.stats": "SUPPLY 1,000,000,000 ★ 0% TAX ★ CONTRACT RENOUNCED ★ LP BURNED ★ VERIFY ALL OF THIS ON-CHAIN YOURSELF ★",
+      "ticker.announcement": "★ A WARM WELCOME TO $TUGOU ★ CONGRATULATIONS AND BE PROSPEROUS ★ FORTUNE ENTERS ★ SAFE DEPOSITS AND WITHDRAWALS ★ WE DO NOT CHEAT CHILDREN OR THE ELDERLY ★ THIS WEBSITE IS FREE FOREVER ★ YOU ARE VISITOR NUMBER 88,888 ★ FORWARD THIS PAGE, BLESSINGS +1 ★ HARMONY BREEDS WEALTH ★",
+      "ticker.stats": "★ CONTRACT ADDRESS NOT PUBLISHED YET ★ WHEN IT IS, VERIFY EVERY NUMBER ON-CHAIN YOURSELF ★",
       "ticker.pauseLabel": "pause",
 
       "hero.eyebrow": "the chinese village dog coin",
@@ -263,7 +266,7 @@
       "hero.sealA": "SUMMON WEALTH, BRING IN TREASURE",
       "hero.sealB": "GOOD FORTUNE",
       "hero.sub": "TOO COOL TO BE TRUE",
-      "hero.body": "welcome home. $TUGOU is live.\na native dog. a native coin.\nno team. no roadmap. no utility. only gold, glitter, and one sincere blessing.",
+      "hero.body": "welcome home.\n$TUGOU is a native dog and a native coin.\nno team. no roadmap. no utility. only gold, glitter, and one sincere blessing.",
       "hero.blessing": "wishing you: sudden wealth overnight, usdt every year, and safe deposits and withdrawals.",
       "hero.ctaPrimary": "SEND IT",
       "hero.ctaPrimaryAria": "buy $TUGOU tokens",
@@ -280,15 +283,15 @@
       "whatis.lead": "tugou means the chinese village dog. mixed breed. not expensive. guards the house. lives a long time.",
       "whatis.quote": "tugou coin, also rendered in chinese as MeMe coin",
       "whatis.quoteSource": "— the opening line of the Baidu Baike entry for 'tugou coin'",
-      "whatis.p1": "read that again. the chinese internet already finished translating the word memecoin. the translation is not a loanword. the translation is 'dirt dog.'",
-      "whatis.p2": "so this project is named after the category this project is in. you are looking at a joke made out of the word for joke coins.",
+      "whatis.p1": "you already use this word. the tugou in 'aped a tugou'. the chinese internet finished translating the word memecoin a long time ago. the translation is not a loanword. it is a village dog.",
+      "whatis.p2": "so this project is named after the category this project is in. you are looking at a joke made out of the three characters 土狗币 themselves.",
       "whatis.p3": "it inherits the doge and shib bloodline. it also inherits how that ends.",
       "whatis.p4": "one more thing. tugou is not an insult to the dog. these dogs are hardy, cheap to keep and long-lived, and in the village that is said as praise.",
 
       "toocool.title": "TOO COOL",
       "toocool.sub": "TOO COOL TO BE TRUE",
       "toocool.p1": "'too cool' — coined around 2016, under the handle 'yangya', in a short film called Too Cool To Be True.",
-      "toocool.p2": "the word is 土 (dirt, rural, tacky) plus 酷 (cool). the weight is on the 'too'. it means the highest degree of cool. it does not mean 'so bad it's good'.\n\nthis is the landscape wallpaper covering an entire wall. the gold good-morning card your grandmother forwards at 6am. the ktv lights. the gold plaque.",
+      "toocool.p2": "the word is 土 (dirt, rural, tacky) plus 酷 (cool). 土 is said 'tu', which is how the english word 'too' lands in chinese — so 土酷 is TOO COOL. the highest degree of cool. it does not mean 'so bad it's good'.\n\nthis is the landscape wallpaper covering an entire wall. the gold good-morning card your grandmother forwards at 6am. the ktv lights. the gold plaque.",
       "toocool.p3": "nobody here is laughing at any of it. that blessing your relative sent you was real. they were telling you they miss you, in the only visual language they own. we built this because we like it. not because we are above it.",
       "toocool.p4": "the wall is not a background. in a real room the landscape runs from the floor to the ceiling and the sofa stands in front of the waterfall. that is why there is no empty space on this page.",
       "toocool.comment": "one comment under the video: 'having no culture is also a culture.' that is the whole design brief.",
@@ -306,7 +309,7 @@
       "tokenomics.certTitle": "CERTIFICATE OF HONOUR",
       "tokenomics.certLead": "this is to certify that:",
       "tokenomics.certAward": "this certificate is awarded in recognition of the above.",
-      "tokenomics.certVerify": "all of the above is verifiable on-chain. please verify it. do not take our word for anything.",
+      "tokenomics.certVerify": "all of the above is for you to verify on-chain yourself. please verify it. do not take our word for anything.",
       "tokenomics.issuerLabel": "issued by",
       "tokenomics.issuer": "everyone",
       "tokenomics.serialLabel": "serial no.",
@@ -389,14 +392,14 @@
       "honest.title": "THE HONEST PART",
       "honest.sub": "no gold on this part. no sparkle.",
       "honest.plaque": "we do not cheat children or the elderly",
-      "honest.p1": "$TUGOU is a tugou. in chinese, 'tugou coin' just means memecoin — a coin with no technology, no team, and no use. so what you have been reading is a joke built out of the word for joke coins. that is the entire product.",
+      "honest.p1": "$TUGOU is a tugou. in chinese, 'tugou coin' just means memecoin — a coin with no technology, no team, and no use. so what you have been reading is a joke built out of the three characters 土狗币 themselves. that is the entire product.",
       "honest.p2": "there is no utility. there is no roadmap. the thing above is an almanac. an almanac is not a promise. it changes every day; that is what makes it an almanac. it will not make you financially free.",
       "honest.p3": "the numbers are public: about 99% of these approach zero once the attention leaves. some last two weeks. it costs a few hundred yuan to deploy one. you are not the exception. neither are we.",
       "honest.p4": "the only part that is not a joke is the blessings. your grandmother meant hers. we mean ours. the finance is the joke; the sincerity is not. we know the difference and we would like you to know we know.",
       "honest.p5": "so: only spend what you can lose. read the contract yourself. do not borrow. do not tell yourself this one is different.",
       "honest.p6": "the numbers on the certificate are for you to check on-chain. we printed them so you would verify them, not so you would believe them.",
       "honest.laozi": "'gold and jade fill the hall, but no one can keep them.'",
-      "honest.laoziSource": "— Laozi, chapter 9. he wrote the exit liquidity warning around 2,500 years before the exit liquidity.",
+      "honest.laoziSource": "— Laozi, chapter 9.",
       "honest.sign": "best wishes. sincerely.",
 
       "footer.title": "DISCLAIMER",
@@ -419,8 +422,31 @@
     }
   },
   "data": {
+    "launch": {
+      "$comment": "The launch gate. Every claim this page makes about a contract that does not exist yet hangs off this ONE flag — DESIGN.md#Cultural-contract §7. While verified is false the strings listed in gates ship as they stand: no supply, no tax, no renouncement, no LP burn, no 上线 / GRAND LAUNCH anywhere. When the contract is deployed AND every row of data.tokenomics.rows has been checked on-chain, set verified true, set each rows[].verified true, and swap in whenVerified below. One switch, not four scattered strings.",
+      "verified": false,
+      "gates": ["ticker.stats", "ticker.announcement", "hero.body", "marquee[0]", "tokenomics.rows[].verified"],
+      "whenVerified": {
+        "ticker.stats": {
+          "zh": "总量 1,000,000,000 ★ 买卖税 0% ★ 合约已弃权 ★ 流动池已销毁 ★ 数据请自行到链上核验 ★",
+          "en": "SUPPLY 1,000,000,000 ★ 0% TAX ★ CONTRACT RENOUNCED ★ LP BURNED ★ VERIFY ALL OF THIS ON-CHAIN YOURSELF ★"
+        },
+        "ticker.announcement": {
+          "zh": "★ 热烈庆祝 $土狗 隆重上线 ★ 恭喜发财 ★ 招财进宝 ★ 出入平安 ★ 童叟无欺 ★ 本站永久免费 ★ 您是第 88,888 位贵宾 ★ 转发本页，福气加一 ★ 和气生财 ★",
+          "en": "★ WARMLY CELEBRATING THE GRAND LAUNCH OF $TUGOU ★ CONGRATULATIONS AND BE PROSPEROUS ★ FORTUNE ENTERS ★ SAFE DEPOSITS AND WITHDRAWALS ★ WE DO NOT CHEAT CHILDREN OR THE ELDERLY ★ THIS WEBSITE IS FREE FOREVER ★ YOU ARE VISITOR NUMBER 88,888 ★ FORWARD THIS PAGE, BLESSINGS +1 ★ HARMONY BREEDS WEALTH ★"
+        },
+        "hero.body": {
+          "zh": "欢迎回家！\n$土狗 正式上线，一只土生土长的狗，一枚土生土长的币。\n无团队、无路线图、无实用性——只有金玉满堂，和一句真心实意的祝福。",
+          "en": "welcome home. $TUGOU is live.\na native dog. a native coin.\nno team. no roadmap. no utility. only gold, glitter, and one sincere blessing."
+        },
+        "marquee[0]": {
+          "zh": "★ 热烈庆祝 $土狗 隆重上线 ★",
+          "en": "★ WARMLY CELEBRATING THE GRAND LAUNCH OF $TUGOU ★"
+        }
+      }
+    },
     "marquee": [
-      { "zh": "★ 热烈庆祝 $土狗 隆重上线 ★", "en": "★ WARMLY CELEBRATING THE GRAND LAUNCH OF $TUGOU ★" },
+      { "zh": "★ 热烈欢迎光临 $土狗 ★", "en": "★ A WARM WELCOME TO $TUGOU ★" },
       { "zh": "★ 恭喜发财 ★", "en": "★ CONGRATULATIONS AND BE PROSPEROUS ★" },
       { "zh": "★ 招财进宝 ★", "en": "★ SUMMON WEALTH, BRING IN TREASURE ★" },
       { "zh": "★ 出入平安 ★", "en": "★ SAFE DEPOSITS AND WITHDRAWALS ★" },
@@ -437,7 +463,7 @@
         "zhSimplified": "富水长流",
         "pinyin": "fù shuǐ cháng liú",
         "en": "WEALTH-WATER FLOWS LONG",
-        "noteZh": "原句是「細水長流」，劝人省着花。把「細」换成「富」，节俭就变成了富足——这是故意写错的成语，也是本页的中心思想：钱要慢慢流，命要拿得住。",
+        "noteZh": "原句是“细水长流”，劝人省着花。把“细”换成“富”，节俭就变成了富足——这是故意写错的成语，也是这一页的中心思想：钱要慢慢流，命要拿得住。一个整天喊梭哈的币，门口挂着一块金匾，劝你仓位小一点、拿久一点。",
         "noteEn": "the real idiom is 'a thin stream flows far' — spend sparingly so it lasts. swapping one character turns thrift into abundance. a coin whose entire premise is going all in hangs a gold sign telling you to size small and let it run."
       },
       {
@@ -446,8 +472,8 @@
         "zhSimplified": "一夜暴富",
         "pinyin": "yī yè bào fù",
         "en": "RICH OVERNIGHT",
-        "noteZh": "不是古成语，是现代四字词，而且在日常中文里略带贬义——傻子才这么盼。「暴」就是暴涨暴跌的那个暴，那个字的本意是暴力。",
-        "noteEn": "the entire memecoin thesis in four characters, and it was already in the language. the 暴 here is the same 暴 as in 'violent pump' and 'violent dump'. the character means violence. it is doing the same job in both."
+        "noteZh": "不是古成语，是现代四字词。“暴”就是暴涨暴跌的那个暴，两头干的是同一件事。这四个字谁都盼过，包括我们。",
+        "noteEn": "not a classical idiom — a modern four-character phrase, and the entire memecoin thesis was already sitting in the language. the 暴 here is the same 暴 as in 'violent pump' and 'violent dump'. it is doing the same job in both. everyone has wished for this one. us included."
       },
       {
         "id": "zhaocaijinbao",
@@ -455,8 +481,8 @@
         "zhSimplified": "招财进宝",
         "pinyin": "zhāo cái jìn bǎo",
         "en": "SUMMON WEALTH, BRING IN TREASURE",
-        "noteZh": "元代《降桑椹》：「招財進寶臻佳瑞。」传统上写成合体字——四个字焊成一个字，贴在门上。",
-        "noteEn": "traditionally written as one fused glyph, four characters welded into a single character on new year door stickers. which is to say: a liquidity pair. two assets welded into one token you cannot pull apart."
+        "noteZh": "元代《降桑椹》里就有：“招财进宝臻佳瑞。”传统上写成合体字——四个字焊成一个字，贴在门上。换句话说：一个交易对。两样东西焊死成一个，拆不开。",
+        "noteEn": "the line is in the yuan-dynasty play 降桑椹: 'summon wealth, bring in treasure, and fine omens arrive'. traditionally written as one fused glyph, four characters welded into a single character on new year door stickers. which is to say: a liquidity pair. two assets welded into one token you cannot pull apart."
       },
       {
         "id": "chururipingan",
@@ -464,7 +490,7 @@
         "zhSimplified": "出入平安",
         "pinyin": "chū rù píng ān",
         "en": "SAFE COMING AND GOING",
-        "noteZh": "挂在自家大门上的那一句。而「出入」正好就是「出金／入金」——所以它是一句字面意义上正确的、真诚的祝福，祝你的出入金顺利。",
+        "noteZh": "挂在自家大门上的那一句。而“出入”正好就是“出金／入金”——所以它是一句字面意义上正确的、真诚的祝福，祝你的出入金顺利。",
         "noteEn": "hung above the front door of a house. and 出 / 入 are literally the crypto words for withdrawal and deposit. so this is a sincere, literally correct blessing over your on-ramp and your off-ramp."
       },
       {
@@ -473,7 +499,7 @@
         "zhSimplified": "年年有U",
         "pinyin": "nián nián yǒu U",
         "en": "USDT EVERY YEAR",
-        "noteZh": "原句「年年有餘」。餘與魚同音，所以过年要上一条整鱼，所以这类画里永远有鱼——这一页的锦鲤就是这个意思。我们把餘换成 U，U 是中文币圈说的 USDT。",
+        "noteZh": "原句“年年有余”。余和鱼同音，所以过年要上一条整鱼，所以这类画里永远有鱼——这一页的锦鲤就是这条鱼。我们把余换成 U，U 是中文币圈说的 USDT。“年年有U”既是祝福，也是这一类东西里最现实的结果。",
         "noteEn": "the original is 'surplus every year'. surplus sounds like fish, which is why a whole fish is served at new year and why fish swim through every one of these pictures. we swapped it for U — what chinese traders call usdt. 'may you always have some usdt' is both a blessing and the most realistic outcome available."
       },
       {
@@ -482,7 +508,7 @@
         "zhSimplified": "大展红图",
         "pinyin": "dà zhǎn hóng tú",
         "en": "MAY YOUR CHART BE ALL RED",
-        "noteZh": "原句「大展宏圖」，给刚创业的人。宏與紅同音。中国市场红涨绿跌，所以「满屏通红」是祝福，不是诅咒。",
+        "noteZh": "原句“大展宏图”，是给刚创业的人的祝福。宏和红同音。中国市场红涨绿跌，所以“满屏通红”是祝福，不是诅咒。这句话翻成英文就成了诅咒——这个落差我们留着。",
         "noteEn": "the original is 'unfurl the grand design', a blessing for someone starting a business. 'grand' and 'red' are exact homophones. in chinese markets red means up and green means down — the reverse of the west. so this reads as a curse in english and a blessing in chinese. we are leaving the gap in."
       },
       {
@@ -491,7 +517,7 @@
         "zhSimplified": "花开富贵",
         "pinyin": "huā kāi fù guì",
         "en": "FLOWERS OPEN INTO WEALTH",
-        "noteZh": "牡丹的题词，画屏和山水壁纸上的常客。「開」是開盤、開倉的開——花开，就是candle开了。",
+        "noteZh": "牡丹的题词，画屏和山水壁纸上的常客。“开”是开盘、开仓的开——花开了，盘也开了。",
         "noteEn": "peony imagery, the standard caption on painted screens and on the wallpaper murals this page is built from. 開 is the 開 of 'market open' and 'open a position'. the flower opens; the candle opens."
       },
       {
@@ -500,8 +526,8 @@
         "zhSimplified": "步步高升",
         "pinyin": "bù bù gāo shēng",
         "en": "RISING STEP BY STEP",
-        "noteZh": "出自《二十年目睹之怪現狀》，升官的祝词。步步，就是一根一根 K 线。",
-        "noteEn": "a promotion blessing. step by step is candle by candle. best hung directly above a chart that is visibly not doing this."
+        "noteZh": "出自《二十年目睹之怪现状》，升官的祝词。步步，就是一根一根 K 线。挂在一张明显没这么走的图上面，最合适。",
+        "noteEn": "a promotion blessing, from the qing novel 二十年目睹之怪现状. step by step is candle by candle. best hung directly above a chart that is visibly not doing this."
       },
       {
         "id": "wenrutaishan",
@@ -509,7 +535,7 @@
         "zhSimplified": "稳如泰山",
         "pinyin": "wěn rú tài shān",
         "en": "STEADY AS MOUNT TAI",
-        "noteZh": "钻石手，拿住，别动。这句话比「diamond hands」早两千年，而且这一页背后就有山。",
+        "noteZh": "钻石手，拿住，别动。这句话比“diamond hands”早两千年，而且这一页背后就有山。",
         "noteEn": "diamond hands, written in a language two thousand years older than diamond hands. the mountains behind this plaque are already on the wall."
       },
       {
@@ -523,36 +549,37 @@
       }
     ],
     "almanac": {
+      "$comment": "Each entry carries the 宜/忌 term in both languages (zh/en) and a gloss in both (noteZh/noteEn). The English note may not carry a joke, a claim or a citation the Chinese note does not — see the parity rule in the file header.",
       "yi": [
-        { "zh": "开仓", "en": "good day to open a bag. 开仓 in the almanac means 'open the granary.' it is the same two characters traders use for 'open a position.' we did not do that." },
-        { "zh": "纳财", "en": "good day to receive wealth. also a real almanac entry. the almanac has been bullish for 2000 years." },
-        { "zh": "祈福", "en": "pray first. buy second. in that order." },
-        { "zh": "开光", "en": "good day to consecrate an object. today the object is a token." },
-        { "zh": "拿住不动", "en": "hold. do nothing. today, doing nothing is listed as an activity." },
-        { "zh": "埋伏蹲点", "en": "good day to lie in the grass and wait. buy small. tell no one." },
-        { "zh": "定投", "en": "good day to buy a little bit, on a schedule, like a boring person." },
-        { "zh": "栽种韭菜", "en": "good day to plant chives. not to cut them. chives grow back after cutting. that is why we are called chives." },
-        { "zh": "牧养", "en": "good day to keep an animal. the animal is this dog. the dog is the coin." },
-        { "zh": "会亲友", "en": "good day to see family. forward them a card. the card is free." },
-        { "zh": "沐浴", "en": "shower before you look at the chart. it will not change the chart. it will change you." },
-        { "zh": "毕业", "en": "good day to graduate. the curve fills, the pool opens, the parents cry." },
-        { "zh": "出行", "en": "good day to travel. also to get off the bus while it is still going up." }
+        { "zh": "开仓", "en": "open the granary", "noteZh": "黄历里的“开仓”是开粮仓，币圈的“开仓”是开仓位。同样两个字，我们一个字都没改。", "noteEn": "good day to open a bag. 开仓 in the almanac means 'open the granary.' it is the same two characters traders use for 'open a position.' we did not do that." },
+        { "zh": "纳财", "en": "receive wealth", "noteZh": "宜进财。这也是真黄历里的一条——黄历看多两千年了。", "noteEn": "good day to receive wealth. also a real almanac entry. the almanac has been bullish for 2000 years." },
+        { "zh": "祈福", "en": "pray for blessings", "noteZh": "先拜，再买。顺序别反。", "noteEn": "pray first. buy second. in that order." },
+        { "zh": "开光", "en": "consecrate an object", "noteZh": "宜给一件东西开光。今天这件东西是一个代币。", "noteEn": "good day to consecrate an object. today the object is a token." },
+        { "zh": "拿住不动", "en": "hold, do nothing", "noteZh": "拿住，别动。今天“什么都不做”被列成了一项正经事。", "noteEn": "hold. do nothing. today, doing nothing is listed as an activity." },
+        { "zh": "埋伏蹲点", "en": "lie in wait", "noteZh": "宜蹲在草里等。买小一点，别声张。", "noteEn": "good day to lie in the grass and wait. buy small. tell no one." },
+        { "zh": "定投", "en": "buy on a schedule", "noteZh": "宜每次买一点点，按时买，像个无聊的人。", "noteEn": "good day to buy a little bit, on a schedule, like a boring person." },
+        { "zh": "栽种韭菜", "en": "plant chives", "noteZh": "宜种，不宜割。韭菜割了会再长——所以我们才叫韭菜。", "noteEn": "good day to plant chives. not to cut them. chives grow back after cutting. that is why we are called chives." },
+        { "zh": "牧养", "en": "keep an animal", "noteZh": "宜养牲口。这里的牲口是这条狗，这条狗就是这个币。", "noteEn": "good day to keep an animal. the animal is this dog. the dog is the coin." },
+        { "zh": "会亲友", "en": "see family and friends", "noteZh": "宜见家人。顺手转一张卡过去，卡是免费的。", "noteEn": "good day to see family. forward them a card. the card is free." },
+        { "zh": "沐浴", "en": "take a bath", "noteZh": "看盘之前先去洗个澡。澡改变不了行情，能改变你。", "noteEn": "shower before you look at the chart. it will not change the chart. it will change you." },
+        { "zh": "毕业", "en": "graduate", "noteZh": "宜毕业：曲线填满，池子打开，家长在哭。", "noteEn": "good day to graduate. the curve fills, the pool opens, the parents cry." },
+        { "zh": "出行", "en": "travel", "noteZh": "宜出行。也宜在车还往上开的时候下车。", "noteEn": "good day to travel. also to get off the bus while it is still going up." }
       ],
       "ji": [
-        { "zh": "梭哈", "en": "do not put it all in. not today. tomorrow's almanac will also say this." },
-        { "zh": "追高", "en": "do not chase the top. the top does not want to be caught." },
-        { "zh": "割肉", "en": "do not cut the flesh. the wick is not finished." },
-        { "zh": "加杠杆", "en": "no leverage. the almanac is unusually firm about this one." },
-        { "zh": "乱签授权", "en": "do not sign what you did not read. one signature can empty a wallet in four seconds." },
-        { "zh": "点私信链接", "en": "do not click links in your dms. nobody is airdropping you. nobody." },
-        { "zh": "半夜看盘", "en": "do not check the chart at 3am. it will still be there at 9am. so will you, more or less." },
-        { "zh": "借钱上车", "en": "do not borrow money to get on the bus. the bus is not going where the bus says." },
-        { "zh": "信路线图", "en": "do not believe roadmaps. including this one. this one is a calendar." },
-        { "zh": "问何时上所", "en": "do not ask when binance. the answer is nobody knows, and the person who told you is selling." },
-        { "zh": "塞穴", "en": "do not plug the hole. 塞穴 is a genuine almanac entry meaning 'seal up an opening.' it is also, exactly, a honeypot contract." },
-        { "zh": "与庄对赌", "en": "do not bet against the whale. the whale drew the chart before you woke up." },
-        { "zh": "卖飞", "en": "do not sell it and then watch it fly. this one is unavoidable. we list it anyway." },
-        { "zh": "说这次不一样", "en": "do not say this one is different. this one is not different. that is the point of the name." }
+        { "zh": "梭哈", "en": "go all in", "noteZh": "别全押进去。今天不行。明天那张黄历也会这么写。", "noteEn": "do not put it all in. not today. tomorrow's almanac will also say this." },
+        { "zh": "追高", "en": "chase the top", "noteZh": "别追高。高点不想被你抓住。", "noteEn": "do not chase the top. the top does not want to be caught." },
+        { "zh": "割肉", "en": "cut the flesh", "noteZh": "别割肉。这根针还没走完。", "noteEn": "do not cut the flesh. the wick is not finished." },
+        { "zh": "加杠杆", "en": "use leverage", "noteZh": "不加杠杆。这一条黄历写得格外硬。", "noteEn": "no leverage. the almanac is unusually firm about this one." },
+        { "zh": "乱签授权", "en": "sign approvals blindly", "noteZh": "没读懂的东西别签。一次授权，四秒钟能清空一个钱包。", "noteEn": "do not sign what you did not read. one signature can empty a wallet in four seconds." },
+        { "zh": "点私信链接", "en": "click links in your dms", "noteZh": "别点私信里的链接。没人给你空投。一个都没有。", "noteEn": "do not click links in your dms. nobody is airdropping you. nobody." },
+        { "zh": "半夜看盘", "en": "check the chart at 3am", "noteZh": "凌晨三点别看盘。它九点还在那儿，你也还在，大概。", "noteEn": "do not check the chart at 3am. it will still be there at 9am. so will you, more or less." },
+        { "zh": "借钱上车", "en": "borrow to get on the bus", "noteZh": "别借钱上车。这车不往它说的地方开。", "noteEn": "do not borrow money to get on the bus. the bus is not going where the bus says." },
+        { "zh": "信路线图", "en": "believe a roadmap", "noteZh": "别信路线图，包括这一张。这一张是日历。", "noteEn": "do not believe roadmaps. including this one. this one is a calendar." },
+        { "zh": "问何时上所", "en": "ask when binance", "noteZh": "别问什么时候上所。答案是没人知道，而告诉你的那个人正在卖。", "noteEn": "do not ask when binance. the answer is nobody knows, and the person who told you is selling." },
+        { "zh": "塞穴", "en": "seal up an opening", "noteZh": "“塞穴”是黄历里真有的一条，意思是把口子堵上。它同时也精确地描述了貔貅盘。", "noteEn": "do not plug the hole. 塞穴 is a genuine almanac entry meaning 'seal up an opening.' it is also, exactly, a honeypot contract." },
+        { "zh": "与庄对赌", "en": "bet against the whale", "noteZh": "别跟庄对赌。你还没醒，图已经画好了。", "noteEn": "do not bet against the whale. the whale drew the chart before you woke up." },
+        { "zh": "卖飞", "en": "sell it and watch it fly", "noteZh": "别卖飞。这一条躲不掉，我们还是写上。", "noteEn": "do not sell it and then watch it fly. this one is unavoidable. we list it anyway." },
+        { "zh": "说这次不一样", "en": "say this one is different", "noteZh": "别说这次不一样。这次和上次一样——这个名字说的就是这件事。", "noteEn": "do not say this one is different. this one is not different. that is the point of the name." }
       ]
     },
     "tokenomics": {
@@ -574,15 +601,15 @@
     },
     "buySteps": [
       { "zh": "第一步　装个钱包。", "en": "step one. get a wallet." },
-      { "zh": "第二步　买点链上主币当油钱。", "en": "step two. buy some gas." },
-      { "zh": "第三步　只从本页复制合约地址。认准官方，别信私信，别信「客服」。", "en": "step three. copy the contract address from this page and only this page. nobody in your dms is support. there is no support." },
+      { "zh": "第二步　买点主链币，留够 gas。", "en": "step two. buy some of the chain's own coin and keep enough for gas." },
+      { "zh": "第三步　只从本页复制合约地址。认准官方，别信私信，别信“客服”。", "en": "step three. copy the contract address from this page and only this page. nobody in your dms is support. there is no support." },
       { "zh": "第四步　滑点稍微调高一点，然后……随缘。", "en": "step four. raise your slippage a little. after that it is up to fate." },
       { "zh": "第五步（可选）　拿住。", "en": "step five, optional. hold." }
     ],
     "familyRules": [
-      { "zh": "一、不喊单，不带盘，不预测价格。", "en": "one. no price calls, no shilling, no predictions." },
+      { "zh": "一、不喊单，不带单，不预测价格。", "en": "one. no price calls, no shilling, no predictions." },
       { "zh": "二、有人亏了，就说一句：没事，人比币重要。", "en": "two. if somebody loses money, you say: it's fine, people matter more than coins." },
-      { "zh": "三、每天早上发一张图。丑的也行，丑的更好。", "en": "three. post a picture every morning. ugly is allowed. ugly is better." }
+      { "zh": "三、每天早上发一张图。手机随手拍的也行，越热闹越好。", "en": "three. post a picture every morning. a phone snapshot counts. the louder the better." }
     ],
     "scenes": [
       { "id": "shanshui", "zh": "山水瀑布", "en": "mountains and waterfalls" },
@@ -600,25 +627,25 @@
       { "zh": "拿住不动", "en": "hold and do not move" }
     ],
     "glossary": [
-      { "zh": "土狗", "pinyin": "tǔ gǒu", "en": "dirt dog. a mongrel village dog; in crypto, a no-name micro-cap token with no team, no audit and no whitepaper.", "usageZh": "「今天冲了三个土狗，两个归零。」正式名称是中华田园犬。这个词不贬低狗——土狗皮实、命长，是夸奖。", "usageEn": "'aped three tugou today, two went to zero.' the formal word for the animal is 中华田园犬, the chinese pastoral dog. not derogatory toward the dog." },
-      { "zh": "土狗币", "pinyin": "tǔ gǒu bì", "en": "memecoin. not 'a kind of memecoin' — this IS the chinese word for the category.", "usageZh": "百度百科开篇：「土狗币，中文名亦作『MeMe币』」。这一句是整个项目的地基。", "usageEn": "baidu baike opens its entry with exactly this. that single line is the load-bearing fact of the whole project." },
-      { "zh": "金狗", "pinyin": "jīn gǒu", "en": "golden dog. a tugou that went up 100x and became respectable. SHIB is the canonical example.", "usageZh": "「土狗和金狗是可以互相转化的。」", "usageEn": "they convert into each other. a well-marketed tugou becomes a golden dog; a golden dog nobody markets becomes worse than a tugou." },
-      { "zh": "冲", "pinyin": "chōng", "en": "to charge in. to ape.", "usageZh": "「冲不冲？」「冲！」——整个决策流程。", "usageEn": "'are we sending it?' 'send it.' that is the entire decision-making process. this is why the button says 冲 and not 买入." },
-      { "zh": "上车 / 下车", "pinyin": "shàng chē / xià chē", "en": "get on the bus / get off the bus. buy in / sell out.", "usageZh": "「求上车」。「车门焊死」＝谁也别想下车，是一句忠诚宣言。", "usageEn": "'let me on the bus.' 'the doors are welded shut' is said as a promise of loyalty, not a threat." },
-      { "zh": "梭哈", "pinyin": "suō hā", "en": "all in. from the cantonese card game 'show hand', by way of 1990s hong kong gambling films.", "usageZh": "「梭哈了」＝全押进去了。一把定输赢，没有第二次。", "usageEn": "one hand, no second chance, cigarette in mouth. that is the flavor the word carries." },
-      { "zh": "韭菜", "pinyin": "jiǔ cài", "en": "chives. retail investors, who exist to be harvested.", "usageZh": "「我就是个老韭菜」——这个词几乎永远是自嘲，对着别人说就难听了。韭菜割了会再长，所以才有人一直割。", "usageEn": "overwhelmingly self-applied. the metaphor is precise: chives grow back after cutting, which is exactly why the market keeps cutting. keep it self-directed; never aim it at the reader." },
-      { "zh": "归零", "pinyin": "guī líng", "en": "go to zero.", "usageZh": "「99% 的土狗在热度消退后接近归零。」", "usageEn": "note that 归 (to return) is the same character as in 'return home laden'. this page puts those two next to each other on purpose." },
-      { "zh": "拿住", "pinyin": "ná zhù", "en": "hold on. keep your grip. the native HODL, and older than HODL.", "usageZh": "「拿住了，别动。」比「钻石手」更平实、更暖，像一句真心的劝。", "usageEn": "plainer and warmer than 'diamond hands'. it sounds like advice from someone who likes you." },
-      { "zh": "跑路", "pinyin": "pǎo lù", "en": "to run. the dev abandons the project and takes the liquidity. rug pull.", "usageZh": "「项目方跑路了。」比 rug 范围更宽——弃坑也算。", "usageEn": "slightly broader than 'rug': it covers abandonment as well as theft." },
-      { "zh": "貔貅盘", "pinyin": "pí xiū pán", "en": "honeypot contract. you can buy, you cannot sell.", "usageZh": "貔貅有嘴无肛，只进不出，所以它既是玉器店里的招财神兽，也是这种合约的名字。", "usageEn": "named for the mythical beast with a mouth and no anus. the same statue is a blessing on a shelf and a rug-pull on a chain." },
-      { "zh": "U", "pinyin": "U", "en": "USDT. said as the english letter.", "usageZh": "收U、出U、U本位。这就是「年年有U」这块匾成立的原因。", "usageEn": "'take payment in U', 'sell for U', 'denominate in U'. this is what makes the 'usdt every year' plaque work." }
+      { "zh": "土狗", "pinyin": "tǔ gǒu", "defZh": "村口那条谁都认识的狗，正式名称中华田园犬；在币圈指没团队、没审计、没白皮书的小市值新币。", "en": "dirt dog. a mongrel village dog; in crypto, a no-name micro-cap token with no team, no audit and no whitepaper.", "usageZh": "“今天冲了三个土狗，两个归零。”正式名称是中华田园犬。这个词不贬低狗——土狗皮实、命长，村里人是拿它当夸奖用的。", "usageEn": "'aped three tugou today, two went to zero.' the formal word for the animal is 中华田园犬, the chinese pastoral dog. not derogatory toward the dog: these dogs are hardy and long-lived, and in the village that is said as praise." },
+      { "zh": "土狗币", "pinyin": "tǔ gǒu bì", "defZh": "meme 币。不是“某一种 meme 币”——这三个字就是中文里这个品类的名字。", "en": "memecoin. not 'a kind of memecoin' — this IS the chinese word for the category.", "usageZh": "百度百科开篇：“土狗币，中文名亦作‘MeMe币’”。这一句是整个项目的地基。", "usageEn": "baidu baike opens its entry with exactly this. that single line is the load-bearing fact of the whole project." },
+      { "zh": "金狗", "pinyin": "jīn gǒu", "defZh": "涨了一百倍、混出头的土狗。SHIB 是标准案例。", "en": "golden dog. a tugou that went up 100x and became respectable. SHIB is the canonical example.", "usageZh": "“土狗和金狗是可以互相转化的。”有人营销的土狗会变成金狗；没人管的金狗，比土狗还难看。", "usageEn": "they convert into each other. a well-marketed tugou becomes a golden dog; a golden dog nobody markets becomes worse than a tugou." },
+      { "zh": "冲", "pinyin": "chōng", "defZh": "冲进去，看到就买。", "en": "to charge in. to ape.", "usageZh": "“冲不冲？”“冲！”——整个决策流程。所以这一页的按钮上写的是“冲”，不是“买入”。", "usageEn": "'are we sending it?' 'send it.' that is the entire decision-making process. this is why the button says 冲 and not 买入." },
+      { "zh": "上车 / 下车", "pinyin": "shàng chē / xià chē", "defZh": "上车＝买进，下车＝卖出。", "en": "get on the bus / get off the bus. buy in / sell out.", "usageZh": "“求上车”。“车门焊死”＝谁也别想下车，是一句忠诚宣言，不是威胁。", "usageEn": "'let me on the bus.' 'the doors are welded shut' is said as a promise of loyalty, not a threat." },
+      { "zh": "梭哈", "pinyin": "suō hā", "defZh": "全押。来自粤语的“show hand”，经九十年代香港赌片进了普通话。", "en": "all in. from the cantonese card game 'show hand', by way of 1990s hong kong gambling films.", "usageZh": "“梭哈了”＝全押进去了。一把定输赢，没有第二次——这就是这个词带着的味道。", "usageEn": "one hand, no second chance. that is the flavor the word carries." },
+      { "zh": "韭菜", "pinyin": "jiǔ cài", "defZh": "散户。被割的那一茬。", "en": "chives. retail investors, who exist to be harvested.", "usageZh": "“我就是个老韭菜”——这个词几乎永远是自嘲，对着别人说就难听了。韭菜割了会再长，所以才有人一直割。", "usageEn": "overwhelmingly self-applied. the metaphor is precise: chives grow back after cutting, which is exactly why the market keeps cutting. keep it self-directed; never aim it at the reader." },
+      { "zh": "归零", "pinyin": "guī líng", "defZh": "跌到接近零。", "en": "go to zero.", "usageZh": "“99% 的土狗在热度消退后接近归零。”注意“归零”的归，和“满载而归”是同一个归——这一页故意把这两个词摆在一起。", "usageEn": "note that 归 (to return) is the same character as in 'return home laden'. this page puts those two next to each other on purpose." },
+      { "zh": "拿住", "pinyin": "ná zhù", "defZh": "别卖，攥住。中文里的 HODL，而且比 HODL 早得多。", "en": "hold on. keep your grip. the native HODL, and older than HODL.", "usageZh": "“拿住了，别动。”比“钻石手”更平实、更暖，像一句真心的劝。", "usageEn": "plainer and warmer than 'diamond hands'. it sounds like advice from someone who likes you." },
+      { "zh": "跑路", "pinyin": "pǎo lù", "defZh": "项目方带着流动性消失。英文叫 rug pull。", "en": "to run. the dev abandons the project and takes the liquidity. rug pull.", "usageZh": "“项目方跑路了。”比 rug 范围更宽——弃坑也算。", "usageEn": "slightly broader than 'rug': it covers abandonment as well as theft." },
+      { "zh": "貔貅盘", "pinyin": "pí xiū pán", "defZh": "只能买、不能卖的合约。英文叫 honeypot。", "en": "honeypot contract. you can buy, you cannot sell.", "usageZh": "貔貅有嘴无肛，只进不出，所以它既是玉器店里的招财神兽，也是这种合约的名字。同一尊像，摆在架子上是祝福，写进合约里是骗局。", "usageEn": "named for the mythical beast with a mouth and no anus. the same statue is a blessing on a shelf and a rug-pull on a chain." },
+      { "zh": "U", "pinyin": "U", "defZh": "USDT，读作英文字母 U。", "en": "USDT. said as the english letter.", "usageZh": "收U、出U、U本位。这就是“年年有U”这块匾成立的原因。", "usageEn": "'take payment in U', 'sell for U', 'denominate in U'. this is what makes the 'usdt every year' plaque work." }
     ],
     "credits": {
       "aesthetic": { "zh": "土酷（Too Cool）", "en": "土酷 (too cool)" },
-      "originator": { "zh": "「养鸭」", "en": "'yangya'" },
+      "originator": { "zh": "“养鸭”", "en": "'yangya'" },
       "originatorNote": { "zh": "只署经核实的网名。个人名的汉字尚未确认，未确认前不写。", "en": "handle only. the hanzi of the personal name are not confirmed, and this page does not ship a guessed spelling." },
       "film": { "zh": "《Too Cool To Be True》，约 2016 年", "en": "Too Cool To Be True, c. 2016" },
-      "quotedSource": { "zh": "百度百科「土狗币」词条", "en": "Baidu Baike, entry for 'tugou coin'" },
+      "quotedSource": { "zh": "百度百科“土狗币”词条", "en": "Baidu Baike, entry for 'tugou coin'" },
       "quotedUrl": { "zh": "baike.baidu.com/item/土狗币/64278161", "en": "baike.baidu.com/item/土狗币/64278161" }
     },
     "counters": {

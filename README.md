@@ -48,6 +48,7 @@ i18n dictionary lives in `script.js` as a plain object rather than in a fetched 
 > philosophy, the antipatterns, the register rules — the documents win, and those are the parts
 > worth reading. Treat both as a backlog and a rulebook rather than a spec of the current page.
 | `assets/proto-*.html` | Standalone prototypes for the landscape and the type treatments, kept because they are the fastest way to iterate on either in isolation |
+| `test/` | Playwright checks — not shipped, not a dependency of the page. See `test/README.md` |
 
 ## How it is built
 
@@ -75,13 +76,26 @@ reference frame. The switch is `data-i18n` attributes over a single DOM, persist
   Any multi-weight Google Fonts request resolves to a variable file. Measured against the live
   API, a representative CJK subset is **19 KB** at `wght@400` and **35 KB** at either
   `wght@400;900` *or* `wght@400;700;900` — asking for two weights costs exactly what asking for
-  three does. Heavy text uses Noto Serif SC 900; display uses ZCOOL KuaiLe.
+  three does. So all the visual weight is carried by ZCOOL KuaiLe, a display face that was
+  already loaded for the WordArt, and which is a more authentic shopfront voice than a bold sans
+  would have been anyway.
 
-- **Ma Shan Zheng is loaded in its own `<link>`, subset to 土狗酷早安.** 2,928 bytes instead of
-  ~2 MB. `&text=` is a *request-level* parameter — it applies to every family in the URL it
-  appears in — so merging that link into the main one would silently subset all three other
-  families to five glyphs and render the page as tofu. **If you set a new string in Ma Shan
-  Zheng, add its characters to that `&text=` or they render in the fallback.**
+- **Two families ship subset via `&text=`, each in its own `<link>`.** Ma Shan Zheng to 土狗酷早安
+  (2,928 bytes instead of ~2 MB) and Noto Serif SC 900 to 正宗土狗币宜忌一二三四 plus digits
+  (3,760 bytes instead of the **499 KB** the full family actually pulled). `&text=` is a
+  *request-level* parameter — it applies to every family in the URL it appears in — so merging
+  either link into the main stylesheet would silently subset everything else to those few glyphs
+  and render the page as tofu.
+
+  The subsetted serif is a **register, not a weight**: only the seal, the certificate crest, the
+  宜/忌 marks, the almanac day, the step numerals and the dictionary headword. Every one of those
+  strings is hardcoded and never translated, which is what makes subsetting safe. **A character
+  outside a subset does not error — it silently falls back.** `test/subset-check.mjs` walks every
+  element on a subsetted family in both languages and fails if anything drifts outside; run it
+  after editing any of those strings, and update the `&text=` at the same time.
+
+  Total webfont cost, measured: **813 KB zh / 499 KB en**, down from 1,260 / 788 before the
+  serif was subset.
 
 - **The WordArt paints its text three times.** `::before` is the dark keyline, the real text node
   is the white keyline, `::after` is the rainbow fill. That order is not arbitrary: an element
