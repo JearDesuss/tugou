@@ -38,6 +38,15 @@ i18n dictionary lives in `script.js` as a plain object rather than in a fetched 
 | `script.js` | i18n dictionary + engine, the almanac, and the 早安 card generator |
 | `DESIGN.md` | The design contract — read this before changing anything visual |
 | `content.json` | A larger copy bank than the page currently uses; source material for new sections |
+
+> **On `DESIGN.md` and `content.json`:** both were written against a *larger* version of this page
+> — one with a nav, a mascot, an LED price strip, a plaque wall and a community section. They
+> describe roughly ten type treatments and thirty chromatic hexes; what is actually built is a
+> tighter system of **six chromatics and six treatments**, and the implementation is the tested
+> one. So where the two disagree on *counts and inventory*, the code is current and the documents
+> are a superset. Where they disagree on **principles** — the cultural contract, the elevation
+> philosophy, the antipatterns, the register rules — the documents win, and those are the parts
+> worth reading. Treat both as a backlog and a rulebook rather than a spec of the current page.
 | `assets/proto-*.html` | Standalone prototypes for the landscape and the type treatments, kept because they are the fastest way to iterate on either in isolation |
 
 ## How it is built
