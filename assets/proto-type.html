@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>土酷 type treatments</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=ZCOOL+KuaiLe&family=Noto+Sans+SC:wght@400;700;900&family=Noto+Serif+SC:wght@700;900&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{
+    background:
+      linear-gradient(#2f9fe0,#7ecdf2 30%,#cfeeff 62%,#bfe6a8 80%,#12c2c8);
+    min-height:100vh; padding:48px 24px; display:flex; flex-direction:column;
+    gap:44px; align-items:center; font-family:"Noto Sans SC",sans-serif;
+  }
+  .row{display:flex;flex-direction:column;gap:14px;align-items:center;width:100%;max-width:760px}
+  .tag{font:12px/1 ui-monospace,monospace;color:#0a3a52;background:#fff;padding:4px 8px;border-radius:3px;letter-spacing:.08em}
+
+  /* ============================================================
+     TREATMENT 1 — GOLD PLAQUE (金字牌匾)
+     The calligraphy board above the sofa. Brush face, gold gradient
+     poured top-to-bottom with a hard specular band, dark outline so it
+     survives on any background, hard offset shadow. No soft glow: the
+     real thing is embossed plastic, not light.
+     ============================================================ */
+  .plaque{
+    position:relative; padding:22px 56px 26px;
+    background:
+      linear-gradient(#8d1710,#c0261a 18%,#8f1410 52%,#5e0c08);
+    border:5px solid #f0c23a;
+    box-shadow:
+      0 0 0 3px #7a2a10,
+      10px 10px 0 0 rgba(0,0,0,.45);
+  }
+  .plaque::before{
+    /* inner gold hairline — the cheap frame-within-a-frame */
+    content:""; position:absolute; inset:5px; border:2px solid rgba(240,194,58,.55);
+    pointer-events:none;
+  }
+  .gold{
+    font-family:"Ma Shan Zheng",serif; font-size:76px; line-height:1.12;
+    letter-spacing:.10em; text-align:center;
+    background:linear-gradient(#fff6c9 0%,#ffd84a 26%,#c98a00 48%,#ffe98a 58%,#f5b500 74%,#8a5a00 100%);
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+    -webkit-text-stroke:2px #3b1a06;
+    filter:drop-shadow(4px 4px 0 rgba(0,0,0,.5));
+    padding-right:.10em; /* claw back the trailing letter-spacing */
+  }
+  /* Seal stamp: red square, reversed characters, rotated a couple of degrees
+     because it was stamped by a hand. */
+  .seal{
+    position:absolute; right:-18px; bottom:-16px;
+    width:74px; height:74px; background:#d81f14; border:3px solid #f2eee0;
+    display:grid; place-content:center; transform:rotate(-7deg);
+    box-shadow:4px 4px 0 rgba(0,0,0,.4);
+    font-family:"Noto Serif SC",serif; font-weight:900; font-size:26px;
+    line-height:1.02; color:#fff6ec; letter-spacing:0;
+    writing-mode:vertical-rl; text-orientation:upright;
+  }
+
+  /* ============================================================
+     TREATMENT 2 — BLUE SUBTITLE BOX (蓝底白字)
+     Burned-in subtitle. Pure blue box, white Helvetica, no radius,
+     no padding-elegance. This is the ONLY place English appears.
+     ============================================================ */
+  .sub{
+    display:inline-block; background:#0000f5; color:#fff;
+    font-family:Arial,Helvetica,"Liberation Sans",sans-serif;
+    font-size:34px; font-weight:400; line-height:1.24;
+    padding:2px 10px 4px; letter-spacing:.005em;
+  }
+  .sub-wrap{text-align:center;max-width:100%}
+
+  /* ============================================================
+     TREATMENT 3 — RAINBOW WORDART (彩虹艺术字)
+     The chunky rounded face, rainbow poured across it, thick white
+     keyline then black keyline, hard offset shadow. Two stacked strokes
+     is what WordArt actually did and it is why it reads as WordArt.
+     ============================================================ */
+  /* WordArt is three stacked copies: widest dark keyline, white keyline, gradient
+     fill. The order matters and it is not the obvious one — an element paints its
+     background FIRST, so a background-clip:text gradient on the parent ends up
+     UNDER its own pseudo-elements. Painting inside an inline box actually runs
+     ::before → text → ::after, so the layers are assigned in that order and the
+     real text node (kept for selection, a11y and i18n) carries the middle one. */
+  .wordart{
+    position:relative; display:inline-block;
+    font-family:"ZCOOL KuaiLe",cursive; font-size:82px; line-height:1.2;
+    letter-spacing:.03em; text-align:center; white-space:nowrap;
+    -webkit-text-stroke:7px #ffffff; color:#ffffff;      /* middle: white keyline */
+    filter:drop-shadow(8px 9px 0 rgba(0,0,0,.45));
+  }
+  .wordart::before,.wordart::after{
+    content:attr(data-text); position:absolute; left:0; top:0; width:100%;
+    white-space:nowrap;
+  }
+  .wordart::before{                                       /* back: dark keyline */
+    -webkit-text-stroke:15px #1a0050; color:#1a0050;
+  }
+  .wordart::after{                                        /* front: rainbow fill */
+    -webkit-text-stroke:0; color:transparent;
+    background:linear-gradient(92deg,#ff0040 0%,#ff7a00 16%,#ffe000 33%,#00d43c 50%,#00a8ff 67%,#7b2cff 84%,#ff00a8 100%);
+    -webkit-background-clip:text; background-clip:text;
+  }
+
+  /* ============================================================
+     TREATMENT 4 — CERTIFICATE / AWARD BADGE (荣誉证书)
+     Gold starburst behind red text. The "authorised dealer" sticker
+     on a shop window.
+     ============================================================ */
+  .cert{
+    position:relative; width:240px; height:240px; display:grid; place-content:center;
+    text-align:center;
+  }
+  .cert::before{
+    content:""; position:absolute; inset:0;
+    background:
+      conic-gradient(from 0deg,
+        #ffd84a 0 6deg,#b8860b 6deg 12deg,#ffd84a 12deg 18deg,#b8860b 18deg 24deg,
+        #ffd84a 24deg 30deg,#b8860b 30deg 36deg,#ffd84a 36deg 42deg,#b8860b 42deg 48deg,
+        #ffd84a 48deg 54deg,#b8860b 54deg 60deg,#ffd84a 60deg 66deg,#b8860b 66deg 72deg,
+        #ffd84a 72deg 78deg,#b8860b 78deg 84deg,#ffd84a 84deg 90deg,#b8860b 90deg 96deg,
+        #ffd84a 96deg 102deg,#b8860b 102deg 108deg,#ffd84a 108deg 114deg,#b8860b 114deg 120deg,
+        #ffd84a 120deg 126deg,#b8860b 126deg 132deg,#ffd84a 132deg 138deg,#b8860b 138deg 144deg,
+        #ffd84a 144deg 150deg,#b8860b 150deg 156deg,#ffd84a 156deg 162deg,#b8860b 162deg 168deg,
+        #ffd84a 168deg 174deg,#b8860b 174deg 180deg,#ffd84a 180deg 186deg,#b8860b 186deg 192deg,
+        #ffd84a 192deg 198deg,#b8860b 198deg 204deg,#ffd84a 204deg 210deg,#b8860b 210deg 216deg,
+        #ffd84a 216deg 222deg,#b8860b 222deg 228deg,#ffd84a 228deg 234deg,#b8860b 234deg 240deg,
+        #ffd84a 240deg 246deg,#b8860b 246deg 252deg,#ffd84a 252deg 258deg,#b8860b 258deg 264deg,
+        #ffd84a 264deg 270deg,#b8860b 270deg 276deg,#ffd84a 276deg 282deg,#b8860b 282deg 288deg,
+        #ffd84a 288deg 294deg,#b8860b 294deg 300deg,#ffd84a 300deg 306deg,#b8860b 306deg 312deg,
+        #ffd84a 312deg 318deg,#b8860b 318deg 324deg,#ffd84a 324deg 330deg,#b8860b 330deg 336deg,
+        #ffd84a 336deg 342deg,#b8860b 342deg 348deg,#ffd84a 348deg 354deg,#b8860b 354deg 360deg);
+    border-radius:50%;
+    filter:drop-shadow(5px 6px 0 rgba(0,0,0,.4));
+    animation:spin 24s linear infinite;
+  }
+  .cert::after{
+    content:""; position:absolute; inset:22px; border-radius:50%;
+    background:radial-gradient(#fff8e0,#ffe9a8 62%,#f0c23a);
+    border:4px solid #d81f14;
+  }
+  .cert > span{
+    position:relative; z-index:1;
+    font-family:"Noto Serif SC",serif; font-weight:900; font-size:34px; line-height:1.22;
+    color:#d81f14; text-shadow:2px 2px 0 #fff6c9;
+  }
+  @keyframes spin{to{transform:rotate(360deg)}}
+
+  /* ============================================================
+     TREATMENT 5 — MARQUEE TICKER (跑马灯)
+     The scrolling shop-sign LED. Yellow on red, all caps energy.
+     ============================================================ */
+  .marquee{
+    width:100%; overflow:hidden; background:#c0261a; border-top:4px solid #f0c23a;
+    border-bottom:4px solid #f0c23a; padding:8px 0;
+  }
+  .marquee > div{
+    display:inline-block; white-space:nowrap; padding-left:100%;
+    animation:slide 18s linear infinite;
+    font-family:"Noto Sans SC",sans-serif; font-weight:900; font-size:26px;
+    color:#ffe14a; letter-spacing:.06em;
+    text-shadow:2px 2px 0 #6d0d06;
+  }
+  @keyframes slide{to{transform:translateX(-100%)}}
+</style>
+</head>
+<body>
+
+  <div class="row">
+    <span class="tag">1 — GOLD PLAQUE 金字牌匾</span>
+    <div class="plaque">
+      <div class="gold">富狗長流</div>
+      <div class="seal">土狗</div>
+    </div>
+  </div>
+
+  <div class="row">
+    <span class="tag">2 — BLUE SUBTITLE BOX 蓝底白字</span>
+    <div class="sub-wrap"><span class="sub">what do all of these have in common</span></div>
+    <div class="sub-wrap"><span class="sub">it is a 土狗. that is the whole product.</span></div>
+  </div>
+
+  <div class="row">
+    <span class="tag">3 — RAINBOW WORDART 彩虹艺术字</span>
+    <div class="wordart" data-text="恭喜发财">恭喜发财</div>
+  </div>
+
+  <div class="row">
+    <span class="tag">4 — CERTIFICATE 荣誉证书</span>
+    <div class="cert"><span>正宗<br>土狗</span></div>
+  </div>
+
+  <div class="row" style="max-width:100%">
+    <span class="tag">5 — MARQUEE 跑马灯</span>
+    <div class="marquee"><div>★ 恭喜发财 ★ 一夜暴富 ★ 招财进宝 ★ 心想事成 ★ 万事如意 ★ 财源广进 ★ 早安 ★ 恭喜发财 ★</div></div>
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,718 @@
+/* ============================================================================
+   土狗 $TUGOU — stylesheet
+
+   NORTH STAR
+   A county-town living room at six in the morning: one wall is a floor-to-ceiling
+   backlit waterfall poster, a gold calligraphy board hangs over the sofa, and a
+   phone on the table is glowing with a glitter 早安 GIF that somebody's aunt sent
+   to everyone she knows.
+
+   THE METHOD, INVERTED
+   The house design discipline preaches accent scarcity. 土酷 is the opposite of
+   scarcity — so the DISCIPLINE is kept and the OUTPUT is maximal. The chromatic
+   set is hard-bounded at SIX named colors; a seventh is a bug, not a flourish.
+   There are exactly THREE radii. There is exactly ONE elevation philosophy. There
+   are exactly SIX type treatments and nothing may be typeset outside them.
+   Maximalism executed with a system is what separates 土酷 from noise.
+
+   ELEVATION PHILOSOPHY — HARD OFFSET SHADOWS, NO BLUR.
+   Every raised thing casts `Npx Npx 0` and wears a thick keyline. Blur radius is
+   banned in UI chrome; the only soft edges in the whole page live inside the SVG
+   artwork, where they are atmospheric mist. A soft modern shadow anywhere in the
+   chrome is the single fastest way to make this read as a Western pastiche.
+   ========================================================================== */
+
+:root {
+  /* ---- SIX chromatics. Named. Bounded. Do not add a seventh. ---- */
+  --zhu:    #d81f14;  /* 朱红 vermilion — lacquer boards, seals, the red half   */
+  --jin:    #f0c23a;  /* 金   gold      — every frame, keyline and crest        */
+  --fei:    #12c2c8;  /* 翡翠 jade      — water, panel grounds                  */
+  --tao:    #ff2e86;  /* 桃红 peach     — lotus, hot accents                    */
+  --lan:    #0000f5;  /* 湖蓝 blue      — the subtitle box AND NOTHING ELSE     */
+  --qing:   #2f8f33;  /* 竹青 bamboo    — foliage, the green half               */
+
+  /* ---- Neutral ramp, dark to light ---- */
+  --mo:     #1a1008;  /* 墨 ink      */
+  --tan:    #3b2a18;  /* 檀 sandal   */
+  --tao-n:  #6b543a;  /* 陶 clay     */
+  --mi:     #e8dcc0;  /* 米 rice     */
+  --xuan:   #f6efdd;  /* 宣 xuan     */
+  --xue:    #fffdf6;  /* 雪 snow     */
+
+  /* ---- Deep shades used only inside gradients and keylines ---- */
+  --zhu-d:  #8d1710;
+  --jin-d:  #8a5a00;
+  --qing-d: #0e4416;
+
+  /* ---- THREE radii. That is the entire set. ---- */
+  --r-0:    0;        /* boxes, plaques, subtitle bars — sharp is the default  */
+  --r-1:    8px;      /* buttons, inputs, cards                                */
+  --r-full: 999px;    /* pills and badges                                      */
+
+  /* ---- Spacing: 4px base, four named layout numbers ---- */
+  --sp:     4px;
+  --gap:    12px;     /* element gap  */
+  --pad:    24px;     /* card padding */
+  --sec:    96px;     /* section gap  */
+  --max:    1120px;   /* page width   */
+
+  /* ---- The one elevation recipe, at three strengths ---- */
+  --lift-1: 4px 4px 0 rgba(26,16,8,.42);
+  --lift-2: 8px 8px 0 rgba(26,16,8,.45);
+  --lift-3: 12px 12px 0 rgba(26,16,8,.5);
+
+  --key:    3px;      /* standard keyline weight */
+
+  /* ---- Font stacks ----
+     Only ONE weight of each CJK family is fetched, because any multi-weight
+     Google Fonts request resolves to a variable file: measured, 35 KB per CJK
+     subset for wght@400;900 against 19 KB for wght@400 alone. So weight on this
+     page comes from CHANGING FAMILY, never from asking Noto Sans SC for a bold.
+     Every stack ends in explicit system CJK faces — during the display=swap
+     window a bare `sans-serif` shows a screen of tofu on a machine with no
+     CJK font installed. */
+  --f-body:  "Noto Sans SC", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  --f-heavy: "Noto Serif SC", "Songti SC", "SimSun", serif;   /* always weight 900 */
+  --f-disp:  "ZCOOL KuaiLe", "PingFang SC", "Microsoft YaHei", cursive;
+  --f-brush: "Ma Shan Zheng", "Noto Serif SC", "Songti SC", serif;
+  /* The blue box only. Arial leads because the burned-in-subtitle look IS Arial —
+     but Arial carries no CJK, and in Chinese this box is full of it. A bare
+     `sans-serif` tail would drop those characters into whatever the system
+     happens to have rather than the face the page actually loaded. Fallback is
+     per-character, so Latin still resolves to Arial and only the CJK falls
+     through to Noto Sans SC. */
+  --f-sub:   Arial, Helvetica, "Liberation Sans",
+             "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+}
+
+*,*::before,*::after { box-sizing: border-box; }
+* { margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--xuan);
+  color: var(--mo);
+  font-family: var(--f-body);
+  font-size: 17px;
+  line-height: 1.75;
+  overflow-x: hidden;
+  /* CJK and Latin sit together on nearly every line here. `line-break: strict`
+     stops a line opening with a closing bracket or a full stop. `word-break`
+     stays `normal`: `keep-all` is a Korean rule and, because Chinese has no
+     spaces, it turns a whole paragraph into one unbreakable token that blows
+     straight out of the viewport. Latin words inside Chinese text must not be
+     guillotined either, so no `overflow-wrap: anywhere` — the long unbroken
+     runs on this page are contract addresses, which opt in locally. */
+  word-break: normal;
+  line-break: strict;
+  text-spacing-trim: trim-start;
+}
+
+img, svg, canvas { display: block; max-width: 100%; }
+
+.wrap { width: 100%; max-width: var(--max); margin-inline: auto; padding-inline: var(--pad); }
+.wrap--narrow { max-width: 720px; }
+
+/* ============================================================================
+   TYPE TREATMENT 1 — 牌匾 GOLD PLAQUE
+   The calligraphy board over the sofa. Brush face, gold poured top to bottom
+   with a hard specular band, dark keyline so it survives on any ground, hard
+   offset shadow. Never a soft glow: the real object is embossed plastic, not a
+   light source.
+   ========================================================================== */
+.plaque {
+  position: relative;
+  display: inline-block;
+  padding: 20px 52px 24px;
+  background: linear-gradient(var(--zhu-d), var(--zhu) 18%, #8f1410 52%, #5e0c08);
+  border: 5px solid var(--jin);
+  border-radius: var(--r-0);
+  box-shadow: 0 0 0 var(--key) #7a2a10, var(--lift-3);
+}
+.plaque::before {
+  content: ""; position: absolute; inset: 5px;
+  border: 2px solid rgba(240,194,58,.55);
+  pointer-events: none;
+}
+.plaque__gold {
+  font-family: var(--f-brush);
+  font-size: clamp(64px, 15vw, 132px);
+  line-height: 1.14;
+  letter-spacing: .10em;
+  padding-right: .10em;           /* claw back the trailing letter-space */
+  text-align: center;
+  background: linear-gradient(#fff6c9 0%, #ffd84a 26%, #c98a00 48%,
+                              #ffe98a 58%, #f5b500 74%, var(--jin-d) 100%);
+  -webkit-background-clip: text; background-clip: text;
+  color: transparent;
+  -webkit-text-stroke: 2px #3b1a06;
+  filter: drop-shadow(4px 4px 0 rgba(0,0,0,.5));
+}
+.plaque--hero { margin-bottom: var(--pad); }
+
+/* TREATMENT 4 — 印章 SEAL. Reversed characters on red, stamped by a hand and so
+   never quite square to the page. */
+.seal {
+  position: absolute; right: -20px; bottom: -18px;
+  width: 78px; height: 78px;
+  display: grid; place-content: center;
+  background: var(--zhu); border: 3px solid #f2eee0;
+  border-radius: var(--r-0);
+  transform: rotate(-7deg);
+  box-shadow: var(--lift-1);
+  font-family: var(--f-heavy); font-weight: 900;
+  font-size: 26px; line-height: 1.02; color: #fff6ec;
+  writing-mode: vertical-rl; text-orientation: upright;
+}
+
+/* ============================================================================
+   TYPE TREATMENT 2 — 蓝底白字 SUBTITLE BOX
+   The burned-in subtitle. Pure blue, white Arial, no radius, no elegance. This
+   is the ONLY element permitted to use --lan, and the only place a sans-serif
+   Latin face appears at size.
+   ========================================================================== */
+.sub-wrap { text-align: center; margin-block: var(--gap); }
+.sub {
+  display: inline;
+  background: var(--lan);
+  color: #fff;
+  font-family: var(--f-sub);
+  font-size: clamp(17px, 2.6vw, 30px);
+  font-weight: 400;
+  line-height: 1.5;
+  padding: 2px 10px 4px;
+  border-radius: var(--r-0);
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+.sub--small { font-size: clamp(14px, 1.8vw, 19px); }
+
+/* ============================================================================
+   TYPE TREATMENT 3 — 彩虹艺术字 RAINBOW WORDART
+   Three stacked copies: widest dark keyline, white keyline, rainbow fill.
+   The layer order is not the obvious one. An element paints its BACKGROUND
+   first, so a background-clip:text gradient on the parent ends up underneath
+   its own pseudo-elements. Painting inside an inline box runs
+   ::before -> text -> ::after, so the layers are assigned in that order and the
+   real text node carries the middle one — which also keeps it selectable, and
+   keeps one node for the i18n layer to write to.
+   ========================================================================== */
+.wordart {
+  position: relative;
+  display: inline-block;
+  font-family: var(--f-disp);
+  font-size: clamp(40px, 8vw, 86px);
+  line-height: 1.24;
+  letter-spacing: .03em;
+  text-align: center;
+  white-space: nowrap;
+  -webkit-text-stroke: 7px #fff; color: #fff;              /* middle keyline */
+  filter: drop-shadow(8px 9px 0 rgba(26,16,8,.45));
+}
+.wordart::before, .wordart::after {
+  content: attr(data-text);
+  position: absolute; left: 0; top: 0; width: 100%;
+  white-space: nowrap;
+}
+.wordart::before { -webkit-text-stroke: 15px #1a0050; color: #1a0050; }
+.wordart::after {
+  -webkit-text-stroke: 0; color: transparent;
+  background: linear-gradient(92deg, #ff0040 0%, #ff7a00 16%, #ffe000 33%,
+                              #00d43c 50%, #00a8ff 67%, #7b2cff 84%, #ff00a8 100%);
+  -webkit-background-clip: text; background-clip: text;
+}
+/* English headlines are far longer than four Chinese characters and would burst
+   the line. Let them wrap and shrink rather than overflow. */
+html[data-lang="en"] .wordart {
+  white-space: normal;
+  font-size: clamp(30px, 5.4vw, 60px);
+  max-width: 18ch;
+}
+html[data-lang="en"] .wordart::before,
+html[data-lang="en"] .wordart::after { white-space: normal; }
+
+/* TREATMENT 6 — 标签 LABEL. Small, heavy, tracked. Metadata only. */
+.label {
+  font-family: var(--f-heavy); font-weight: 900; font-size: 13px; letter-spacing: .16em;
+  text-transform: uppercase;
+}
+
+/* ============================================================================
+   FOCUS
+   A default focus ring is invisible over a hyper-saturated waterfall, so every
+   focusable thing gets a double ring: white against the dark, black against the
+   light. One of the two always survives.
+   ========================================================================== */
+:where(a, button, input, select, [tabindex]):focus-visible {
+  outline: 3px solid #fff;
+  outline-offset: 3px;
+  box-shadow: 0 0 0 6px var(--mo);
+}
+
+/* The permanent way out of the bit. Off-screen until focused, then it lands
+   as a plain, unstyled-looking bar — the honest section's own register. */
+.skiplink {
+  position: fixed; top: 0; left: 50%; transform: translate(-50%, -120%);
+  z-index: 80;
+  padding: 10px 20px;
+  background: var(--mo); color: var(--xue);
+  border-radius: var(--r-0);
+  font-family: var(--f-body); font-size: 15px;
+  text-decoration: underline;
+  transition: transform .08s steps(2);
+}
+.skiplink:focus-visible { transform: translate(-50%, 0); }
+
+/* ============================================================================
+   LANGUAGE SWITCH
+   ========================================================================== */
+.langbar { position: fixed; top: 16px; right: 16px; z-index: 60; }
+.langbtn {
+  display: flex; align-items: center; gap: 6px;
+  padding: 8px 16px;
+  background: linear-gradient(var(--zhu), var(--zhu-d));
+  color: var(--jin);
+  border: var(--key) solid var(--jin);
+  border-radius: var(--r-1);
+  box-shadow: var(--lift-1);
+  font-family: var(--f-heavy); font-weight: 900; font-size: 16px;
+  letter-spacing: .04em;
+  cursor: pointer;
+  transition: transform .08s steps(2), box-shadow .08s steps(2);
+}
+.langbtn:hover { transform: translate(-2px,-2px); box-shadow: 6px 6px 0 rgba(26,16,8,.45); }
+.langbtn:active { transform: translate(2px,2px); box-shadow: 1px 1px 0 rgba(26,16,8,.45); }
+.langbtn__sep { opacity: .55; }
+/* The inactive language dims; the active one is full gold. */
+.langbtn__zh, .langbtn__en { transition: opacity .12s steps(2); }
+html[data-lang="zh"] .langbtn__en { opacity: .45; }
+html[data-lang="en"] .langbtn__zh { opacity: .45; }
+
+/* ============================================================================
+   HERO
+   ========================================================================== */
+.hero {
+  position: relative;
+  min-height: 100svh;
+  display: grid;
+  place-items: center;
+  padding: 96px var(--pad) 120px;
+  overflow: hidden;
+}
+.hero__scene { position: absolute; inset: 0; z-index: 0; }
+.hero__scene svg {
+  width: 100%; height: 100%;
+  /* The single filter that turns a vector drawing into a Photoshop composite:
+     saturation and contrast pushed past what any camera saw. */
+  filter: saturate(1.45) contrast(1.12);
+}
+.hero__content { position: relative; z-index: 2; text-align: center; }
+.hero__fade {
+  position: absolute; left: 0; right: 0; bottom: 0; height: 140px; z-index: 1;
+  background: linear-gradient(rgba(246,239,221,0), var(--xuan));
+}
+
+.ticker-badge {
+  display: inline-flex; align-items: center; gap: 10px;
+  margin-block: var(--gap);
+  padding: 8px 20px;
+  background: var(--xue);
+  border: var(--key) solid var(--mo);
+  border-radius: var(--r-full);
+  box-shadow: var(--lift-1);
+  font-family: var(--f-heavy); font-weight: 900;
+}
+.ticker-badge__label { font-size: 13px; letter-spacing: .14em; color: var(--tao-n); }
+.ticker-badge__value { font-size: 22px; letter-spacing: .06em; color: var(--zhu); }
+.ticker-badge__cn { font-size: 22px; color: var(--mo); }
+
+.hero__cta { display: flex; gap: var(--gap); justify-content: center; flex-wrap: wrap; margin-top: var(--pad); }
+
+/* ============================================================================
+   BUTTONS
+   ========================================================================== */
+.btn {
+  display: inline-block;
+  padding: 14px 30px;
+  border: var(--key) solid var(--mo);
+  border-radius: var(--r-1);
+  box-shadow: var(--lift-1);
+  font-family: var(--f-heavy);
+  font-weight: 900; font-size: 17px; letter-spacing: .04em;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform .08s steps(2), box-shadow .08s steps(2);
+}
+.btn:hover  { transform: translate(-2px,-2px); box-shadow: 6px 6px 0 rgba(26,16,8,.45); }
+.btn:active { transform: translate(2px,2px);   box-shadow: 1px 1px 0 rgba(26,16,8,.45); }
+.btn--red   { background: var(--zhu); color: var(--jin); }
+.btn--gold  { background: var(--jin); color: var(--zhu-d); }
+.btn--small { padding: 8px 16px; font-size: 14px; background: var(--mi); color: var(--mo); }
+/* A button that cannot do anything has to look like it. There is no address to
+   copy yet, and a live-looking control there invites someone to paste nothing
+   into a wallet. */
+.btn[disabled] {
+  background: var(--mi); color: var(--tao-n);
+  border-color: var(--tao-n);
+  box-shadow: none;
+  cursor: not-allowed;
+  opacity: .65;
+}
+.btn[disabled]:hover, .btn[disabled]:active { transform: none; box-shadow: none; }
+
+/* ============================================================================
+   MARQUEE — 跑马灯. The scrolling LED shop sign.
+   ========================================================================== */
+.marquee {
+  position: relative;
+  overflow: hidden;
+  background: var(--zhu);
+  border-block: 4px solid var(--jin);
+  padding-block: 8px;
+}
+/* WCAG 2.2.2 — auto-scrolling content running longer than five seconds must be
+   stoppable. Small, on the strip itself, not buried in a settings panel. */
+.marquee__pause {
+  position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
+  width: 44px; height: 44px;   /* full tap target — it is the only control here */
+  display: grid; place-content: center;
+  background: var(--jin); color: var(--zhu-d);
+  border: 2px solid var(--mo);
+  border-radius: var(--r-1);
+  box-shadow: var(--lift-1);
+  font-size: 12px; line-height: 1;
+  cursor: pointer;
+}
+.marquee__track {
+  display: inline-block; white-space: nowrap; padding-left: 100%;
+  animation: slide 26s linear infinite;
+  font-family: var(--f-heavy); font-weight: 900; font-size: clamp(17px, 2.4vw, 26px);
+  color: #ffe14a; letter-spacing: .06em;
+  text-shadow: 2px 2px 0 #6d0d06;
+}
+@keyframes slide { to { transform: translateX(-100%); } }
+
+/* ============================================================================
+   SECTIONS
+   ========================================================================== */
+.section { padding-block: var(--sec); position: relative; }
+.section > .wrap > .wordart { display: block; margin-inline: auto; }
+.section--paper { background: var(--xuan); }
+.section--jade  {
+  background:
+    repeating-linear-gradient(45deg, rgba(255,255,255,.06) 0 14px, transparent 14px 28px),
+    linear-gradient(var(--fei), #0a93b8);
+  color: var(--xue);
+}
+.section--red {
+  background:
+    repeating-linear-gradient(-45deg, rgba(0,0,0,.05) 0 14px, transparent 14px 28px),
+    linear-gradient(var(--zhu), var(--zhu-d));
+  color: var(--xue);
+}
+.section--plain { background: var(--mi); }
+.section--jade .sub, .section--red .sub { /* the blue box holds its own on any ground */ }
+
+/* ---- Dictionary block: the joke is that this entry is real ---- */
+.dict {
+  max-width: 760px; margin: var(--pad) auto;
+  padding: var(--pad);
+  background: var(--xue);
+  border: var(--key) solid var(--mo);
+  border-radius: var(--r-0);
+  box-shadow: var(--lift-2);
+  text-align: left;
+}
+.dict__head { display: flex; align-items: baseline; gap: var(--gap); flex-wrap: wrap;
+  border-bottom: 2px solid var(--mi); padding-bottom: var(--gap); margin-bottom: var(--gap); }
+.dict__word { font-family: var(--f-heavy); font-weight: 900; font-size: 38px; }
+.dict__pinyin { font-family: var(--f-heavy); font-weight: 900; color: var(--tao-n); font-size: 20px; }
+/* The load-bearing line, quoted verbatim. The whole coin is downstream of it. */
+.dict__quote {
+  margin-bottom: var(--gap);
+  padding-left: var(--gap);
+  border-left: 5px solid var(--zhu);
+}
+.dict__quoteline {
+  font-family: var(--f-heavy); font-weight: 900;
+  font-size: clamp(19px, 2.4vw, 25px); line-height: 1.6;
+}
+.dict__quotesrc { display: block; margin-top: 6px; font-size: 14px; color: var(--tao-n); font-style: normal; }
+.dict__body { font-size: 18px; }
+.dict__src { margin-top: var(--gap); font-size: 15px; color: var(--tan); }
+
+.credit {
+  margin-top: var(--sec); text-align: center;
+  font-size: 14px; color: var(--tao-n);
+}
+.warning {
+  max-width: 640px; margin: var(--pad) auto 0;
+  text-align: center; font-size: 16px;
+  color: var(--xue);
+}
+
+/* ---- Cards ---- */
+.cardgrid {
+  display: grid; gap: var(--gap);
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  margin-top: var(--sec);
+}
+.card {
+  padding: var(--pad);
+  background: var(--xue);
+  border: var(--key) solid var(--mo);
+  border-radius: var(--r-1);
+  box-shadow: var(--lift-2);
+  text-align: center;
+}
+.card__glyph {
+  font-family: var(--f-brush); font-size: 76px; line-height: 1;
+  color: var(--zhu);
+  text-shadow: 3px 3px 0 var(--jin);
+  margin-bottom: var(--gap);
+}
+.card__title { font-family: var(--f-heavy); font-size: 22px; font-weight: 900; margin-bottom: 8px; }
+.card__body  { font-size: 16px; color: var(--tan); }
+
+/* ---- Certificate ---- */
+.certificate {
+  position: relative; max-width: 780px; margin: var(--sec) auto 0;
+  padding: 56px var(--pad);
+  background: radial-gradient(circle at 50% 0%, #fff8e0, var(--mi) 70%);
+  border: 6px double var(--zhu);
+  border-radius: var(--r-0);
+  box-shadow: var(--lift-3);
+  color: var(--mo);
+  text-align: center;
+}
+.certificate__starburst {
+  position: absolute; inset: 10px;
+  background: repeating-conic-gradient(from 0deg,
+    rgba(240,194,58,.30) 0 3deg, transparent 3deg 6deg);
+  pointer-events: none;
+}
+.certificate__inner { position: relative; }
+.certificate__crest { margin-bottom: var(--pad); }
+.cert-badge {
+  position: relative; display: inline-grid; place-content: center;
+  width: 150px; height: 150px;
+}
+.cert-badge::before {
+  content: ""; position: absolute; inset: 0; border-radius: 50%;
+  background: repeating-conic-gradient(from 0deg, var(--jin) 0 6deg, var(--jin-d) 6deg 12deg);
+  filter: drop-shadow(4px 5px 0 rgba(26,16,8,.4));
+  animation: spin 30s linear infinite;
+}
+.cert-badge::after {
+  content: ""; position: absolute; inset: 16px; border-radius: 50%;
+  background: radial-gradient(#fff8e0, #ffe9a8 62%, var(--jin));
+  border: 4px solid var(--zhu);
+}
+.cert-badge > span {
+  position: relative; z-index: 1;
+  font-family: var(--f-heavy); font-weight: 900; font-size: 24px; line-height: 1.2;
+  color: var(--zhu); text-shadow: 2px 2px 0 #fff6c9;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.certificate__title {
+  font-family: var(--f-heavy); font-weight: 900; font-size: 42px; color: var(--zhu-d);
+  margin-bottom: var(--pad);
+}
+/* Four fixed columns, not auto-fit — four stats orphaning one onto a second row
+   looked like a layout bug rather than a certificate. */
+.stats { display: grid; gap: var(--gap); grid-template-columns: repeat(4, 1fr); }
+@media (max-width: 780px) { .stats { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 400px) { .stats { grid-template-columns: 1fr; } }
+.stat {
+  padding: var(--gap);
+  background: var(--xue);
+  border: 2px solid var(--tan);
+  border-radius: var(--r-1);
+}
+.stat dt { font-family: var(--f-heavy); font-size: 13px; letter-spacing: .1em; color: var(--tao-n); font-weight: 900; }
+.stat dd { font-family: var(--f-heavy); font-size: 21px; font-weight: 900; color: var(--mo); }
+.certificate__note { margin-top: var(--pad); font-size: 15px; color: var(--tan); }
+
+/* ---- Almanac ---- */
+.almanac {
+  display: grid; gap: 0;
+  grid-template-columns: minmax(180px, 260px) 1fr;
+  max-width: 900px; margin: var(--pad) auto 0;
+  background: var(--xue);
+  border: var(--key) solid var(--mo);
+  border-radius: var(--r-0);
+  box-shadow: var(--lift-3);
+  color: var(--mo);
+  overflow: hidden;
+}
+.almanac__date {
+  background: var(--zhu); color: var(--xue);
+  padding: var(--pad); text-align: center;
+  display: grid; align-content: center; gap: 4px;
+  border-right: var(--key) solid var(--mo);
+}
+.almanac__day { font-family: var(--f-heavy); font-weight: 900; font-size: 88px; line-height: 1; }
+.almanac__month, .almanac__weekday { font-size: 15px; letter-spacing: .1em; }
+.almanac__cols { display: grid; grid-template-columns: 1fr 1fr; }
+.almanac__col { padding: var(--pad); }
+.almanac__col--yi { border-right: 2px dashed var(--mi); }
+.almanac__mark {
+  font-family: var(--f-heavy); font-weight: 900; font-size: 46px;
+  line-height: 1; margin-bottom: var(--gap);
+}
+.almanac__col--yi .almanac__mark { color: var(--qing); }
+.almanac__col--ji .almanac__mark { color: var(--zhu); }
+.almanac__col ul { list-style: none; display: grid; gap: 8px; }
+.almanac__col li { font-size: 17px; padding-left: 18px; position: relative; }
+.almanac__col li::before {
+  content: "·"; position: absolute; left: 4px; font-weight: 900;
+}
+.almanac__col--yi li::before { color: var(--qing); }
+.almanac__col--ji li::before { color: var(--zhu); }
+
+/* ---- Generator ---- */
+.gen {
+  display: grid; gap: var(--pad);
+  grid-template-columns: minmax(260px, 340px) 1fr;
+  align-items: start;
+  margin-top: var(--pad);
+}
+.gen__controls { display: grid; gap: var(--gap); }
+.field { display: grid; gap: 6px; text-align: left; }
+.field__label { font-family: var(--f-heavy); font-weight: 900; font-size: 14px; letter-spacing: .08em; }
+.field input, .field select {
+  width: 100%; padding: 12px 14px;
+  font-family: inherit; font-size: 16px;
+  background: var(--xue);
+  border: var(--key) solid var(--mo);
+  border-radius: var(--r-1);
+  box-shadow: var(--lift-1);
+  color: var(--mo);
+}
+.field input:focus-visible, .field select:focus-visible,
+.btn:focus-visible, .langbtn:focus-visible {
+  outline: 4px solid var(--tao); outline-offset: 3px;
+}
+.gen__buttons { display: flex; gap: var(--gap); flex-wrap: wrap; margin-top: 4px; }
+.gen__hint { font-size: 14px; color: var(--tao-n); }
+.gen__preview {
+  display: grid; place-items: center;
+  padding: var(--gap);
+  background: var(--mi);
+  border: var(--key) solid var(--mo);
+  border-radius: var(--r-1);
+  box-shadow: var(--lift-2);
+}
+#genCanvas { width: 100%; height: auto; border-radius: var(--r-0); }
+
+/* ---- Steps ---- */
+.steps {
+  list-style: none;
+  display: grid; gap: var(--gap);
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  margin-top: var(--pad);
+}
+.step {
+  position: relative;
+  padding: var(--pad);
+  background: var(--xue); color: var(--mo);
+  border: var(--key) solid var(--mo);
+  border-radius: var(--r-1);
+  box-shadow: var(--lift-2);
+}
+.step__n {
+  display: grid; place-content: center;
+  width: 46px; height: 46px; margin-bottom: var(--gap);
+  background: var(--zhu); color: var(--jin);
+  border-radius: var(--r-full);
+  font-family: var(--f-heavy); font-weight: 900; font-size: 22px;
+}
+.step h3 { font-family: var(--f-heavy); font-weight: 900; font-size: 19px; margin-bottom: 6px; }
+.step p  { font-size: 15px; color: var(--tan); }
+
+.contract {
+  display: flex; align-items: center; gap: var(--gap); flex-wrap: wrap;
+  justify-content: center;
+  max-width: 760px; margin: var(--sec) auto 0;
+  padding: var(--gap) var(--pad);
+  background: var(--xue); color: var(--mo);
+  border: var(--key) solid var(--mo);
+  border-radius: var(--r-1);
+  box-shadow: var(--lift-2);
+}
+.contract__label { font-family: var(--f-heavy); font-weight: 900; font-size: 13px; letter-spacing: .12em; }
+.contract__addr {
+  font-family: ui-monospace, "SFMono-Regular", Menlo, monospace;
+  font-size: 15px; word-break: break-all;
+}
+
+/* ---- The honest section. Deliberately the quietest thing on the page:
+        it is the one part that is not a joke, so it does not wear a costume. ---- */
+.section--plain .truth__title {
+  font-family: var(--f-heavy); font-weight: 900;
+  font-size: clamp(26px, 4vw, 38px);
+  margin-bottom: 6px;
+}
+.truth__sub { font-size: 15px; color: var(--tao-n); margin-bottom: var(--pad); }
+.truth__body { display: grid; gap: var(--gap); font-size: 17px; color: var(--tan); }
+.truth__quote {
+  margin-top: var(--pad); padding-left: var(--gap);
+  border-left: 3px solid var(--tao-n);
+}
+.truth__quote p { font-family: var(--f-heavy); font-weight: 900; font-size: 21px; color: var(--mo); }
+.truth__quote cite { display: block; margin-top: 6px; font-size: 14px; color: var(--tao-n); font-style: normal; }
+.truth__sign { margin-top: var(--pad); font-size: 17px; color: var(--mo); }
+
+/* ---- Footer ---- */
+.footer { background: var(--mo); color: var(--mi); padding-block: var(--sec) var(--pad); text-align: center; }
+.footer__cn {
+  font-family: var(--f-brush); font-size: 72px; line-height: 1;
+  background: linear-gradient(#fff6c9, #ffd84a 30%, #c98a00 60%, var(--jin-d));
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+.footer__credit { margin-top: var(--pad); font-size: 14px; color: var(--tao-n); }
+.footer a { color: var(--jin); }
+
+/* ============================================================================
+   RESPONSIVE
+   ========================================================================== */
+@media (max-width: 860px) {
+  :root { --sec: 64px; --pad: 20px; }
+  .gen { grid-template-columns: 1fr; }
+  .almanac { grid-template-columns: 1fr; }
+  .almanac__date { border-right: 0; border-bottom: var(--key) solid var(--mo); }
+  .almanac__day { font-size: 60px; }
+}
+@media (max-width: 520px) {
+  .almanac__cols { grid-template-columns: 1fr; }
+  .almanac__col--yi { border-right: 0; border-bottom: 2px dashed var(--mi); }
+  .seal { right: -10px; bottom: -12px; width: 62px; height: 62px; font-size: 21px; }
+  .plaque { padding: 16px 30px 20px; }
+}
+
+/* ============================================================================
+   REDUCED MOTION
+   A maximalist page has a duty here: there is a lot moving at once. Everything
+   decorative stops. The page loses nothing it needed.
+   ========================================================================== */
+/* Stop the travel, keep the blessing. Blanket-freezing every animation would
+   erase the aesthetic for exactly the people who did not ask for it to be
+   erased — and worse, the sparkles animate opacity 0 → 1 → 0, so freezing them
+   at a near-zero duration parks them on their final keyframe and they vanish
+   outright. Translation and rotation stop; the twinkle stays, slowed, and is
+   pinned back to full opacity. */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+
+  .marquee__track { animation: none; padding-left: 0; text-align: center; }
+  .cert-badge::before { animation: none; }
+  .btn, .langbtn, .skiplink { transition: none; }
+
+  .hero__scene svg animateTransform,
+  .hero__scene svg animateMotion { display: none; }
+
+  /* The koi and cranes stop where they are; the sparkles stay lit. */
+  .hero__scene svg [fill="#ffffff"] > path { opacity: 1 !important; }
+}
