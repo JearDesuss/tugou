@@ -1,172 +1,143 @@
 import { chromium } from 'playwright';
+import { mkdir } from 'node:fs/promises';
+import { dirname, resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 
-const FILE = process.argv[2];
-const OUT = process.argv[3];
-const url = pathToFileURL(FILE).href;
+const TARGET = process.argv[2] || '../index.html';
+const OUT = resolve(process.argv[3] || './out/tugou');
+const url = /^https?:\/\//i.test(TARGET) ? TARGET : pathToFileURL(resolve(TARGET)).href;
+await mkdir(dirname(OUT), { recursive: true });
+
 let failures = 0;
-const ok = (name, cond, detail = '') => {
-  if (!cond) { failures++; console.log('  FAIL ' + name + (detail ? ' — ' + detail : '')); }
-  else console.log('  pass ' + name + (detail ? ' — ' + detail : ''));
+const ok = (name, condition, detail = '') => {
+  if (!condition) {
+    failures += 1;
+    console.log(`  FAIL ${name}${detail ? ` — ${detail}` : ''}`);
+  } else {
+    console.log(`  pass ${name}${detail ? ` — ${detail}` : ''}`);
+  }
 };
 
 const browser = await chromium.launch();
 
-// ---------- 1. both languages, desktop ----------
 for (const lang of ['zh', 'en']) {
-  console.log('\n[' + lang + ' / desktop 1280]');
-  const p = await browser.newPage({ viewport: { width: 1280, height: 900 } });
-  const errs = [];
-  p.on('pageerror', e => errs.push(e.message));
-  p.on('console', m => { if (m.type() === 'error') errs.push(m.text()); });
-  await p.goto(url, { waitUntil: 'networkidle' });
-  await p.waitForTimeout(2200);
-  if ((await p.getAttribute('html', 'data-lang')) !== lang) {
-    await p.click('#langBtn'); await p.waitForTimeout(900);
+  console.log(`\n[${lang} / desktop 1280]`);
+  const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
+  const errors = [];
+  page.on('pageerror', error => errors.push(error.message));
+  page.on('console', message => { if (message.type() === 'error') errors.push(message.text()); });
+  await page.goto(url, { waitUntil: 'networkidle' });
+  await page.waitForTimeout(1000);
+  if ((await page.getAttribute('html', 'data-lang')) !== lang) {
+    await page.click('#langBtn');
+    await page.waitForTimeout(250);
   }
-  ok('no js errors', errs.length === 0, errs.join(' | ').slice(0, 200));
-  ok('lang attr', (await p.getAttribute('html', 'data-lang')) === lang);
-  ok('html lang', ['zh-Hans', 'en'].includes(await p.getAttribute('html', 'lang')));
-  ok('no h-overflow', (await p.evaluate(() => document.documentElement.scrollWidth)) <= 1281);
 
-  // every translatable node actually got text
-  const empty = await p.evaluate(() => {
-    const out = [];
-    document.querySelectorAll('[data-i18n],[data-i18n-wordart]').forEach(el => {
-      if (!el.textContent.trim()) out.push(el.dataset.i18n || el.dataset.i18nWordart);
-    });
-    return out;
+  ok('no JS errors', errors.length === 0, errors.join(' | ').slice(0, 180));
+  ok('language dataset', (await page.getAttribute('html', 'data-lang')) === lang);
+  ok('language attribute', (await page.getAttribute('html', 'lang')) === (lang === 'zh' ? 'zh-Hans' : 'en'));
+  ok('no horizontal overflow', (await page.evaluate(() => document.documentElement.scrollWidth)) <= 1281);
+
+  const badTranslations = await page.evaluate(() => {
+    return [...document.querySelectorAll('[data-i18n]')]
+      .filter(element => !element.textContent.trim() || element.textContent.trim() === element.dataset.i18n)
+      .map(element => element.dataset.i18n);
   });
-  ok('no empty i18n nodes', empty.length === 0, empty.join(','));
+  ok('all copy rendered', badTranslations.length === 0, badTranslations.join(', '));
 
-  // no key leaked through as its own name
-  const leaked = await p.evaluate(() => {
-    const out = [];
-    document.querySelectorAll('[data-i18n],[data-i18n-wordart]').forEach(el => {
-      const k = el.dataset.i18n || el.dataset.i18nWordart;
-      if (el.textContent.trim() === k) out.push(k);
-    });
-    return out;
+  ok('copy button disabled', await page.$eval('#copyBtn', button => button.disabled));
+  const address = (await page.textContent('#contractAddr')).trim();
+  ok('no fake address', address.length > 0 && !/^0x[0-9a-f]{8,}/i.test(address), address);
+
+  ok('compressed hero image loaded', await page.$eval('.hero__media img', image => image.complete && image.naturalWidth === 840 && image.naturalHeight === 672));
+  ok('almanac has three 宜', (await page.$$eval('#almYi li', nodes => nodes.length)) === 3);
+  ok('almanac has three 忌', (await page.$$eval('#almJi li', nodes => nodes.length)) === 3);
+
+  const painted = await page.evaluate(() => {
+    const canvas = document.getElementById('genCanvas');
+    const data = canvas.getContext('2d').getImageData(0, 0, canvas.width, canvas.height).data;
+    const colors = new Set();
+    for (let index = 0; index < data.length; index += 5000) {
+      colors.add(`${data[index]},${data[index + 1]},${data[index + 2]}`);
+    }
+    return colors.size;
   });
-  ok('no untranslated keys', leaked.length === 0, leaked.join(','));
+  ok('card canvas painted', painted > 60, `${painted} sampled colours`);
 
-  // WordArt headings must not be announced three times
-  const triple = await p.evaluate(() =>
-    [...document.querySelectorAll('.wordart')].filter(el => !el.getAttribute('aria-label')).length);
-  ok('wordart has aria-label', triple === 0);
-
-  // contract must not look copyable while there is no address
-  ok('copy button disabled', await p.$eval('#copyBtn', b => b.disabled));
-  const addr = (await p.$eval('#contractAddr', e => e.textContent)).trim();
-  ok('no fake address', !/^0x[0-9a-f]{6,}/i.test(addr) && addr.length > 0, addr);
-
-  // canvas actually painted something (not a blank rect)
-  const painted = await p.evaluate(() => {
-    const c = document.getElementById('genCanvas');
-    const g = c.getContext('2d');
-    const d = g.getImageData(0, 0, c.width, c.height).data;
-    const seen = new Set();
-    for (let i = 0; i < d.length; i += 4000) seen.add(d[i] + ',' + d[i + 1] + ',' + d[i + 2]);
-    return seen.size;
-  });
-  ok('canvas painted', painted > 40, painted + ' distinct sampled colours');
-
-  // the card must export
-  const blob = await p.evaluate(() => new Promise(res => {
-    document.getElementById('genCanvas').toBlob(b => res(b ? b.size : 0), 'image/png');
+  const pngBytes = await page.evaluate(() => new Promise(resolveBlob => {
+    document.getElementById('genCanvas').toBlob(blob => resolveBlob(blob?.size || 0), 'image/png');
   }));
-  ok('canvas exports png (not tainted)', blob > 10000, blob + ' bytes');
+  ok('card exports an untainted PNG', pngBytes > 10000, `${pngBytes} bytes`);
 
-  // almanac filled
-  ok('almanac populated', (await p.$$eval('#almYi li', n => n.length)) === 5);
-  ok('almanac ji populated', (await p.$$eval('#almJi li', n => n.length)) === 5);
-
-  await p.screenshot({ path: `${OUT}-${lang}-hero.png` });
-  await p.close();
+  await page.screenshot({ path: `${OUT}-${lang}.png`, fullPage: true });
+  await page.close();
 }
 
-// ---------- 2. language choice persists ----------
 console.log('\n[persistence]');
 {
-  const ctx = await browser.newContext({ viewport: { width: 1280, height: 900 } });
-  const p = await ctx.newPage();
-  await p.goto(url, { waitUntil: 'networkidle' });
-  await p.waitForTimeout(1500);
-  const first = await p.getAttribute('html', 'data-lang');
-  await p.click('#langBtn'); await p.waitForTimeout(500);
-  const flipped = await p.getAttribute('html', 'data-lang');
-  await p.reload({ waitUntil: 'networkidle' });
-  await p.waitForTimeout(1500);
-  ok('choice survives reload', (await p.getAttribute('html', 'data-lang')) === flipped,
-     first + ' -> ' + flipped);
-  await ctx.close();
+  const context = await browser.newContext({ viewport: { width: 1280, height: 900 } });
+  const page = await context.newPage();
+  await page.goto(url, { waitUntil: 'networkidle' });
+  const before = await page.getAttribute('html', 'data-lang');
+  await page.click('#langBtn');
+  const flipped = await page.getAttribute('html', 'data-lang');
+  await page.reload({ waitUntil: 'networkidle' });
+  ok('language survives reload', (await page.getAttribute('html', 'data-lang')) === flipped, `${before} → ${flipped}`);
+  await context.close();
 }
 
-// ---------- 3. marquee pause (WCAG 2.2.2) ----------
-console.log('\n[marquee pause]');
+console.log('\n[ticker pause]');
 {
-  const p = await browser.newPage({ viewport: { width: 1280, height: 900 } });
-  await p.goto(url, { waitUntil: 'networkidle' });
-  await p.waitForTimeout(1200);
-  await p.click('#marqueePause'); await p.waitForTimeout(300);
-  ok('pauses', await p.$eval('.marquee__track', e => e.style.animationPlayState === 'paused'));
-  await p.click('#marqueePause'); await p.waitForTimeout(300);
-  ok('resumes', await p.$eval('.marquee__track', e => e.style.animationPlayState === 'running'));
-  await p.close();
+  const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
+  await page.goto(url, { waitUntil: 'networkidle' });
+  await page.click('#tickerToggle');
+  ok('ticker pauses', await page.$eval('.ticker', element => element.classList.contains('is-paused')));
+  ok('animation is paused', await page.$eval('.ticker__track', element => getComputedStyle(element).animationPlayState === 'paused'));
+  await page.click('#tickerToggle');
+  ok('ticker resumes', await page.$eval('.ticker', element => !element.classList.contains('is-paused')));
+  await page.close();
 }
 
-// ---------- 4. reduced motion must not erase the sparkle ----------
 console.log('\n[prefers-reduced-motion]');
 {
-  const ctx = await browser.newContext({ viewport: { width: 1280, height: 900 }, reducedMotion: 'reduce' });
-  const p = await ctx.newPage();
-  await p.goto(url, { waitUntil: 'networkidle' });
-  await p.waitForTimeout(2000);
-  const vis = await p.evaluate(() => {
-    const stars = document.querySelectorAll('.sparks path');
-    let lit = 0;
-    stars.forEach(s => { if (parseFloat(getComputedStyle(s).opacity) > 0.5) lit++; });
-    return { total: stars.length, lit };
-  });
-  ok('sparkles stay visible', vis.total > 0 && vis.lit === vis.total,
-     vis.lit + '/' + vis.total + ' lit');
-  ok('marquee not animating', await p.$eval('.marquee__track',
-     e => getComputedStyle(e).animationName === 'none'));
-  await ctx.close();
+  const context = await browser.newContext({ viewport: { width: 1280, height: 900 }, reducedMotion: 'reduce' });
+  const page = await context.newPage();
+  await page.goto(url, { waitUntil: 'networkidle' });
+  ok('hero stops travelling', await page.$eval('.hero__media img', element => getComputedStyle(element).animationName === 'none'));
+  ok('ticker stops travelling', await page.$eval('.ticker__track', element => getComputedStyle(element).animationName === 'none'));
+  ok('glints remain present', (await page.$$eval('.glint', nodes => nodes.length)) === 2);
+  await context.close();
 }
 
-// ---------- 5. mobile ----------
 console.log('\n[mobile 390]');
 {
-  const p = await browser.newPage({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true });
-  await p.goto(url, { waitUntil: 'networkidle' });
-  await p.waitForTimeout(2000);
-  ok('no h-overflow', (await p.evaluate(() => document.documentElement.scrollWidth)) <= 392);
-  const small = await p.evaluate(() => {
-    const bad = [];
-    document.querySelectorAll('button, a.btn, select, input').forEach(el => {
-      const r = el.getBoundingClientRect();
-      if (r.height > 0 && r.height < 40) bad.push((el.id || el.className) + ' h=' + Math.round(r.height));
-    });
-    return bad;
+  const page = await browser.newPage({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true });
+  await page.goto(url, { waitUntil: 'networkidle' });
+  await page.waitForTimeout(500);
+  ok('no horizontal overflow', (await page.evaluate(() => document.documentElement.scrollWidth)) <= 392);
+  const smallTargets = await page.evaluate(() => {
+    return [...document.querySelectorAll('button, .button, input, select')]
+      .filter(element => {
+        const rect = element.getBoundingClientRect();
+        return rect.width > 0 && rect.height > 0 && rect.height < 40;
+      })
+      .map(element => `${element.id || element.className}:${Math.round(element.getBoundingClientRect().height)}`);
   });
-  ok('tap targets >= 40px', small.length === 0, small.join(', '));
-  await p.screenshot({ path: OUT + '-mobile.png' });
-  await p.close();
+  ok('tap targets are at least 40px', smallTargets.length === 0, smallTargets.join(', '));
+  await page.screenshot({ path: `${OUT}-mobile.png`, fullPage: true });
+  await page.close();
 }
 
-// ---------- 6. no-JS ----------
 console.log('\n[javascript disabled]');
 {
-  const ctx = await browser.newContext({ javaScriptEnabled: false, viewport: { width: 1280, height: 900 } });
-  const p = await ctx.newPage();
-  await p.goto(url, { waitUntil: 'load' });
-  await p.waitForTimeout(1200);
-  ok('landscape still renders', (await p.$$eval('#heroScene svg path', n => n.length)) > 20);
-  await p.screenshot({ path: OUT + '-nojs.png' });
-  await ctx.close();
+  const context = await browser.newContext({ javaScriptEnabled: false, viewport: { width: 1280, height: 900 } });
+  const page = await context.newPage();
+  await page.goto(url, { waitUntil: 'load' });
+  ok('Chinese hero copy remains', (await page.textContent('#heroTitle')).trim() === '土狗');
+  ok('compressed hero image remains', await page.$eval('.hero__media img', image => image.complete && image.naturalWidth === 840 && image.naturalHeight === 672));
+  await context.close();
 }
 
-console.log('\n' + (failures === 0 ? 'ALL CHECKS PASSED' : failures + ' CHECK(S) FAILED'));
+console.log(`\n${failures === 0 ? 'ALL CHECKS PASSED' : `${failures} CHECK(S) FAILED`}`);
 await browser.close();
 process.exit(failures === 0 ? 0 : 1);

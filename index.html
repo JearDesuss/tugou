@@ -1,875 +1,241 @@
 <!doctype html>
 <html lang="zh-Hans" data-lang="zh">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>土狗 $TUGOU — 正宗土狗币</title>
-<meta name="description" data-i18n-attr="content:meta.desc" content="土狗：中文互联网早就给这个东西起好名字了。一个关于“土狗币”这个词的土狗币。">
-<link rel="alternate" hreflang="zh-Hans" href="./index.html">
-<link rel="alternate" hreflang="en" href="./index.html?lang=en">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<!-- Body, heavy and display faces. ONE weight each, deliberately: any
-     multi-weight request resolves to a variable file. Measured against the live
-     API — a representative CJK subset is 19 KB at wght@400 and 35 KB at either
-     wght@400;900 or wght@400;700;900, i.e. asking for two weights costs exactly
-     as much as asking for three. Weight on this page comes from switching
-     family (Noto Serif SC 900 / ZCOOL KuaiLe), never from asking Noto Sans SC
-     for a bold it would have to ship a variable font to provide. -->
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400&family=ZCOOL+KuaiLe&display=swap" rel="stylesheet">
-<!-- Heavy serif, subset to 正宗土狗币宜忌一二三四 + digits — 3,760 bytes instead of
-     the 499 KB the full family actually pulled on the Chinese view, measured.
-     This face is a REGISTER, not a weight: it is only ever the seal, the
-     certificate crest, the 宜/忌 marks, the almanac day, the step numerals and
-     the dictionary headword. Every one of those strings is hardcoded in the
-     markup and never translated, which is what makes subsetting safe here.
-     Do not point anything translatable at it — a string outside this set
-     renders in the fallback with no error. -->
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@900&text=%E6%AD%A3%E5%AE%97%E5%9C%9F%E7%8B%97%E5%B8%81%E5%AE%9C%E5%BF%8C%E4%B8%80%E4%BA%8C%E4%B8%89%E5%9B%9B0123456789&display=swap" rel="stylesheet">
-<!-- Calligraphy, subset to exactly 土狗酷早安 — 2,928 bytes instead of ~2 MB.
-     `&text=` is a REQUEST-level parameter: it applies to every family in the URL
-     it appears in. Merging this into the link above would silently subset all
-     three families to these five glyphs and render most of the page as tofu, so
-     it has to stay its own request. If you ever set a new string in Ma Shan
-     Zheng, add its characters here or they will render in the fallback. -->
-<link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&text=%E5%9C%9F%E7%8B%97%E9%85%B7%E6%97%A9%E5%AE%89&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23d81f14'/><text y='.9em' x='50' text-anchor='middle' font-size='74' fill='%23ffe14a'>土</text></svg>">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#d92716">
+  <meta name="description" data-i18n-attr="content:meta.desc" content="土狗币，就是 meme 币。名字就是品类。土到极致，就是酷。">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="土狗 $TUGOU｜土到极致，就是酷">
+  <meta property="og:description" content="土狗币，就是 meme 币。名字就是品类。">
+  <meta property="og:image" content="assets/tugou-too-cool-hero-v3.jpg">
+  <title>土狗 $TUGOU｜土到极致，就是酷</title>
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400&family=ZCOOL+KuaiLe&display=swap" rel="stylesheet">
+  <link rel="preload" href="assets/tugou-too-cool-hero-v3.jpg" as="image" type="image/jpeg" fetchpriority="high">
+  <link rel="stylesheet" href="styles.css">
+
+  <script>
+    (() => {
+      let saved = null;
+      try { saved = localStorage.getItem('tugou-lang'); } catch (_) {}
+      const query = new URLSearchParams(location.search).get('lang');
+      const lang = query === 'en' || query === 'zh' ? query : saved === 'en' || saved === 'zh' ? saved : 'zh';
+      document.documentElement.dataset.lang = lang;
+      document.documentElement.lang = lang === 'zh' ? 'zh-Hans' : 'en';
+    })();
+  </script>
 </head>
 <body>
+  <a class="skip-link" href="#truth" data-i18n="a11y.skip">直接看实话</a>
 
-<!-- Every scene on this page draws from one set of gradients, filters and
-     reusable pieces. url(#id) resolves document-wide, so separate <svg>
-     elements can share these; duplicating them per scene would multiply the
-     markup and let the scenes drift apart. -->
-<svg class="artdefs" aria-hidden="true" focusable="false" width="0" height="0">
-  <defs>
-        <!-- ===== WHY THIS SCENE IS BUILT FROM GEOMETRY, NOT FILTERS =====
-             v2 made every organic mass by taking a smooth ellipse and running it
-             through feDisplacementMap at scale 34. That does produce an irregular
-             edge, but the filter output is rasterised into a buffer and then scaled
-             to the viewport, so a full-bleed hero came out looking soft and
-             out of focus — an airbrushed green blob where the reference has crisp,
-             dense, high-micro-contrast canopy.
+  <header class="topbar" aria-label="主导航" data-i18n-attr="aria-label:a11y.nav">
+    <a class="brand" href="#top" aria-label="土狗 TUGOU 首页" data-i18n-attr="aria-label:a11y.home">
+      <span class="brand__mark">土</span>
+      <span class="brand__name">土狗 <b>$TUGOU</b></span>
+    </a>
+    <nav class="topbar__nav" aria-label="页面导航" data-i18n-attr="aria-label:a11y.pageNav">
+      <a href="#what" data-i18n="nav.what">什么是土狗</a>
+      <a href="#zaoan" data-i18n="nav.play">今日份土酷</a>
+      <a href="#buy" data-i18n="nav.status">发币状态</a>
+    </nav>
+    <button class="lang-switch" id="langBtn" type="button" aria-pressed="false" data-i18n-attr="aria-label:a11y.language">
+      <span class="lang-switch__zh">中文</span><span aria-hidden="true"> / </span><span class="lang-switch__en">EN</span>
+    </button>
+  </header>
 
-             So the shapes are now DRAWN: many small hard-edged clumps, layered dark
-             to light. Noise survives only as a light edge-roughening pass at low
-             scale, which breaks the geometry's regularity without dissolving it.
-
-             color-interpolation-filters="sRGB" on every filter: the SVG default is
-             linearRGB, which visibly desaturates and flattens filtered output. This
-             one attribute is most of the difference in punch. -->
-
-        <filter id="rough" x="-8%" y="-8%" width="116%" height="116%"
-                color-interpolation-filters="sRGB">
-          <feTurbulence type="fractalNoise" baseFrequency="0.09" numOctaves="3" seed="7" result="n"/>
-          <feDisplacementMap in="SourceGraphic" in2="n" scale="7"
-                             xChannelSelector="R" yChannelSelector="G"/>
-        </filter>
-        <filter id="rough2" x="-8%" y="-8%" width="116%" height="116%"
-                color-interpolation-filters="sRGB">
-          <feTurbulence type="fractalNoise" baseFrequency="0.14" numOctaves="3" seed="23" result="n"/>
-          <feDisplacementMap in="SourceGraphic" in2="n" scale="5"
-                             xChannelSelector="R" yChannelSelector="G"/>
-        </filter>
-        <!-- Rock: anisotropic, so the noise reads as vertical strata -->
-        <filter id="strata" x="-6%" y="-6%" width="112%" height="112%"
-                color-interpolation-filters="sRGB">
-          <feTurbulence type="fractalNoise" baseFrequency="0.02 0.11" numOctaves="3" seed="41" result="n"/>
-          <feDisplacementMap in="SourceGraphic" in2="n" scale="6"
-                             xChannelSelector="R" yChannelSelector="G"/>
-        </filter>
-        <filter id="mist" x="-30%" y="-90%" width="160%" height="280%"
-                color-interpolation-filters="sRGB">
-          <feGaussianBlur stdDeviation="7"/>
-        </filter>
-
-        <!-- ===== PAINT ===== -->
-        <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%"   stop-color="#1e93da"/>
-          <stop offset="34%"  stop-color="#79cbf3"/>
-          <stop offset="66%"  stop-color="#c8ecff"/>
-          <stop offset="100%" stop-color="#e6f9ec"/>
-        </linearGradient>
-        <radialGradient id="sun">
-          <stop offset="0%"   stop-color="#fffce8"/>
-          <stop offset="28%"  stop-color="#ffe23c"/>
-          <stop offset="58%"  stop-color="#ff9d00"/>
-          <stop offset="86%"  stop-color="#ff3f00"/>
-          <stop offset="100%" stop-color="#e01500"/>
-        </radialGradient>
-        <!-- Dawn sky for the almanac band: the one scene lit from low down. -->
-        <linearGradient id="dawn" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%"   stop-color="#8e2bb0"/>
-          <stop offset="24%"  stop-color="#e0426a"/>
-          <stop offset="52%"  stop-color="#ff8b3d"/>
-          <stop offset="78%"  stop-color="#ffd06a"/>
-          <stop offset="100%" stop-color="#ffe9a8"/>
-        </linearGradient>
-        <radialGradient id="sunhalo">
-          <stop offset="0%"   stop-color="#ffb03a" stop-opacity=".6"/>
-          <stop offset="55%"  stop-color="#ffd066" stop-opacity=".18"/>
-          <stop offset="100%" stop-color="#ffe9a8" stop-opacity="0"/>
-        </radialGradient>
-
-        <linearGradient id="mFar" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="#7fa9cc"/><stop offset="100%" stop-color="#bcd9ea"/>
-        </linearGradient>
-        <linearGradient id="mMid" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="#2f8f56"/><stop offset="100%" stop-color="#8ccb6f"/>
-        </linearGradient>
-        <linearGradient id="mNear" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="#0f5f24"/><stop offset="100%" stop-color="#4aa832"/>
-        </linearGradient>
-        <linearGradient id="rock" x1="0" y1="0" x2="1" y2="0.2">
-          <stop offset="0%"   stop-color="#9aa279"/><stop offset="30%" stop-color="#77855c"/>
-          <stop offset="62%"  stop-color="#4c5b3c"/><stop offset="100%" stop-color="#2f3a26"/>
-        </linearGradient>
-        <linearGradient id="water" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%"   stop-color="#cdf3d8"/>
-          <stop offset="14%"  stop-color="#5ee2c8"/>
-          <stop offset="44%"  stop-color="#0ec4cb"/>
-          <stop offset="100%" stop-color="#0a6ea4"/>
-        </linearGradient>
-        <linearGradient id="fall" x1="0" y1="0" x2="1" y2="0">
-          <stop offset="0%"   stop-color="#bfe6f7" stop-opacity=".35"/>
-          <stop offset="22%"  stop-color="#ffffff" stop-opacity="1"/>
-          <stop offset="60%"  stop-color="#ffffff" stop-opacity="1"/>
-          <stop offset="100%" stop-color="#a8dcf0" stop-opacity=".4"/>
-        </linearGradient>
-        <linearGradient id="petal" x1="0" y1="1" x2="0.2" y2="0">
-          <stop offset="0%"   stop-color="#e5006e"/>
-          <stop offset="42%"  stop-color="#ff5fa2"/>
-          <stop offset="100%" stop-color="#fff2f7"/>
-        </linearGradient>
-        <linearGradient id="pad" x1="0" y1="0" x2="0.3" y2="1">
-          <stop offset="0%" stop-color="#7ad83f"/><stop offset="60%" stop-color="#2e8f2b"/>
-          <stop offset="100%" stop-color="#12551a"/>
-        </linearGradient>
-
-        <!-- ===== REUSABLE PIECES =====
-             A canopy clump: a scalloped outline built from arcs. Hard edges, so it
-             stays crisp at any scale, and the scallops read as foliage the way the
-             painted originals do. No fill here — the caller sets it, so one shape
-             serves the dark base, the mid tone and the highlight. -->
-        <g id="clump">
-          <circle cx="-74" cy="14"  r="34"/>
-          <circle cx="-38" cy="-12" r="42"/>
-          <circle cx="4"   cy="-28" r="48"/>
-          <circle cx="50"  cy="-10" r="42"/>
-          <circle cx="86"  cy="18"  r="32"/>
-          <circle cx="-12" cy="20"  r="42"/>
-          <circle cx="44"  cy="26"  r="36"/>
-        </g>
-
-        <!-- One pine: hard triangular tiers. Reads at 12px and at 200px. -->
-        <path id="pine" d="M0 0 L-13 26 L-6 26 L-17 46 L-8 46 L-21 68 L21 68 L8 46 L17 46 L6 26 L13 26 Z"/>
-
-        <!-- Lily pad: a disc with a wedge cut. Defined as a true circle so callers
-             can rotate it and THEN squash it; rotating an already-squashed ellipse
-             shears it into a pointed leaf. -->
-        <path id="padshape" d="M97.8 -20.8 A 100 100 0 1 0 97.8 20.8 L 0 0 Z"/>
-
-        <g id="lotus">
-          <g fill="url(#petal)" stroke="#c4005e" stroke-width="1.6">
-            <ellipse cx="-52" cy="10" rx="20" ry="46" transform="rotate(-42 -52 10)"/>
-            <ellipse cx="-28" cy="-6" rx="20" ry="54" transform="rotate(-22 -28 -6)"/>
-            <ellipse cx="-8"  cy="-16" rx="20" ry="60" transform="rotate(-8 -8 -16)"/>
-            <ellipse cx="14"  cy="-16" rx="20" ry="60" transform="rotate(8 14 -16)"/>
-            <ellipse cx="34"  cy="-6" rx="20" ry="54" transform="rotate(22 34 -6)"/>
-            <ellipse cx="58"  cy="10" rx="20" ry="46" transform="rotate(42 58 10)"/>
-          </g>
-          <ellipse cx="3" cy="18" rx="17" ry="12" fill="#ffe14a" stroke="#e0a000" stroke-width="1.8"/>
-        </g>
-
-        <clipPath id="lakeclip"><rect x="0" y="596" width="1600" height="404"/></clipPath>
-  
-  </defs>
-</svg>
-
-<!-- ============================================================
-     LANGUAGE SWITCH — a shop-sign toggle, not a discreet control.
-     ============================================================ -->
-<!-- The honest section is the one place the bit drops. It gets a permanent link
-     rather than being something you have to scroll to find. -->
-<a class="skiplink" href="#truth" data-i18n="a11y.skipToHonest"></a>
-
-<div class="langbar">
-  <button class="langbtn" id="langBtn" type="button" aria-pressed="false"
-          data-i18n-attr="aria-label:a11y.langToggle">
-    <span class="langbtn__zh">中文</span><span class="langbtn__sep">/</span><span class="langbtn__en">EN</span>
-  </button>
-</div>
-
-<!-- ============================================================
-     HERO
-     ============================================================ -->
-<header class="hero">
-  <div class="hero__scene" aria-hidden="true" id="heroScene">
-    <svg viewBox="0 0 1600 1000" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false">
-        <!-- ============ SKY ============ -->
-        <rect width="1600" height="1000" fill="url(#sky)"/>
-        <circle cx="1210" cy="150" r="190" fill="url(#sunhalo)"/>
-        <circle cx="1210" cy="150" r="72"  fill="url(#sun)"/>
-
-        <g fill="#fff" opacity=".9" filter="url(#mist)">
-          <ellipse cx="320" cy="104" rx="190" ry="16"/>
-          <ellipse cx="880" cy="66"  rx="150" ry="13"/>
-        </g>
-
-        <g fill="none" stroke="#fff" stroke-width="3.6" stroke-linecap="round" opacity=".95">
-          <g><path d="M420 148 q15 -14 30 0 M450 148 q15 -14 30 0"/>
-            <animateTransform attributeName="transform" type="translate" values="0 0; 80 -22; 0 0" dur="19s" repeatCount="indefinite"/></g>
-          <g><path d="M520 202 q12 -11 24 0 M544 202 q12 -11 24 0"/>
-            <animateTransform attributeName="transform" type="translate" values="0 0; 60 16; 0 0" dur="23s" repeatCount="indefinite"/></g>
-          <g><path d="M360 236 q9 -9 19 0 M379 236 q9 -9 19 0"/>
-            <animateTransform attributeName="transform" type="translate" values="0 0; 96 -10; 0 0" dur="27s" repeatCount="indefinite"/></g>
-        </g>
-
-        <!-- ============ RANGES ============ -->
-        <g filter="url(#rough)">
-          <path fill="url(#mFar)" d="M-20 330 L120 190 L250 300 L400 170 L560 310 L700 210 L860 320 L1010 186 L1180 314 L1340 214 L1500 320 L1640 250 L1640 470 L-20 470 Z"/>
-        </g>
-        <g filter="url(#rough)">
-          <path fill="url(#mMid)" d="M-20 410 L110 296 L240 380 L390 268 L540 396 L700 292 L850 404 L1000 288 L1160 400 L1320 300 L1480 396 L1640 330 L1640 560 L-20 560 Z"/>
-        </g>
-        <!-- Pines on the mid ridge: cheap, crisp, and instantly readable as forest -->
-        <g fill="#12622a" opacity=".92">
-          <use href="#pine" transform="translate(150,300) scale(.7)"/>
-          <use href="#pine" transform="translate(215,330) scale(.55)"/>
-          <use href="#pine" transform="translate(430,276) scale(.8)"/>
-          <use href="#pine" transform="translate(500,300) scale(.6)"/>
-          <use href="#pine" transform="translate(745,300) scale(.75)"/>
-          <use href="#pine" transform="translate(810,326) scale(.55)"/>
-          <use href="#pine" transform="translate(1040,296) scale(.8)"/>
-          <use href="#pine" transform="translate(1110,322) scale(.6)"/>
-          <use href="#pine" transform="translate(1360,308) scale(.7)"/>
-        </g>
-        <g filter="url(#rough)">
-          <path fill="url(#mNear)" d="M-20 486 L120 400 L260 470 L410 392 L560 476 L710 400 L870 480 L1020 398 L1180 478 L1340 404 L1500 474 L1640 420 L1640 620 L-20 620 Z"/>
-        </g>
-
-        <!-- ============ CLIFFS + FALLS ============ -->
-        <g filter="url(#strata)">
-          <path fill="url(#rock)" d="M-30 210 L60 168 L140 190 L196 250 L232 350 L256 470 L268 606 L-30 606 Z"/>
-          <path fill="url(#rock)" d="M1630 220 L1540 176 L1462 200 L1400 258 L1360 356 L1332 474 L1324 606 L1630 606 Z"/>
-          <path fill="url(#rock)" d="M330 318 L392 272 L448 296 L486 372 L508 486 L516 606 L316 606 Z"/>
-          <!-- hard-edged strata lines rather than a soft shading pass -->
-          <g stroke="#26301f" stroke-width="2.5" opacity=".45" fill="none">
-            <path d="M-10 300 q80 22 150 6 M-10 380 q90 26 170 4 M-10 452 q100 20 190 2"/>
-            <path d="M1610 310 q-80 22 -150 6 M1610 388 q-90 24 -170 2 M1610 460 q-100 18 -190 0"/>
-            <path d="M336 386 q60 18 116 2 M340 452 q64 16 124 0"/>
-          </g>
-        </g>
-
-        <g>
-          <g clip-path="url(#lakeclip)"></g>
-          <!-- Waterfalls: a crisp white body plus hard stripes. No displacement — a
-               displaced waterfall reads as a smear, and this is the element the eye
-               checks for sharpness. -->
-          <g>
-            <path fill="url(#fall)" d="M96 236 L164 236 L196 600 L74 600 Z"/>
-            <path fill="url(#fall)" d="M372 330 L424 330 L446 598 L358 598 Z"/>
-            <path fill="url(#fall)" d="M1424 264 L1500 264 L1520 600 L1400 600 Z"/>
-            <g stroke="#fff" stroke-width="2.4" opacity=".85" stroke-linecap="round">
-              <path d="M110 250 L96 596 M130 244 L124 596 M150 248 L152 596"/>
-              <path d="M384 340 L376 592 M400 336 L400 592 M414 342 L424 592"/>
-              <path d="M1440 276 L1424 594 M1462 270 L1462 594 M1484 276 L1500 594"/>
-            </g>
-            <g stroke="#bfe6f7" stroke-width="1.6" opacity=".7">
-              <path d="M120 260 L110 590 M140 256 L138 590"/>
-              <path d="M1452 288 L1440 590 M1474 284 L1478 590"/>
-            </g>
-          </g>
-          <g fill="#fff" filter="url(#mist)">
-            <ellipse cx="134" cy="598" rx="96" ry="17" opacity=".95"/>
-            <ellipse cx="402" cy="594" rx="66" ry="13" opacity=".9"/>
-            <ellipse cx="1460" cy="598" rx="88" ry="16" opacity=".92"/>
-          </g>
-        </g>
-
-        <!-- ============ CANOPY ============
-             Layered clumps, dark base first, then mid, then a small bright highlight
-             offset toward the sun. Every edge is a real path edge. -->
-        <g>
-          <g fill="#0d4a18">
-            <use href="#clump" transform="translate(80,470) scale(1.5)"/>
-            <use href="#clump" transform="translate(230,510) scale(1.15)"/>
-            <use href="#clump" transform="translate(-10,560) scale(1.3)"/>
-            <use href="#clump" transform="translate(1500,486) scale(1.45)"/>
-            <use href="#clump" transform="translate(1360,528) scale(1.1)"/>
-          </g>
-          <g fill="#1d7a26">
-            <use href="#clump" transform="translate(64,452) scale(1.2)"/>
-            <use href="#clump" transform="translate(232,494) scale(.92)"/>
-            <use href="#clump" transform="translate(-16,542) scale(1.05)"/>
-            <use href="#clump" transform="translate(1508,468) scale(1.15)"/>
-            <use href="#clump" transform="translate(1362,512) scale(.88)"/>
-          </g>
-          <g fill="#3fa62c">
-            <use href="#clump" transform="translate(50,434) scale(.85)"/>
-            <use href="#clump" transform="translate(232,478) scale(.66)"/>
-            <use href="#clump" transform="translate(1516,450) scale(.8)"/>
-            <use href="#clump" transform="translate(1360,498) scale(.6)"/>
-          </g>
-          <g fill="#78d63c">
-            <use href="#clump" transform="translate(40,420) scale(.5)"/>
-            <use href="#clump" transform="translate(228,466) scale(.38)"/>
-            <use href="#clump" transform="translate(1522,436) scale(.46)"/>
-          </g>
-        </g>
-
-        <!-- Shoreline scrub, so the water does not simply stop -->
-        <g filter="url(#rough2)">
-          <g fill="#17701f">
-            <ellipse cx="560" cy="588" rx="90" ry="20"/><ellipse cx="760" cy="592" rx="70" ry="16"/>
-            <ellipse cx="980" cy="586" rx="96" ry="19"/><ellipse cx="1180" cy="592" rx="72" ry="16"/>
-          </g>
-          <g fill="#3fa62c" opacity=".9">
-            <ellipse cx="566" cy="580" rx="58" ry="13"/><ellipse cx="988" cy="578" rx="62" ry="13"/>
-          </g>
-        </g>
-
-        <!-- ============ BLOSSOM TREE ============ -->
-        <g>
-          <path d="M1268 606 q-24 -96 4 -176 q12 -38 -4 -66" stroke="#4a2f1c" stroke-width="15"
-                fill="none" stroke-linecap="round"/>
-          <path d="M1274 486 q-54 -28 -78 -68 M1272 440 q56 -26 82 -62" stroke="#4a2f1c"
-                stroke-width="9" fill="none" stroke-linecap="round"/>
-          <g fill="#e2004f">
-            <use href="#clump" transform="translate(1196,424) scale(.52)"/>
-            <use href="#clump" transform="translate(1286,378) scale(.62)"/>
-            <use href="#clump" transform="translate(1362,420) scale(.5)"/>
-          </g>
-          <g fill="#ff4d75">
-            <use href="#clump" transform="translate(1200,410) scale(.36)"/>
-            <use href="#clump" transform="translate(1288,364) scale(.44)"/>
-            <use href="#clump" transform="translate(1358,406) scale(.34)"/>
-          </g>
-          <g fill="#ffa8c0">
-            <use href="#clump" transform="translate(1290,352) scale(.24)"/>
-            <use href="#clump" transform="translate(1206,400) scale(.18)"/>
-          </g>
-        </g>
-
-        <!-- ============ LAKE ============ -->
-        <rect x="0" y="596" width="1600" height="404" fill="url(#water)"/>
-        <g clip-path="url(#lakeclip)">
-          <rect x="1150" y="596" width="120" height="404" fill="#ffd24a" opacity=".4" filter="url(#mist)"/>
-          <g stroke="#fff" stroke-linecap="round" fill="none">
-            <g stroke-width="3" opacity=".8">
-              <path d="M70 630 h150 M420 652 h180 M900 622 h140 M1180 668 h170 M240 700 h210 M760 714 h150 M60 764 h190">
-                <animate attributeName="opacity" values=".2;.9;.2" dur="4.5s" repeatCount="indefinite"/></path>
-            </g>
-            <g stroke-width="2.2" opacity=".7">
-              <path d="M40 666 h120 M600 684 h160 M980 706 h130 M340 738 h180 M880 776 h200 M180 812 h160">
-                <animate attributeName="opacity" values=".85;.15;.85" dur="6.2s" repeatCount="indefinite"/></path>
-            </g>
-          </g>
-        </g>
-
-        <!-- Koi -->
-        <g>
-          <g>
-            <ellipse cx="0" cy="0" rx="24" ry="10" fill="#ff5a0a"/>
-            <ellipse cx="-8" cy="-3" rx="10" ry="4.5" fill="#fff" opacity=".92"/>
-            <path d="M23 0 l19 -11 v22 Z" fill="#ff7d2e" opacity=".9"/>
-            <animateMotion dur="21s" repeatCount="indefinite" rotate="auto"
-              path="M140 700 C 420 664, 700 748, 980 694 C 1200 650, 1380 712, 1620 680"/>
-          </g>
-          <g>
-            <ellipse cx="0" cy="0" rx="18" ry="8" fill="#f03000"/>
-            <ellipse cx="-6" cy="-2" rx="7" ry="3.5" fill="#fff" opacity=".92"/>
-            <path d="M17 0 l15 -8 v16 Z" fill="#ff6a24" opacity=".9"/>
-            <animateMotion dur="26s" repeatCount="indefinite" rotate="auto"
-              path="M1620 648 C 1200 720, 820 634, 520 712 C 300 776, 140 714, -20 750"/>
-          </g>
-          <g>
-            <ellipse cx="0" cy="0" rx="15" ry="6.5" fill="#ffab00"/>
-            <path d="M14 0 l12 -7 v14 Z" fill="#ffc93d" opacity=".9"/>
-            <animateMotion dur="17s" repeatCount="indefinite" rotate="auto"
-              path="M560 800 C 800 762, 1040 812, 1300 780"/>
-          </g>
-        </g>
-
-        <!-- ============ LOTUS ============ -->
-        <g>
-          <g fill="url(#pad)" stroke="#0d4a15" stroke-width="2.6">
-            <use href="#padshape" transform="translate(180,884) scale(1,.34) rotate(150) scale(1.05)"/>
-            <use href="#padshape" transform="translate(560,946) scale(1,.34) rotate(-30) scale(.86)"/>
-            <use href="#padshape" transform="translate(1240,882) scale(1,.34) rotate(205) scale(1.1)"/>
-            <use href="#padshape" transform="translate(900,964) scale(1,.34) rotate(40) scale(.78)"/>
-            <use href="#padshape" transform="translate(400,840) scale(1,.34) rotate(120) scale(.6)"/>
-            <use href="#padshape" transform="translate(1030,924) scale(1,.34) rotate(-70) scale(.72)"/>
-            <use href="#padshape" transform="translate(60,968) scale(1,.34) rotate(15) scale(.88)"/>
-            <use href="#padshape" transform="translate(1480,986) scale(1,.34) rotate(190) scale(.8)"/>
-          </g>
-          <g stroke="#0f4d16" stroke-width="6" opacity=".38" fill="none" stroke-linecap="round">
-            <g transform="translate(180,884) scale(1,.34) rotate(150) scale(1.05)">
-              <path d="M0 0 L94 0 M0 0 L66 -66 M0 0 L-66 -66 M0 0 L-94 0 M0 0 L-66 66"/>
-            </g>
-            <g transform="translate(1240,882) scale(1,.34) rotate(205) scale(1.1)">
-              <path d="M0 0 L94 0 M0 0 L66 -66 M0 0 L-66 -66 M0 0 L-94 0 M0 0 L-66 66"/>
-            </g>
-          </g>
-          <use href="#lotus" transform="translate(280,830)"/>
-          <use href="#lotus" transform="translate(1100,806) scale(.84)"/>
-          <use href="#lotus" transform="translate(700,898) scale(.7)"/>
-          <g transform="translate(860,846)">
-            <path d="M0 0 q-18 -38 0 -70 q18 32 0 70Z" fill="url(#petal)" stroke="#c4005e" stroke-width="1.6"/>
-            <path d="M0 -6 v40" stroke="#1c7a2a" stroke-width="6" stroke-linecap="round"/>
-          </g>
-        </g>
-
-        <!-- ============ SPARKLES ============ -->
-        <g class="sparks" fill="#fff">
-          <path d="M470 296 l6 -22 l6 22 l22 6 l-22 6 l-6 22 l-6 -22 l-22 -6 Z">
-            <animate attributeName="opacity" values="0;1;0" dur="2.4s" repeatCount="indefinite"/></path>
-          <path d="M1090 448 l5 -17 l5 17 l17 5 l-17 5 l-5 17 l-5 -17 l-17 -5 Z">
-            <animate attributeName="opacity" values="1;0;1" dur="3.1s" repeatCount="indefinite"/></path>
-          <path d="M840 206 l4 -13 l4 13 l13 4 l-13 4 l-4 13 l-4 -13 l-13 -4 Z">
-            <animate attributeName="opacity" values="0;1;0" dur="1.9s" repeatCount="indefinite"/></path>
-          <path d="M200 716 l5 -17 l5 17 l17 5 l-17 5 l-5 17 l-5 -17 l-17 -5 Z">
-            <animate attributeName="opacity" values="0;1;0" dur="2.7s" repeatCount="indefinite"/></path>
-          <path d="M1330 660 l4 -14 l4 14 l14 4 l-14 4 l-4 14 l-4 -14 l-14 -4 Z">
-            <animate attributeName="opacity" values="1;0;1" dur="2.2s" repeatCount="indefinite"/></path>
-          <path d="M660 552 l4 -15 l4 15 l15 4 l-15 4 l-4 15 l-4 -15 l-15 -4 Z">
-            <animate attributeName="opacity" values="0;1;0" dur="3.4s" repeatCount="indefinite"/></path>
-        </g>
-    </svg>
-  </div>
-
-  <div class="hero__content">
-    <div class="plaque plaque--hero">
-      <div class="plaque__gold">土狗</div>
-      <div class="seal" aria-hidden="true">正宗</div>
-    </div>
-
-    <p class="sub-wrap"><span class="sub" data-i18n="hero.sub"></span></p>
-
-    <div class="ticker-badge">
-      <span class="ticker-badge__label" data-i18n="hero.tickerLabel"></span>
-      <span class="ticker-badge__value">$TUGOU</span>
-      <span class="ticker-badge__cn">土狗</span>
-    </div>
-
-    <p class="sub-wrap"><span class="sub sub--small" data-i18n="hero.sub2"></span></p>
-
-    <div class="hero__cta">
-      <a class="btn btn--red" href="#buy" data-i18n="hero.ctaBuy"></a>
-      <a class="btn btn--gold" href="#what" data-i18n="hero.ctaWhat"></a>
-    </div>
-  </div>
-
-  <div class="hero__fade" aria-hidden="true"></div>
-</header>
-
-<!-- ============================================================
-     MARQUEE
-     ============================================================ -->
-<!-- WCAG 2.2.2: anything that auto-scrolls for more than five seconds needs a
-     way to stop it, so the strip carries its own pause control. -->
-<div class="marquee">
-  <div class="marquee__track" data-i18n="marquee.text" aria-hidden="true"></div>
-  <button class="marquee__pause" id="marqueePause" type="button"
-          data-i18n-attr="aria-label:a11y.marqueePause">
-    <span aria-hidden="true">❚❚</span>
-  </button>
-</div>
-
-<main>
-
-<!-- ============================================================
-     WHAT IS 土狗 — the honest core. The joke is the dictionary entry.
-     ============================================================ -->
-<section class="section section--paper" id="what">
-  <div class="section__scene" aria-hidden="true">
-    <svg viewBox="0 0 1600 420" preserveAspectRatio="xMidYMax slice" aria-hidden="true" focusable="false">
-            <g filter="url(#rough)">
-        <path fill="url(#mFar)" d="M-20 210 L140 96 L280 190 L440 80 L610 200 L780 110 L950 206 L1120 92 L1300 200 L1460 110 L1640 206 L1640 420 L-20 420 Z"/>
-      </g>
-      <g filter="url(#rough)">
-        <path fill="url(#mMid)" d="M-20 268 L130 176 L270 250 L430 160 L600 262 L770 174 L940 266 L1110 168 L1290 258 L1460 176 L1640 262 L1640 420 L-20 420 Z"/>
-      </g>
-      <g fill="#12622a" opacity=".92">
-        <use href="#pine" transform="translate(180,182) scale(.5)"/>
-        <use href="#pine" transform="translate(236,208) scale(.38)"/>
-        <use href="#pine" transform="translate(470,168) scale(.55)"/>
-        <use href="#pine" transform="translate(530,192) scale(.4)"/>
-        <use href="#pine" transform="translate(812,182) scale(.5)"/>
-        <use href="#pine" transform="translate(1146,176) scale(.55)"/>
-        <use href="#pine" transform="translate(1206,200) scale(.4)"/>
-        <use href="#pine" transform="translate(1490,186) scale(.45)"/>
-      </g>
-      <g filter="url(#rough)">
-        <path fill="url(#mNear)" d="M-20 320 L150 250 L320 312 L490 244 L660 316 L840 250 L1010 320 L1180 248 L1360 314 L1520 252 L1640 310 L1640 420 L-20 420 Z"/>
-      </g>
-
-      <g fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" opacity=".9">
-        <g><path d="M430 92 q13 -12 26 0 M456 92 q13 -12 26 0"/>
-          <animateTransform attributeName="transform" type="translate" values="0 0; 70 -16; 0 0" dur="21s" repeatCount="indefinite"/></g>
-        <g><path d="M980 70 q10 -9 20 0 M1000 70 q10 -9 20 0"/>
-          <animateTransform attributeName="transform" type="translate" values="0 0; -60 14; 0 0" dur="25s" repeatCount="indefinite"/></g>
-      </g>
-
-      <g fill="#0d4a18">
-        <use href="#clump" transform="translate(60,330) scale(1.25)"/>
-        <use href="#clump" transform="translate(-40,376) scale(1.1)"/>
-        <use href="#clump" transform="translate(1540,330) scale(1.25)"/>
-        <use href="#clump" transform="translate(1640,376) scale(1.1)"/>
-      </g>
-      <g fill="#1d7a26">
-        <use href="#clump" transform="translate(48,314) scale(1)"/>
-        <use href="#clump" transform="translate(1548,314) scale(1)"/>
-      </g>
-      <g fill="#3fa62c">
-        <use href="#clump" transform="translate(36,300) scale(.68)"/>
-        <use href="#clump" transform="translate(1558,300) scale(.68)"/>
-      </g>
-
-      <g class="sparks" fill="#fff">
-        <path d="M300 120 l5 -18 l5 18 l18 5 l-18 5 l-5 18 l-5 -18 l-18 -5 Z">
-          <animate attributeName="opacity" values="0;1;0" dur="2.6s" repeatCount="indefinite"/></path>
-        <path d="M1180 96 l4 -15 l4 15 l15 4 l-15 4 l-4 15 l-4 -15 l-15 -4 Z">
-          <animate attributeName="opacity" values="1;0;1" dur="3.3s" repeatCount="indefinite"/></path>
-        <path d="M760 62 l4 -13 l4 13 l13 4 l-13 4 l-4 13 l-4 -13 l-13 -4 Z">
-          <animate attributeName="opacity" values="0;1;0" dur="2.1s" repeatCount="indefinite"/></path>
-      </g>
-    </svg>
-  </div>
-  <div class="wrap">
-    <h2 class="wordart" data-i18n-wordart="what.title"></h2>
-    <p class="sub-wrap"><span class="sub" data-i18n="what.sub"></span></p>
-
-    <div class="dict">
-      <div class="dict__head">
-        <span class="dict__word">土狗币</span>
-        <span class="dict__pinyin">tǔ gǒu bì</span>
+  <main id="top">
+    <section class="hero" aria-labelledby="heroTitle">
+      <div class="hero__media" aria-hidden="true">
+        <img src="assets/tugou-too-cool-hero-v3.jpg" width="840" height="672" alt="" fetchpriority="high" decoding="async">
       </div>
-      <blockquote class="dict__quote">
-        <p class="dict__quoteline" data-i18n="what.quote"></p>
-        <cite class="dict__quotesrc" data-i18n="what.quoteSrc"></cite>
-      </blockquote>
-      <p class="dict__body" data-i18n="what.dictBody"></p>
-      <p class="dict__src" data-i18n="what.dictSrc"></p>
-    </div>
+      <div class="hero__veil" aria-hidden="true"></div>
+      <span class="glint glint--one" aria-hidden="true"></span>
+      <span class="glint glint--two" aria-hidden="true"></span>
+      <p class="hero__vertical" data-i18n="hero.vertical">中华土酷</p>
+      <p class="hero__price" aria-label="only for 1.99 yuan">only for ¥1.99</p>
+      <p class="hero__rating"><b aria-hidden="true">★★★★★</b><span data-i18n="hero.rating">五星级土狗</span></p>
+      <p class="hero__beautiful" aria-hidden="true">美<br>好</p>
+      <div class="hero__disc hero__disc--one" aria-hidden="true"></div>
+      <div class="hero__disc hero__disc--two" aria-hidden="true"></div>
 
-    <div class="cardgrid">
-      <article class="card">
-        <div class="card__glyph" aria-hidden="true">土</div>
-        <h3 class="card__title" data-i18n="what.c1t"></h3>
-        <p class="card__body" data-i18n="what.c1b"></p>
-      </article>
-      <article class="card">
-        <div class="card__glyph" aria-hidden="true">狗</div>
-        <h3 class="card__title" data-i18n="what.c2t"></h3>
-        <p class="card__body" data-i18n="what.c2b"></p>
-      </article>
-      <article class="card">
-        <div class="card__glyph" aria-hidden="true">酷</div>
-        <h3 class="card__title" data-i18n="what.c3t"></h3>
-        <p class="card__body" data-i18n="what.c3b"></p>
-      </article>
-    </div>
-
-    <p class="credit chip" data-i18n="what.credit"></p>
-  </div>
-</section>
-
-<!-- ============================================================
-     TOKENOMICS — as an award certificate
-     ============================================================ -->
-<section class="section section--jade" id="tokenomics">
-  <div class="section__scene" aria-hidden="true">
-    <svg viewBox="0 0 1600 420" preserveAspectRatio="xMidYMax slice" aria-hidden="true" focusable="false">
-            <g filter="url(#rough)">
-        <path fill="url(#mMid)" d="M-20 250 L160 168 L340 244 L520 160 L700 250 L880 166 L1060 248 L1240 162 L1420 246 L1640 176 L1640 420 L-20 420 Z"/>
-      </g>
-      <g filter="url(#rough)">
-        <path fill="url(#mNear)" d="M-20 320 L170 254 L360 316 L540 248 L720 320 L900 252 L1080 318 L1270 250 L1450 316 L1640 258 L1640 420 L-20 420 Z"/>
-      </g>
-      <g><path d="M120 420 q-10 -70 2 -120" stroke="#4a2f1c" stroke-width="11" fill="none" stroke-linecap="round"/><g fill="#e2004f"><use href="#clump" transform="translate(120,250) scale(.46)"/></g><g fill="#ff4d75"><use href="#clump" transform="translate(126,238) scale(.32)"/></g><g fill="#ffa8c0"><use href="#clump" transform="translate(130,228) scale(.18)"/></g></g><g><path d="M330 420 q-10 -70 2 -120" stroke="#4a2f1c" stroke-width="11" fill="none" stroke-linecap="round"/><g fill="#e2004f"><use href="#clump" transform="translate(330,226) scale(.46)"/></g><g fill="#ff4d75"><use href="#clump" transform="translate(336,214) scale(.32)"/></g><g fill="#ffa8c0"><use href="#clump" transform="translate(340,204) scale(.18)"/></g></g><g><path d="M560 420 q-10 -70 2 -120" stroke="#4a2f1c" stroke-width="11" fill="none" stroke-linecap="round"/><g fill="#e2004f"><use href="#clump" transform="translate(560,258) scale(.46)"/></g><g fill="#ff4d75"><use href="#clump" transform="translate(566,246) scale(.32)"/></g><g fill="#ffa8c0"><use href="#clump" transform="translate(570,236) scale(.18)"/></g></g><g><path d="M790 420 q-10 -70 2 -120" stroke="#4a2f1c" stroke-width="11" fill="none" stroke-linecap="round"/><g fill="#e2004f"><use href="#clump" transform="translate(790,232) scale(.46)"/></g><g fill="#ff4d75"><use href="#clump" transform="translate(796,220) scale(.32)"/></g><g fill="#ffa8c0"><use href="#clump" transform="translate(800,210) scale(.18)"/></g></g><g><path d="M1010 420 q-10 -70 2 -120" stroke="#4a2f1c" stroke-width="11" fill="none" stroke-linecap="round"/><g fill="#e2004f"><use href="#clump" transform="translate(1010,256) scale(.46)"/></g><g fill="#ff4d75"><use href="#clump" transform="translate(1016,244) scale(.32)"/></g><g fill="#ffa8c0"><use href="#clump" transform="translate(1020,234) scale(.18)"/></g></g><g><path d="M1240 420 q-10 -70 2 -120" stroke="#4a2f1c" stroke-width="11" fill="none" stroke-linecap="round"/><g fill="#e2004f"><use href="#clump" transform="translate(1240,228) scale(.46)"/></g><g fill="#ff4d75"><use href="#clump" transform="translate(1246,216) scale(.32)"/></g><g fill="#ffa8c0"><use href="#clump" transform="translate(1250,206) scale(.18)"/></g></g><g><path d="M1470 420 q-10 -70 2 -120" stroke="#4a2f1c" stroke-width="11" fill="none" stroke-linecap="round"/><g fill="#e2004f"><use href="#clump" transform="translate(1470,252) scale(.46)"/></g><g fill="#ff4d75"><use href="#clump" transform="translate(1476,240) scale(.32)"/></g><g fill="#ffa8c0"><use href="#clump" transform="translate(1480,230) scale(.18)"/></g></g>
-      <g fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" opacity=".9">
-        <g><path d="M430 92 q13 -12 26 0 M456 92 q13 -12 26 0"/>
-          <animateTransform attributeName="transform" type="translate" values="0 0; 70 -16; 0 0" dur="21s" repeatCount="indefinite"/></g>
-        <g><path d="M980 70 q10 -9 20 0 M1000 70 q10 -9 20 0"/>
-          <animateTransform attributeName="transform" type="translate" values="0 0; -60 14; 0 0" dur="25s" repeatCount="indefinite"/></g>
-      </g>
-
-      <g class="sparks" fill="#fff">
-        <path d="M300 120 l5 -18 l5 18 l18 5 l-18 5 l-5 18 l-5 -18 l-18 -5 Z">
-          <animate attributeName="opacity" values="0;1;0" dur="2.6s" repeatCount="indefinite"/></path>
-        <path d="M1180 96 l4 -15 l4 15 l15 4 l-15 4 l-4 15 l-4 -15 l-15 -4 Z">
-          <animate attributeName="opacity" values="1;0;1" dur="3.3s" repeatCount="indefinite"/></path>
-        <path d="M760 62 l4 -13 l4 13 l13 4 l-13 4 l-4 13 l-4 -13 l-13 -4 Z">
-          <animate attributeName="opacity" values="0;1;0" dur="2.1s" repeatCount="indefinite"/></path>
-      </g>
-    </svg>
-  </div>
-  <div class="wrap">
-    <h2 class="wordart" data-i18n-wordart="tok.title"></h2>
-    <p class="sub-wrap"><span class="sub" data-i18n="tok.sub"></span></p>
-
-    <div class="certificate">
-      <div class="certificate__starburst" aria-hidden="true"></div>
-      <div class="certificate__inner">
-        <div class="certificate__crest" aria-hidden="true">
-          <span class="cert-badge"><span>正宗<br>土狗</span></span>
+      <div class="hero__content">
+        <p class="hero__eyebrow" data-i18n="hero.eyebrow">中华土狗币</p>
+        <div class="hero-plaque">
+          <span class="hero-plaque__seal" data-i18n="hero.seal">正宗</span>
+          <h1 id="heroTitle" data-i18n="hero.title">土狗</h1>
+          <p>$TUGOU</p>
         </div>
-        <h3 class="certificate__title" data-i18n="tok.certTitle"></h3>
-        <dl class="stats">
-          <div class="stat"><dt data-i18n="tok.k1"></dt><dd>1,000,000,000</dd></div>
-          <div class="stat"><dt data-i18n="tok.k2"></dt><dd data-i18n="tok.v2"></dd></div>
-          <div class="stat"><dt data-i18n="tok.k3"></dt><dd data-i18n="tok.v3"></dd></div>
-          <div class="stat"><dt data-i18n="tok.k4"></dt><dd data-i18n="tok.v4"></dd></div>
-        </dl>
-        <p class="certificate__note" data-i18n="tok.note"></p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ============================================================
-     ALMANAC — the roadmap, as a 黄历 page
-     ============================================================ -->
-<section class="section section--red" id="almanac">
-  <div class="section__scene" aria-hidden="true">
-    <svg viewBox="0 0 1600 420" preserveAspectRatio="xMidYMax slice" aria-hidden="true" focusable="false">
-            <circle cx="800" cy="300" r="260" fill="url(#sunhalo)"/>
-      <circle cx="800" cy="300" r="104" fill="url(#sun)"/>
-      <g filter="url(#rough)">
-        <path fill="#0e5a3a" opacity=".75" d="M-20 260 L180 168 L380 250 L580 172 L800 256 L1020 170 L1220 252 L1420 166 L1640 250 L1640 420 L-20 420 Z"/>
-      </g>
-      <g filter="url(#rough)">
-        <path fill="#07361f" d="M-20 330 L200 262 L420 326 L640 258 L860 330 L1080 260 L1300 328 L1520 262 L1640 306 L1640 420 L-20 420 Z"/>
-      </g>
-
-      <g fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" opacity=".9">
-        <g><path d="M430 92 q13 -12 26 0 M456 92 q13 -12 26 0"/>
-          <animateTransform attributeName="transform" type="translate" values="0 0; 70 -16; 0 0" dur="21s" repeatCount="indefinite"/></g>
-        <g><path d="M980 70 q10 -9 20 0 M1000 70 q10 -9 20 0"/>
-          <animateTransform attributeName="transform" type="translate" values="0 0; -60 14; 0 0" dur="25s" repeatCount="indefinite"/></g>
-      </g>
-
-      <g class="sparks" fill="#fff">
-        <path d="M300 120 l5 -18 l5 18 l18 5 l-18 5 l-5 18 l-5 -18 l-18 -5 Z">
-          <animate attributeName="opacity" values="0;1;0" dur="2.6s" repeatCount="indefinite"/></path>
-        <path d="M1180 96 l4 -15 l4 15 l15 4 l-15 4 l-4 15 l-4 -15 l-15 -4 Z">
-          <animate attributeName="opacity" values="1;0;1" dur="3.3s" repeatCount="indefinite"/></path>
-        <path d="M760 62 l4 -13 l4 13 l13 4 l-13 4 l-4 13 l-4 -13 l-13 -4 Z">
-          <animate attributeName="opacity" values="0;1;0" dur="2.1s" repeatCount="indefinite"/></path>
-      </g>
-    </svg>
-  </div>
-  <div class="wrap">
-    <h2 class="wordart" data-i18n-wordart="alm.title"></h2>
-    <p class="sub-wrap"><span class="sub" data-i18n="alm.sub"></span></p>
-
-    <div class="almanac">
-      <div class="almanac__date">
-        <div class="almanac__day" id="almDay">--</div>
-        <div class="almanac__month" id="almMonth"></div>
-        <div class="almanac__weekday" id="almWeekday"></div>
-      </div>
-      <div class="almanac__cols">
-        <div class="almanac__col almanac__col--yi">
-          <div class="almanac__mark" aria-hidden="true">宜</div>
-          <ul id="almYi"></ul>
-        </div>
-        <div class="almanac__col almanac__col--ji">
-          <div class="almanac__mark" aria-hidden="true">忌</div>
-          <ul id="almJi"></ul>
+        <p class="subtitle-box" data-i18n="hero.subtitle">土狗币，就是 meme 币。</p>
+        <p class="hero__lede" data-i18n="hero.lede">名字就是品类。土到极致，就是酷。</p>
+        <div class="hero__actions">
+          <a class="button button--lacquer" href="#buy" data-i18n="hero.status">查看状态</a>
+          <a class="button button--paper" href="#what" data-i18n="hero.explain">先看看</a>
         </div>
       </div>
+
+      <p class="hero__edition" aria-hidden="true">土酷 / TOO COOL / 2026</p>
+    </section>
+
+    <div class="ticker" aria-label="祝福滚动字幕" data-i18n-attr="aria-label:a11y.ticker">
+      <div class="ticker__viewport">
+        <div class="ticker__track" data-i18n="ticker.text">★ 最土的狗 ★ 最酷的币 ★ 祝你发财 ★ 少看 K 线 ★ 多发早安 ★</div>
+      </div>
+      <button class="ticker__toggle" id="tickerToggle" type="button" data-i18n-attr="aria-label:a11y.pause">
+        <span aria-hidden="true" data-i18n="ticker.pause">暂停</span>
+      </button>
     </div>
-    <p class="sub-wrap"><span class="sub sub--small" data-i18n="alm.foot"></span></p>
-  </div>
-</section>
 
-<!-- ============================================================
-     GOOD MORNING GENERATOR — the WeChat auntie ritual, as a tool
-     ============================================================ -->
-<section class="section section--paper" id="zaoan">
-  <div class="section__scene" aria-hidden="true">
-    <svg viewBox="0 0 1600 420" preserveAspectRatio="xMidYMax slice" aria-hidden="true" focusable="false">
-            <g filter="url(#rough)">
-        <path fill="url(#mMid)" d="M-20 190 L180 120 L380 184 L580 116 L800 190 L1020 118 L1220 186 L1420 114 L1640 188 L1640 260 L-20 260 Z"/>
-      </g>
-      <rect x="0" y="230" width="1600" height="190" fill="url(#water)"/>
-      <g stroke="#fff" stroke-linecap="round" fill="none" stroke-width="3" opacity=".75">
-        <path d="M80 268 h150 M430 292 h180 M900 262 h140 M1200 300 h170 M260 336 h200 M780 350 h150">
-          <animate attributeName="opacity" values=".2;.85;.2" dur="4.8s" repeatCount="indefinite"/></path>
-      </g>
-      <g fill="url(#pad)" stroke="#0d4a15" stroke-width="2.6">
-        <use href="#padshape" transform="translate(220,352) scale(1,.34) rotate(150) scale(.8)"/>
-        <use href="#padshape" transform="translate(620,382) scale(1,.34) rotate(-30) scale(.68)"/>
-        <use href="#padshape" transform="translate(1080,350) scale(1,.34) rotate(205) scale(.84)"/>
-        <use href="#padshape" transform="translate(1420,388) scale(1,.34) rotate(40) scale(.62)"/>
-      </g>
-      <use href="#lotus" transform="translate(300,320) scale(.62)"/>
-      <use href="#lotus" transform="translate(1160,310) scale(.54)"/>
-      <g>
-        <ellipse cx="0" cy="0" rx="20" ry="8.5" fill="#ff5a0a"/>
-        <path d="M19 0 l16 -9 v18 Z" fill="#ff7d2e"/>
-        <animateMotion dur="20s" repeatCount="indefinite" rotate="auto"
-          path="M120 300 C 420 272, 760 340, 1080 296 C 1320 264, 1480 312, 1640 288"/>
-      </g>
-
-      <g class="sparks" fill="#fff">
-        <path d="M300 120 l5 -18 l5 18 l18 5 l-18 5 l-5 18 l-5 -18 l-18 -5 Z">
-          <animate attributeName="opacity" values="0;1;0" dur="2.6s" repeatCount="indefinite"/></path>
-        <path d="M1180 96 l4 -15 l4 15 l15 4 l-15 4 l-4 15 l-4 -15 l-15 -4 Z">
-          <animate attributeName="opacity" values="1;0;1" dur="3.3s" repeatCount="indefinite"/></path>
-        <path d="M760 62 l4 -13 l4 13 l13 4 l-13 4 l-4 13 l-4 -13 l-13 -4 Z">
-          <animate attributeName="opacity" values="0;1;0" dur="2.1s" repeatCount="indefinite"/></path>
-      </g>
-    </svg>
-  </div>
-  <div class="wrap">
-    <h2 class="wordart" data-i18n-wordart="gen.title"></h2>
-    <p class="sub-wrap"><span class="sub" data-i18n="gen.sub"></span></p>
-
-    <div class="gen">
-      <div class="gen__controls">
-        <label class="field">
-          <span class="field__label" data-i18n="gen.nameLabel"></span>
-          <input id="genName" type="text" maxlength="12"
-                 data-i18n-attr="placeholder:gen.namePh">
-        </label>
-
-        <label class="field">
-          <span class="field__label" data-i18n="gen.wishLabel"></span>
-          <select id="genWish"></select>
-        </label>
-
-        <label class="field">
-          <span class="field__label" data-i18n="gen.sceneLabel"></span>
-          <select id="genScene"></select>
-        </label>
-
-        <div class="gen__buttons">
-          <button class="btn btn--red" id="genRandom" type="button" data-i18n="gen.random"></button>
-          <button class="btn btn--gold" id="genDownload" type="button" data-i18n="gen.download"></button>
+    <section class="section definition" id="what" aria-labelledby="whatTitle">
+      <img class="collage-scrap collage-scrap--one" src="assets/tugou-qipao-waterfall.jpg" width="800" height="600" alt="" loading="lazy" decoding="async">
+      <img class="collage-scrap collage-scrap--two" src="assets/tugou-water-heart.jpg" width="800" height="600" alt="" loading="lazy" decoding="async">
+      <div class="section__inner definition__layout">
+        <div class="definition__intro">
+          <p class="eyebrow" data-i18n="what.eyebrow">一个词，讲明白</p>
+          <h2 id="whatTitle" data-i18n="what.title">土狗，到底是什么？</h2>
+          <p class="definition__lead" data-i18n="what.lead">中文币圈早就把 memecoin 叫作“土狗币”。所以 $TUGOU 不只是名字，也是它自己的品类。</p>
+          <p class="definition__body" data-i18n="what.body">这里的“土”不是自嘲，“狗”也不是骂人。它就是村口那只皮实、好养、谁都认识的狗。</p>
         </div>
-        <p class="gen__hint" data-i18n="gen.hint"></p>
+
+        <figure class="quote-plate">
+          <span class="quote-plate__index">01</span>
+          <blockquote><span data-i18n="what.quote1">“土狗币，中文名亦作</span><span data-i18n="what.quote2">‘MeMe币’”</span></blockquote>
+          <figcaption data-i18n="what.source">——百度百科“土狗币”词条</figcaption>
+        </figure>
       </div>
 
-      <div class="gen__preview">
-        <canvas id="genCanvas" width="720" height="720"
-                data-i18n-attr="aria-label:a11y.canvas" role="img"></canvas>
+      <div class="section__inner fact-rail">
+        <article>
+          <span>土</span>
+          <div><h3 data-i18n="what.fact1Title">名字就是品类</h3><p data-i18n="what.fact1Body">不绕弯。土狗币，就是 meme 币。</p></div>
+        </article>
+        <article>
+          <span>狗</span>
+          <div><h3 data-i18n="what.fact2Title">不装高科技</h3><p data-i18n="what.fact2Body">不画饼，不编路线图。</p></div>
+        </article>
+        <article>
+          <span>酷</span>
+          <div><h3 data-i18n="what.fact3Title">祝福是真的</h3><p data-i18n="what.fact3Body">金融是玩笑，祝你发财是真心的。</p></div>
+        </article>
       </div>
+
+      <p class="section__inner culture-note" data-i18n="what.note">视觉灵感来自土酷（Too Cool）：真心祝福，不拿长辈当笑话。</p>
+    </section>
+
+    <section class="section daily" id="zaoan" aria-labelledby="dailyTitle">
+      <div class="section__inner">
+        <div class="daily__heading">
+          <div>
+            <p class="eyebrow eyebrow--light" data-i18n="daily.eyebrow">今日份土酷</p>
+            <h2 id="dailyTitle" data-i18n="daily.title">先看黄历，再发早安。</h2>
+          </div>
+          <p class="subtitle-box subtitle-box--inline" data-i18n="daily.subtitle">黄历每天换，行情不负责。</p>
+        </div>
+
+        <div class="daily__gallery" aria-hidden="true">
+          <img src="assets/tugou-blessing-park.jpg" width="800" height="600" alt="" loading="lazy" decoding="async">
+          <img src="assets/tugou-qipao-waterfall.jpg" width="800" height="600" alt="" loading="lazy" decoding="async">
+          <img src="assets/tugou-water-heart.jpg" width="800" height="600" alt="" loading="lazy" decoding="async">
+          <span>PHOTO CD · 2006 · 五星风景</span>
+        </div>
+
+        <div class="daily__grid">
+          <article class="almanac" id="almanac" aria-labelledby="almanacTitle">
+            <header class="almanac__header">
+              <div>
+                <p class="almanac__stamp" data-i18n="almanac.stamp">每日一签</p>
+                <h3 id="almanacTitle" data-i18n="almanac.title">土狗黄历</h3>
+              </div>
+              <div class="almanac__date">
+                <strong id="almDay">--</strong>
+                <span id="almMonth"></span>
+                <span id="almWeekday"></span>
+              </div>
+            </header>
+            <div class="almanac__columns">
+              <div class="almanac__column almanac__column--yes">
+                <b>宜</b>
+                <ul id="almYi"></ul>
+              </div>
+              <div class="almanac__column almanac__column--no">
+                <b>忌</b>
+                <ul id="almJi"></ul>
+              </div>
+            </div>
+            <p class="almanac__note" data-i18n="almanac.note">按日期生成，不看盘。</p>
+          </article>
+
+          <article class="maker" aria-labelledby="makerTitle">
+            <div class="maker__controls">
+              <div>
+                <p class="maker__kicker" data-i18n="maker.kicker">家族群专用</p>
+                <h3 id="makerTitle" data-i18n="maker.title">做张早安图</h3>
+                <p data-i18n="maker.subtitle">写个名字，送句祝福。</p>
+              </div>
+              <label>
+                <span data-i18n="maker.nameLabel">称呼</span>
+                <input id="genName" maxlength="12" data-i18n-attr="placeholder:maker.namePlaceholder;aria-label:maker.nameLabel" placeholder="例如：二舅">
+              </label>
+              <label>
+                <span data-i18n="maker.wishLabel">祝福</span>
+                <select id="genWish" data-i18n-attr="aria-label:maker.wishLabel"></select>
+              </label>
+              <div class="maker__buttons">
+                <button class="button button--lacquer" id="genRandom" type="button" data-i18n="maker.shuffle">换一张</button>
+                <button class="button button--gold" id="genDownload" type="button" data-i18n="maker.save">保存</button>
+              </div>
+              <p class="maker__privacy" data-i18n="maker.privacy">图片只在本地生成。</p>
+            </div>
+            <div class="maker__preview">
+              <canvas id="genCanvas" width="720" height="720" role="img" data-i18n-attr="aria-label:a11y.canvas"></canvas>
+              <span class="maker__corner" aria-hidden="true">土<br>狗</span>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section launch" id="buy" aria-labelledby="launchTitle">
+      <div class="section__inner launch__billboard">
+        <div class="launch__copy">
+          <p class="eyebrow" data-i18n="launch.eyebrow">上车前先看</p>
+          <h2 id="launchTitle" data-i18n="launch.title">还没发币。</h2>
+          <p data-i18n="launch.body">没有预售，没有合约地址。看到同名代币，别碰。</p>
+        </div>
+        <img class="launch__photo" src="assets/tugou-water-heart.jpg" width="800" height="600" alt="" loading="lazy" decoding="async">
+        <div class="contract">
+          <span data-i18n="launch.caLabel">合约地址</span>
+          <code id="contractAddr" data-i18n="launch.caPending">待公布</code>
+          <button class="button button--ink" id="copyBtn" type="button" disabled data-i18n="launch.copy">复制 CA</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="honest" id="truth" aria-labelledby="truthTitle">
+      <div class="section__inner honest__inner">
+        <img class="honest__photo" src="assets/tugou-qipao-waterfall.jpg" width="800" height="600" alt="" loading="lazy" decoding="async">
+        <div class="honest__copy">
+          <h2 id="truthTitle" data-i18n="truth.title">一句实话</h2>
+          <p class="honest__lead" data-i18n="truth.lead">目前没有代币，也没有合约。</p>
+          <p data-i18n="truth.risk">meme 币可能归零。别借钱，别梭哈。</p>
+          <p data-i18n="truth.close">金融是玩笑，祝福是真的。</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="section__inner footer__inner">
+      <p class="footer__mark">土狗 <span>$TUGOU</span></p>
+      <p data-i18n="footer.line">最土的狗，最酷的币。</p>
+      <p>© <span id="year">2026</span> TUGOU</p>
     </div>
-  </div>
-</section>
+  </footer>
 
-<!-- ============================================================
-     HOW TO BUY
-     ============================================================ -->
-<section class="section section--jade" id="buy">
-  <div class="section__scene" aria-hidden="true">
-    <svg viewBox="0 0 1600 420" preserveAspectRatio="xMidYMax slice" aria-hidden="true" focusable="false">
-            <g filter="url(#rough)">
-        <path fill="url(#mMid)" d="M-20 230 L170 140 L360 224 L560 136 L760 230 L960 138 L1160 226 L1360 134 L1560 228 L1640 190 L1640 420 L-20 420 Z"/>
-      </g>
-      <g filter="url(#strata)">
-        <path fill="url(#rock)" d="M-30 120 L90 66 L200 100 L262 176 L296 288 L308 420 L-30 420 Z"/>
-        <path fill="url(#rock)" d="M1630 130 L1510 72 L1400 108 L1338 186 L1306 296 L1298 420 L1630 420 Z"/>
-        <path fill="url(#rock)" d="M700 190 L780 150 L850 180 L890 268 L902 420 L688 420 Z"/>
-      </g>
-      <g>
-        <path fill="url(#fall)" d="M108 146 L180 146 L206 416 L82 416 Z"/>
-        <path fill="url(#fall)" d="M1420 158 L1494 158 L1516 416 L1396 416 Z"/>
-        <path fill="url(#fall)" d="M746 232 L812 232 L830 416 L726 416 Z"/>
-        <g stroke="#fff" stroke-width="2.2" opacity=".85" stroke-linecap="round">
-          <path d="M124 158 L108 412 M146 152 L142 412 M166 158 L172 412"/>
-          <path d="M1438 170 L1420 412 M1458 164 L1458 412 M1480 170 L1498 412"/>
-          <path d="M760 244 L748 412 M782 240 L782 412 M802 246 L816 412"/>
-        </g>
-      </g>
-      <g fill="#0d4a18">
-        <use href="#clump" transform="translate(400,352) scale(1.1)"/>
-        <use href="#clump" transform="translate(1120,356) scale(1.05)"/>
-      </g>
-      <g fill="#1d7a26">
-        <use href="#clump" transform="translate(392,338) scale(.86)"/>
-        <use href="#clump" transform="translate(1126,342) scale(.82)"/>
-      </g>
-      <g fill="#3fa62c">
-        <use href="#clump" transform="translate(384,326) scale(.58)"/>
-        <use href="#clump" transform="translate(1132,330) scale(.55)"/>
-      </g>
-
-      <g class="sparks" fill="#fff">
-        <path d="M300 120 l5 -18 l5 18 l18 5 l-18 5 l-5 18 l-5 -18 l-18 -5 Z">
-          <animate attributeName="opacity" values="0;1;0" dur="2.6s" repeatCount="indefinite"/></path>
-        <path d="M1180 96 l4 -15 l4 15 l15 4 l-15 4 l-4 15 l-4 -15 l-15 -4 Z">
-          <animate attributeName="opacity" values="1;0;1" dur="3.3s" repeatCount="indefinite"/></path>
-        <path d="M760 62 l4 -13 l4 13 l13 4 l-13 4 l-4 13 l-4 -13 l-13 -4 Z">
-          <animate attributeName="opacity" values="0;1;0" dur="2.1s" repeatCount="indefinite"/></path>
-      </g>
-    </svg>
-  </div>
-  <div class="wrap">
-    <h2 class="wordart" data-i18n-wordart="buy.title"></h2>
-    <p class="sub-wrap"><span class="sub" data-i18n="buy.sub"></span></p>
-
-    <ol class="steps">
-      <li class="step"><span class="step__n" aria-hidden="true">一</span>
-        <h3 data-i18n="buy.s1t"></h3><p data-i18n="buy.s1b"></p></li>
-      <li class="step"><span class="step__n" aria-hidden="true">二</span>
-        <h3 data-i18n="buy.s2t"></h3><p data-i18n="buy.s2b"></p></li>
-      <li class="step"><span class="step__n" aria-hidden="true">三</span>
-        <h3 data-i18n="buy.s3t"></h3><p data-i18n="buy.s3b"></p></li>
-      <li class="step"><span class="step__n" aria-hidden="true">四</span>
-        <h3 data-i18n="buy.s4t"></h3><p data-i18n="buy.s4b"></p></li>
-    </ol>
-
-    <!-- No placeholder that could pass for an address. Somebody would send funds
-         to it. The field states plainly that there is none and the copy button
-         stays disabled until a real one exists. -->
-    <div class="contract">
-      <span class="contract__label" data-i18n="buy.caLabel"></span>
-      <code class="contract__addr" id="contractAddr" data-i18n="buy.caPending"></code>
-      <button class="btn btn--small" id="copyBtn" type="button" disabled
-              data-i18n="buy.copy"></button>
-    </div>
-    <p class="sub-wrap"><span class="sub sub--small" data-i18n="buy.caNote"></span></p>
-    <p class="warning chip" data-i18n="buy.warning"></p>
-  </div>
-</section>
-
-<!-- ============================================================
-     THE HONEST BIT — one section, straight, no jokes
-     ============================================================ -->
-<section class="section section--plain" id="truth">
-  <div class="wrap wrap--narrow">
-    <h2 class="truth__title" data-i18n="truth.title"></h2>
-    <p class="truth__sub" data-i18n="truth.sub"></p>
-    <div class="truth__body">
-      <p data-i18n="truth.p1"></p>
-      <p data-i18n="truth.p2"></p>
-      <p data-i18n="truth.p3"></p>
-      <p data-i18n="truth.p4"></p>
-      <p data-i18n="truth.p5"></p>
-    </div>
-    <blockquote class="truth__quote">
-      <p data-i18n="truth.laozi"></p>
-      <cite data-i18n="truth.laoziSrc"></cite>
-    </blockquote>
-    <p class="truth__sign" data-i18n="truth.sign"></p>
-  </div>
-</section>
-
-</main>
-
-<footer class="footer">
-  <div class="wrap">
-    <p class="footer__cn">土狗</p>
-    <p class="sub-wrap"><span class="sub sub--small" data-i18n="footer.line"></span></p>
-    <p class="footer__credit" data-i18n="footer.credit"></p>
-  </div>
-</footer>
-
-<script src="script.js"></script>
+  <p class="sr-only" id="liveRegion" aria-live="polite"></p>
+  <script src="script.js" defer></script>
 </body>
 </html>

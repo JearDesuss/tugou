@@ -1,42 +1,15 @@
-# Checks
+# Optional checks
 
-Not part of the site — the page itself has zero dependencies and no build step.
-These need Playwright, installed anywhere convenient:
+The site itself has no runtime dependencies. The checks use Playwright:
 
-```
-npm i playwright        # browsers already present? add PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1
-node verify.mjs      "../index.html" ./out
-node subset-check.mjs "../index.html"
-node font-cost.mjs   "../index.html"
-node live-check.mjs  "https://tugoubi.vercel.app"
+```powershell
+npm install playwright
+node verify.mjs http://127.0.0.1:4173 ./out/tugou
+node live-check.mjs https://tugoubi.vercel.app ./out/live
 ```
 
-**`verify.mjs`** — both languages: no JS errors, no untranslated keys, no empty
-i18n nodes, WordArt headings carry an `aria-label`, the copy button is disabled
-while there is no address, the canvas paints and exports an untainted PNG, the
-almanac fills. Then: language choice survives a reload, the marquee pause works,
-`prefers-reduced-motion` stops travel *without* extinguishing the sparkles, no
-horizontal overflow at 1280 or 390, tap targets ≥ 40px, and the landscape still
-renders with JavaScript disabled.
+`verify.mjs` checks both languages, missing translations, browser errors, horizontal overflow, the no-token contract state, hero-image loading, the three-item almanac columns, canvas rendering and PNG export, language persistence, the ticker pause, reduced motion, mobile tap targets, and the no-JavaScript hero.
 
-**`subset-check.mjs`** — the important one. Two families ship subset via `&text=`
-(Ma Shan Zheng, Noto Serif SC). A character outside the subset does not error; it
-silently renders in the fallback. This walks every element that resolves to one
-of those families, in both languages, and fails if any character was never asked
-for. **Run it after touching a plaque, a seal, the certificate crest, the 宜/忌
-marks, the step numerals or the dictionary headword** — and update the `&text=`
-parameter in `index.html` and the sets at the top of this script together.
+`live-check.mjs` repeats the important rendering checks over HTTPS and verifies that both webfont families actually load.
 
-**`font-cost.mjs`** — records what the page actually pulls from fonts.gstatic.com
-per language. The browser fetches only the `unicode-range` subsets it needs, so a
-family's published size is a ceiling and not a page cost; measure rather than
-guess. Current: **813 KB zh / 499 KB en.**
-
-**`live-check.mjs`** — the same page over HTTPS rather than `file://`, which is
-the only way to catch things that cannot happen locally. It found one: calling
-`document.fonts.load()` before the cross-origin Google stylesheet had registered
-its `@font-face` rules raced that stylesheet, and the font request intermittently
-went out without CORS mode and was rejected by fonts.gstatic.com. It asserts all
-four faces actually reach `status: "loaded"` in both languages, so a silent
-fallback fails the run. **Run it after every deploy** — it reproduced roughly one
-time in two, so a single green run is not evidence.
+`font-cost.mjs` is retained for occasional network-cost measurement. The old subset-font check was removed because the current page does not ship `&text=` font subsets.

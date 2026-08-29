@@ -31,9 +31,9 @@ for (const lang of ['zh', 'en']) {
     return [...new Set(loaded)];
   });
   ok('ZCOOL KuaiLe loaded', applied.includes('ZCOOL KuaiLe'), applied.join(', '));
-  ok('Ma Shan Zheng loaded', applied.includes('Ma Shan Zheng'));
+  ok('Noto Sans SC loaded', applied.includes('Noto Sans SC'));
 
-  const empty = await p.evaluate(() => [...document.querySelectorAll('[data-i18n],[data-i18n-wordart]')].filter(e => !e.textContent.trim()).length);
+  const empty = await p.evaluate(() => [...document.querySelectorAll('[data-i18n]')].filter(e => !e.textContent.trim()).length);
   ok('all strings rendered', empty === 0);
 
   const painted = await p.evaluate(() => {
@@ -42,7 +42,7 @@ for (const lang of ['zh', 'en']) {
     for (let i = 0; i < d.length; i += 4000) s.add(d[i] + ',' + d[i + 1] + ',' + d[i + 2]);
     return s.size;
   });
-  ok('card generator paints', painted > 40, painted + ' colours');
+  ok('card generator paints', painted > 60, painted + ' colours');
   ok('no h-overflow', (await p.evaluate(() => document.documentElement.scrollWidth)) <= 1281);
 
   await p.screenshot({ path: `${OUT}-${lang}.png` });

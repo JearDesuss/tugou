@@ -1,165 +1,61 @@
 # 土狗 · $TUGOU
 
-A memecoin landing page whose ticker is the Chinese word for "memecoin".
+A Chinese-first memecoin landing page built around a very literal joke: in Chinese crypto, a memecoin is already called a `土狗币`. The coin’s name is its category.
 
-Baidu Baike's entry for 土狗币 opens: “土狗币，中文名亦作‘MeMe币’” — *tugou coin, also
-rendered in Chinese as MeMe coin*. The Chinese internet finished translating "memecoin" years
-ago, and what it landed on is not a loanword: 土狗 is a village mongrel, the dog at the end of
-the road that everybody knows. So the coin is named after its own category. That is the joke,
-and the page says so out loud in [the honest section](#the-honest-section).
+The visual language is `土酷` (“Too Cool”): glossy good-morning collage, daylight waterfalls, KTV shine, gold shopfront lettering, and sincere excess. The reference is [this reel by @fakeplasticbrands](https://www.instagram.com/reel/DcdbF-JueeA/).
 
-The visual language is **土酷 (tǔkù)**, phonetically **"Too Cool"** — the term popularised
-around 2016 by the artist working as 养鸭 in a film called *Too Cool To Be True*. The stress
-is on **TOO**, not on 土: not "slightly tacky" but *cool taken all the way*. Its sincere layer is
-small-town and older-generation taste — hyper-saturated landscape wallpaper pasted floor to
-ceiling, gold calligraphy boards, and the blinged-out 早安 image an elder sends to everyone at
-six in the morning as a genuine blessing.
+Live site: <https://tugoubi.vercel.app>
 
-The source was [this reel](https://www.instagram.com/reel/DcdbF-JueeA/) by @fakeplasticbrands.
+## Run locally
 
-**Live: <https://tugoubi.vercel.app>**
+The site is static and has no build step.
 
-## Running it
-
-Static. No build, no dependencies, no server required.
-
-```
-open index.html
+```powershell
+npx http-server . -p 4173 -c-1
 ```
 
-Everything except the Google Fonts request works offline and from `file://`, which is why the
-i18n dictionary lives in `script.js` as a plain object rather than in a fetched JSON file —
-`fetch()` is blocked on `file://`.
+Then open <http://127.0.0.1:4173>.
+
+## Current page
+
+- Full-bleed 840×672 compressed-JPEG 土酷 hero with real HTML lettering
+- Distinct qipao, water-heart dog, and blessing-park collage plates throughout the page
+- Short Chinese-first explanation of `土狗币`
+- Date-seeded 土狗黄历 with three `宜` and three `忌`
+- Local canvas good-morning-card generator and PNG export
+- Explicit launch-status block: no presale and no contract address yet
+- Concise risk statement in both languages
+
+The page deliberately does not publish invented tokenomics, liquidity claims, team claims, or a realistic placeholder contract address.
 
 ## Files
 
-| file | what it holds |
+| File | Purpose |
 |---|---|
-| `index.html` | Structure, and the hero landscape inlined as SVG so it renders with JS disabled |
-| `styles.css` | The token system and the six type treatments |
-| `script.js` | i18n dictionary + engine, the almanac, and the 早安 card generator |
-| `DESIGN.md` | The design contract — read this before changing anything visual |
-| `content.json` | A larger copy bank than the page currently uses; source material for new sections |
-| `assets/proto-*.html` | Standalone prototypes for the landscape and the type treatments, kept because they are the fastest way to iterate on either in isolation |
-| `test/` | Playwright checks — not shipped, not a dependency of the page. See `test/README.md` |
+| `index.html` | Accessible page structure and Chinese no-JS copy |
+| `styles.css` | The bounded visual system and responsive layout |
+| `script.js` | Chinese/English copy, language switching, almanac, and card maker |
+| `DESIGN.md` | Current design and cultural contract |
+| `assets/tugou-too-cool-hero-v3.jpg` | Moderately compressed 840×672 master collage used by the hero and card maker |
+| `assets/tugou-qipao-waterfall.jpg` | Qipao-and-waterfall section collage |
+| `assets/tugou-water-heart.jpg` | Water-heart village-dog section collage |
+| `assets/tugou-blessing-park.jpg` | Wings, roses, teacup, and park section collage |
+| `test/` | Optional Playwright verification scripts |
 
-> **On `DESIGN.md` and `content.json`:** both were written against a *larger* version of this page
-> — one with a nav, a mascot, an LED price strip, a plaque wall and a community section. They
-> describe roughly ten type treatments and thirty chromatic hexes; what is actually built is a
-> tighter system of **six chromatics and six treatments**, and the implementation is the tested
-> one. So where the two disagree on *counts and inventory*, the code is current and the documents
-> are a superset. Where they disagree on **principles** — the cultural contract, the elevation
-> philosophy, the antipatterns, the register rules — the documents win, and those are the parts
-> worth reading. Treat both as a backlog and a rulebook rather than a spec of the current page.
+`content.json` and the prototypes under `assets/` are retained as research/archive material. They are not loaded by the current page.
 
-## How it is built
+## Copy rules
 
-**No images.** Every pixel is CSS, SVG or canvas.
+Chinese is the source language. It uses ordinary mainland crypto vocabulary and Simplified Chinese punctuation. English translates the same propositions; it does not add a separate joke.
 
-The scenery is **drawn geometry, not filter output** — and that is a correction. The first version
-made every organic mass by taking a smooth ellipse and running it through `feDisplacementMap` at
-`scale="34"`. That does produce an irregular edge, but filter output is rasterised into a buffer
-and then scaled to the viewport, so a full-bleed hero came out visibly soft: an airbrushed green
-blob where the reference has crisp, dense canopy. Now the shapes are drawn — canopy is clusters of
-overlapping circles, pines are hard triangular tiers, waterfalls are flat bodies with hard stripes
-— and noise survives only as a light edge-roughening pass at `scale="5"`–`7`, which breaks the
-regularity without dissolving it.
+The live page should stay short. The five lines that matter are:
 
-Every filter also carries **`color-interpolation-filters="sRGB"`**. The SVG default is `linearRGB`,
-which visibly desaturates and flattens anything filtered; that one attribute is most of the
-difference in punch. The whole scene then goes through `filter: saturate(1.35) contrast(1.14)`,
-which is the "enhance" button every one of these wallpapers has been through.
+- `土狗币，就是 meme 币。`
+- `名字就是品类。`
+- `目前没有代币，也没有合约地址。`
+- `meme 币可能归零。别借钱，别梭哈。`
+- `金融是玩笑，祝福是真的。`
 
-**Scenery runs the length of the page, not just the hero.** 土酷 wallpaper covers the whole wall,
-so five sections carry their own horizon band and the content sits on top in framed, opaque cards.
-Each band is anchored along the *bottom* of its section rather than filling it: a 3.8:1 scene
-stretched to cover a 1250px-tall section has to scale about 4× to do it, and you end up looking at
-one enormous hillside with every readable detail cropped away. The section's own sky gradient
-carries the space above the band, which is also how the wall it imitates actually works. All the
-scenes share one hidden `<svg>` of defs, since `url(#id)` resolves document-wide.
+## Cultural boundary
 
-`#truth` has no scenery, because that is the section where every effect drops.
-
-**Six chromatics, three radii, one elevation philosophy.** The house design method preaches
-accent scarcity; 土酷 is the opposite of scarcity. The resolution is to keep the *discipline* and
-invert the *output* — the palette is loud but hard-bounded and named, and there is exactly one
-elevation recipe: hard offset shadows with zero blur. A soft modern shadow anywhere in the chrome
-is the fastest way to make this read as a Western pastiche. See `DESIGN.md`.
-
-**Bilingual, Chinese-primary.** Chinese is the original; English is a burned-in subtitle, which
-is why it is set in white Arial on a pure `#0000f5` box — the most specific single thing in the
-reference frame. The switch is `data-i18n` attributes over a single DOM, persisted to
-`localStorage` and falling back to `navigator.language`, then to Chinese.
-
-## Things that will look like mistakes and are not
-
-- **`Noto Sans SC` is requested at `wght@400` only, and weight comes from switching family.**
-  Any multi-weight Google Fonts request resolves to a variable file. Measured against the live
-  API, a representative CJK subset is **19 KB** at `wght@400` and **35 KB** at either
-  `wght@400;900` *or* `wght@400;700;900` — asking for two weights costs exactly what asking for
-  three does. So all the visual weight is carried by ZCOOL KuaiLe, a display face that was
-  already loaded for the WordArt, and which is a more authentic shopfront voice than a bold sans
-  would have been anyway.
-
-- **Two families ship subset via `&text=`, each in its own `<link>`.** Ma Shan Zheng to 土狗酷早安
-  (2,928 bytes instead of ~2 MB) and Noto Serif SC 900 to 正宗土狗币宜忌一二三四 plus digits
-  (3,760 bytes instead of the **499 KB** the full family actually pulled). `&text=` is a
-  *request-level* parameter — it applies to every family in the URL it appears in — so merging
-  either link into the main stylesheet would silently subset everything else to those few glyphs
-  and render the page as tofu.
-
-  The subsetted serif is a **register, not a weight**: only the seal, the certificate crest, the
-  宜/忌 marks, the almanac day, the step numerals and the dictionary headword. Every one of those
-  strings is hardcoded and never translated, which is what makes subsetting safe. **A character
-  outside a subset does not error — it silently falls back.** `test/subset-check.mjs` walks every
-  element on a subsetted family in both languages and fails if anything drifts outside; run it
-  after editing any of those strings, and update the `&text=` at the same time.
-
-  Total webfont cost, measured: **813 KB zh / 499 KB en**, down from 1,260 / 788 before the
-  serif was subset.
-
-- **The WordArt paints its text three times.** `::before` is the dark keyline, the real text node
-  is the white keyline, `::after` is the rainbow fill. That order is not arbitrary: an element
-  paints its *background* first, so a `background-clip: text` gradient on the parent ends up
-  *underneath* its own pseudo-elements. Painting inside an inline box runs
-  `::before → text → ::after`, which is the only stacking that puts the gradient on top. The
-  headings also carry an `aria-label`, because Chrome puts generated content into the
-  accessibility tree and a screen reader would otherwise read every heading three times.
-
-- **The card generator calls `document.fonts.load()` explicitly rather than trusting
-  `document.fonts.ready`.** `ready` resolves once fonts used in *layout* have settled; a face the
-  page only ever draws to canvas is never referenced in layout, so the browser never starts
-  fetching it and `ready` resolves immediately. The PNG would then ship in a system fallback.
-
-- **`word-break` stays `normal`.** `keep-all` is a Korean rule; Chinese has no spaces, so it turns
-  a paragraph into one unbreakable token that blows out of the viewport.
-
-- **`prefers-reduced-motion` stops travel but keeps the sparkle.** Blanket-freezing every
-  animation parks the sparkles on their final `opacity: 0` keyframe and they disappear — which
-  erases the aesthetic for exactly the people who did not ask for that.
-
-- **The contract address field says 合约地址待公布 and the copy button is disabled.** There is no
-  token. A realistic-looking placeholder is something a person can send funds to.
-
-## The honest section
-
-`#truth` is the one place every effect drops — no gold, no sparkle, no blue box, no WordArt. It
-has a permanent skip link at the top of the document so it is not something a reader has to
-scroll to find. It states plainly that there is no token, no contract and no roadmap, that the
-almanac is computed from the date, and that roughly 99% of these approach zero once attention
-leaves. It ends on 「金玉满堂，莫之能守。」 — Laozi, chapter 9.
-
-The finance is the joke. The sincerity is not. Every blessing on the page is meant.
-
-## Cultural contract
-
-`DESIGN.md` carries this in full and it outranks every visual rule in the file. The short
-version: this lands on the **sincere** side of 土酷, celebration rather than mockery. The
-grandmother is never the punchline. No vaporwave in costume, no Chinese characters used as
-texture, no Chinatown-pack orientalism or wonton fonts, no Japanese leakage (the dog is a
-中华田园犬, not a Shiba), and no deliberate incompetence — real 土酷 objects are made *with care
-using limited tools*, so the crudeness comes from the vocabulary and never from sloppiness.
-
-## Not a launch
-
-There is no token, no contract, no presale and no team. This is a design piece.
+The page celebrates the sincere side of 土酷. The finance is the joke; rural or older-generation taste is not. JPEG texture, awkward crops, and clashing WordArt are intentional source-era texture, but the pictures must remain recognizable—not an excuse for broken controls or fake Chinese. Do not add vaporwave, Shibas, Japanese motifs, decorative fake Chinese, or sneering “so bad it’s good” copy. Read [DESIGN.md](DESIGN.md) before visual changes.
