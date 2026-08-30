@@ -12,4 +12,11 @@ node live-check.mjs https://tugoubi.vercel.app ./out/live
 
 `live-check.mjs` repeats the important rendering checks over HTTPS and verifies that both webfont families actually load.
 
+`shots.mjs` writes a per-section screenshot plus a full-page capture, which is how the
+collage plates were checked in place:
+
+```powershell
+node shots.mjs ./out/shots
+```
+
 `font-cost.mjs` is retained for occasional network-cost measurement. The old subset-font check was removed because the current page does not ship `&text=` font subsets.

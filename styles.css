@@ -1440,11 +1440,26 @@ body::after {
 .honest h2 { color: var(--blue); text-shadow: 3px 3px 0 var(--toxic), 6px 6px 0 var(--lotus); }
 
 .footer {
+  position: relative;
   color: var(--gold);
   background: repeating-linear-gradient(90deg, var(--blue) 0 70px, var(--toxic) 70px 140px);
   border-top: 7px ridge var(--chrome);
   text-shadow: 2px 2px 0 var(--ink);
 }
+
+/* A landscape band the way a print shop ends a page — a strip of scenery above
+   the credits, not a wash behind them. Blending it under the type ate the copy. */
+.footer__strip {
+  display: block;
+  width: calc(100% + var(--space-6) * 2);
+  height: clamp(72px, 9vw, 132px);
+  margin: calc(var(--space-8) * -1) calc(var(--space-6) * -1) var(--space-6);
+  object-fit: cover;
+  object-position: center 62%;
+  border-bottom: 5px ridge var(--gold);
+}
+
+.footer__inner { position: relative; z-index: 1; }
 
 @keyframes hero-wobble {
   0% { transform: scale(1.07) translate(0, 0); }
