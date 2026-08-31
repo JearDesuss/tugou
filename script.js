@@ -145,8 +145,8 @@ const ALMANAC = {
   yi: [
     ['轻仓', 'stay light'],
     ['止盈', 'take profit'],
-    ['溜狗', 'walk the dog'],
-    ['查貔貌', 'check for a honeypot'],
+    ['遛狗', 'walk the dog'],
+    ['查貔貅', 'check for a honeypot'],
     ['早睡', 'sleep early'],
     ['关机', 'turn the phone off'],
     ['发早安图', 'send a good-morning card'],
