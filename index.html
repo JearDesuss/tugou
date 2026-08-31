@@ -28,6 +28,18 @@
       document.documentElement.lang = lang === 'zh' ? 'zh-Hans' : 'en';
     })();
   </script>
+
+  <script>
+    (() => {
+      const root = document.documentElement;
+      let saved = null;
+      try { saved = localStorage.getItem('tugou-chaos'); } catch (_) {}
+      const fx = saved === 'off' ? 'off' : 'on';
+      const calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      root.dataset.fx = fx;
+      root.dataset.chaos = (fx === 'off' || calm) ? 'off' : 'on';
+    })();
+  </script>
 </head>
 <body>
   <a class="skip-link" href="#truth" data-i18n="a11y.skip">直接看实话</a>
@@ -42,9 +54,15 @@
       <a href="#zaoan" data-i18n="nav.play">今日土酷</a>
       <a href="#buy" data-i18n="nav.status">发币状态</a>
     </nav>
-    <button class="lang-switch" id="langBtn" type="button" aria-pressed="false" data-i18n-attr="aria-label:a11y.language">
-      <span class="lang-switch__zh">中文</span><span aria-hidden="true"> / </span><span class="lang-switch__en">EN</span>
-    </button>
+    <div class="topbar__tools">
+      <button class="chaos-switch" id="chaosBtn" type="button" aria-pressed="true" hidden>
+        <span class="chaos-switch__lamp" aria-hidden="true"></span>
+        <span class="chaos-switch__label">土酷全开</span>
+      </button>
+      <button class="lang-switch" id="langBtn" type="button" aria-pressed="false" data-i18n-attr="aria-label:a11y.language">
+        <span class="lang-switch__zh">中文</span><span aria-hidden="true"> / </span><span class="lang-switch__en">EN</span>
+      </button>
+    </div>
   </header>
 
   <main id="top">
@@ -87,6 +105,11 @@
       <button class="ticker__toggle" id="tickerToggle" type="button" data-i18n-attr="aria-label:a11y.pause">
         <span aria-hidden="true" data-i18n="ticker.pause">暂停</span>
       </button>
+      <button class="bgm-btn" id="bgmBtn" type="button" aria-pressed="false" hidden>
+        <span class="bgm-btn__glyph" aria-hidden="true">&#9654;</span>
+        <span class="bgm-btn__label">配乐</span>
+      </button>
+      <input class="bgm-vol" id="bgmVol" type="range" min="0" max="100" value="42" hidden>
     </div>
 
     <section class="section definition" id="what" aria-labelledby="whatTitle">
@@ -235,6 +258,8 @@
       <p>© <span id="year">2026</span> TUGOU</p>
     </div>
   </footer>
+
+  <div class="chaos-layer" id="chaosLayer" aria-hidden="true"></div>
 
   <p class="sr-only" id="liveRegion" aria-live="polite"></p>
   <script src="script.js" defer></script>

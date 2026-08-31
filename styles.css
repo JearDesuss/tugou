@@ -1510,3 +1510,731 @@ body::after {
 @media (prefers-reduced-motion: reduce) {
   .hero__media img { animation: none; transform: scale(1.08); }
 }
+
+/* ==========================================================================
+   土酷动效层 · THE CHAOS LAYER
+   ==========================================================================
+   NO @layer. Every existing rule in this stylesheet is unlayered, so layered
+   chaos rules would lose to the WACKO OVERRIDE block and the 闪字 heading
+   effect could never apply. Source order plus the explicit .honest reset
+   below is the firewall instead, and it wins outright.
+
+   z-index map — do not collide:
+     100  .skip-link
+      90  body::after      the CRT glass. Chaos sits UNDER it on purpose: the
+                           glitter is inside the screen, not on it. Confetti
+                           floating on top of the scanlines is the exact
+                           Western Y2K-pastiche tell.
+      50  .topbar          chaos may never cover the nav or the switches
+      40  .chaos-layer     every free-floating decorative node, nothing else
+       4  .ticker
+
+   FLASH BUDGET. An N-step animation of duration D flashes at N/D Hz, not
+   1/D Hz. Recomputed for every animation here: the lamp is 0.83 Hz, 闪字 is
+   1.67 Hz and is a hue march rather than a luminance flash, and nothing
+   larger than a thumbnail blinks at all. No full-viewport background
+   animation, no filter: invert(), no hue-rotate on html or body — those are
+   a large-area luminance hazard AND a whole-page repaint behind eight
+   gradient sections.
+   ========================================================================== */
+
+/* ---- the stage ---------------------------------------------------------- */
+
+.chaos-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  overflow: hidden;         /* the single line standing between this work and
+                               a horizontal-overflow failure in verify.mjs */
+  contain: layout paint style;
+  pointer-events: none;
+  transition: opacity 240ms linear;
+}
+
+html[data-chaos="off"] .chaos-layer { display: none; }
+
+/* the quiet zone: fade and freeze, never a half-opacity performance */
+html[data-chaos="hushed"] .chaos-layer { opacity: 0; }
+html[data-chaos="hushed"] .chaos-layer * { animation-play-state: paused; }
+
+
+/* ---- #truth FIREWALL ----------------------------------------------------
+   Four independent mechanisms guard the honest section, and a future edit has
+   to defeat all four: (1) chaos DOM only ever mounts in a body-level sibling,
+   so it cannot be a descendant of .honest; (2) the JS host guard refuses a
+   forbidden host; (3) a MutationObserver sweeps and reports strays;
+   (4) this block.
+
+   It nulls animation/transition/translate/rotate/scale but NOT `transform`,
+   so .honest's own skewY and .honest__inner's rotate survive intact. Only
+   MOTION dies. */
+
+.honest .chaos-layer,
+.honest [class*="chaos-"] { display: none !important; }
+
+.honest,
+.honest *,
+.honest *::before,
+.honest *::after {
+  animation: none !important;
+  transition: none !important;
+  translate: none !important;
+  rotate: none !important;
+  scale: none !important;
+  will-change: auto !important;
+}
+
+
+/* ---- the two controls --------------------------------------------------- */
+
+/* The wrapper keeps .topbar at THREE grid children, so neither
+   `grid-template-columns: auto 1fr auto` nor its `1fr auto` override at
+   <=940px needs to change, and .lang-switch's 44px tap target is never
+   squeezed. */
+.topbar__tools { display: flex; gap: var(--space-2); align-items: center; }
+
+.chaos-switch {
+  display: inline-flex;
+  min-height: 44px;
+  gap: 6px;
+  align-items: center;
+  padding: var(--space-2) var(--space-3);
+  color: var(--ink);
+  background: linear-gradient(to bottom, var(--chrome), var(--toxic) 40%, var(--mud-yellow) 74%, var(--lotus));
+  border: 3px outset var(--chrome);
+  box-shadow: inset 2px 2px 0 var(--chrome), 4px 5px 0 var(--ink);
+  cursor: pointer;
+  font-family: var(--font-display);
+  font-size: 13px;
+  line-height: 1;
+  white-space: nowrap;
+  transform: rotate(-2deg);
+}
+
+/* Hidden until JS proves it is alive, so a JS-disabled visitor never sees a
+   dead control — and a zero-size element is exempt from verify.mjs's
+   40px tap-target assertion. */
+.chaos-switch[hidden], .bgm-btn[hidden], .bgm-vol[hidden] { display: none; }
+
+.chaos-switch__lamp {
+  flex: none;
+  width: 10px;
+  height: 10px;
+  background: var(--lacquer);
+  border: var(--line-thin) solid var(--ink);
+  border-radius: 50%;
+}
+
+/* 2 edges over 2.4 s = 0.83 Hz. steps(N) over duration D flashes at N/D Hz,
+   NOT 1/D. Well under the 3 Hz ceiling, on a 10px dot. */
+html[data-fx="on"] .chaos-switch__lamp { animation: chaos-lamp 2.4s steps(2, end) infinite; }
+
+@keyframes chaos-lamp {
+  0%, 49%   { background: var(--lacquer); }
+  50%, 100% { background: var(--gold); }
+}
+
+html[data-fx="off"] .chaos-switch {
+  color: var(--paper);
+  background: linear-gradient(to bottom, var(--chrome), var(--clay) 55%, var(--bark));
+  box-shadow: inset 2px 2px 0 var(--chrome-52), 4px 5px 0 var(--ink);
+}
+
+html[data-fx="off"] .chaos-switch__lamp { background: var(--clay); animation: none; }
+
+/* The music player docks into the ticker rail as a third control rather than
+   floating in a corner — which also fixes its keyboard-order problem, since
+   the ticker is early in the document. */
+.ticker { grid-template-columns: minmax(0, 1fr) auto auto auto; }
+.ticker__toggle { min-height: 44px; }
+
+.bgm-btn {
+  display: inline-flex;
+  gap: 5px;
+  align-items: center;
+  justify-content: center;
+  min-width: 78px;
+  min-height: 44px;
+  padding: 0 var(--space-3);
+  color: var(--ink);
+  background: var(--toxic);
+  border: 0;
+  border-left: var(--line-heavy) solid var(--ink);
+  cursor: pointer;
+  font-family: var(--font-display);
+  font-size: 13px;
+  line-height: 1;
+}
+
+.bgm-btn[aria-pressed="true"] { color: var(--gold); background: var(--lacquer); }
+
+.bgm-vol {
+  width: 84px;
+  height: 44px;                 /* verify.mjs measures `input` too */
+  margin: 0;
+  background: var(--blue);
+  border-left: var(--line-heavy) solid var(--ink);
+  accent-color: var(--lotus);
+}
+
+/* Off means off: the PA goes with the show. Keyed on data-fx (the user's
+   preference), never on data-chaos (the effective mode), so a reduced-motion
+   visitor keeps access to sound — sound is not motion. */
+html[data-fx="off"] .bgm-btn,
+html[data-fx="off"] .bgm-vol { display: none; }
+
+@media (max-width: 700px) {
+  .bgm-vol { display: none; }
+  .bgm-btn { min-width: 56px; padding-inline: var(--space-2); }
+  .bgm-btn__label { display: none; }
+}
+
+
+/* ---- 1. 早安贴纸雨 ------------------------------------------------------- */
+
+.chaos-sticker {
+  position: absolute;
+  top: -14vh;
+  left: var(--x);
+  color: var(--gold);
+  font-family: var(--font-display);
+  font-size: var(--size);
+  font-style: normal;
+  line-height: 1;
+  white-space: nowrap;
+  text-shadow: 3px 3px 0 var(--lacquer), 6px 6px 0 var(--blue);
+  -webkit-text-stroke: 2px var(--ink);
+  animation: chaos-fall var(--dur) linear var(--delay) infinite;
+}
+
+.chaos-sticker--rise {
+  top: auto;
+  bottom: -14vh;
+  color: var(--vermilion);
+  text-shadow: 2px 2px 0 var(--lotus);
+  animation-name: chaos-rise;
+}
+
+/* will-change only while the layer is actually live, so switching off
+   genuinely hands the compositor layers back. */
+html[data-chaos="on"] .chaos-sticker { will-change: transform; }
+
+@keyframes chaos-fall {
+  0%   { opacity: 0; transform: translate3d(0, 0, 0) rotate(var(--spin-a)) scale(.7); }
+  9%   { opacity: 1; }
+  50%  { transform: translate3d(var(--drift), 62vh, 0) rotate(var(--spin-b)) scale(1); }
+  91%  { opacity: 1; }
+  100% { opacity: 0; transform: translate3d(0, 128vh, 0) rotate(var(--spin-a)) scale(.8); }
+}
+
+@keyframes chaos-rise {
+  0%   { opacity: 0; transform: translate3d(0, 0, 0) scale(.65); }
+  10%  { opacity: .9; }
+  84%  { opacity: .9; }
+  100% { opacity: 0; transform: translate3d(var(--drift), -128vh, 0) scale(1.15); }
+}
+
+
+/* ---- 2. 家族群弹幕 ------------------------------------------------------- */
+
+.chaos-danmu {
+  position: absolute;
+  top: var(--top, 20%);
+  left: 0;
+  margin: 0;
+  padding: 5px 12px;
+  color: var(--chrome);
+  background: var(--ink-72);
+  border: var(--line) solid var(--gold);
+  font-family: var(--font-display);
+  font-size: clamp(15px, 2vw, 22px);
+  line-height: 1.2;
+  white-space: nowrap;
+  text-shadow: 2px 2px 0 var(--lacquer);
+  transform: translateX(100vw);
+}
+
+.chaos-danmu[hidden] { display: none; }
+html[data-chaos="on"] .chaos-danmu { will-change: transform; }
+.chaos-danmu.is-running { animation: chaos-danmu-run var(--dur, 13s) linear 1 both; }
+
+@keyframes chaos-danmu-run {
+  from { transform: translateX(100vw); }
+  to   { transform: translateX(-110%); }
+}
+
+
+/* ---- 3. 红包雨 ----------------------------------------------------------- */
+
+.chaos-fall {
+  position: absolute;
+  top: -16vh;
+  animation-name: chaos-drop;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+}
+
+html[data-chaos="on"] .chaos-fall { will-change: transform; }
+
+@keyframes chaos-drop {
+  from { transform: translate3d(0, 0, 0) rotate(var(--spin-from, 0deg)); }
+  to   { transform: translate3d(var(--drift, 0px), 132vh, 0) rotate(var(--spin-to, 180deg)); }
+}
+
+.chaos-fall--packet {
+  width: 34px;
+  height: 46px;
+  background: linear-gradient(158deg, var(--vermilion), var(--lacquer) 58%, var(--bark));
+  border: var(--line) solid var(--ink);
+  box-shadow: 3px 3px 0 var(--ink);
+}
+
+.chaos-fall--packet::after {
+  position: absolute;
+  top: 9px;
+  left: 50%;
+  display: grid;
+  width: 17px;
+  height: 17px;
+  place-items: center;
+  color: var(--lacquer);
+  background: var(--gold);
+  border: var(--line-thin) solid var(--ink);
+  border-radius: 50%;
+  content: "福";
+  font-family: var(--font-song);
+  font-size: 11px;
+  line-height: 1;
+  transform: translateX(-50%);
+}
+
+.chaos-fall--coin {
+  display: grid;
+  width: 30px;
+  height: 30px;
+  place-items: center;
+  color: var(--bark);
+  background: radial-gradient(circle at 34% 30%, var(--paper), var(--gold) 46%, var(--mud-yellow));
+  border: var(--line) solid var(--ink);
+  border-radius: 50%;
+  font-family: var(--font-song);
+  font-size: 14px;
+}
+
+.chaos-fall--coin::after { content: "元"; }
+
+.chaos-fall--ingot {
+  width: 42px;
+  height: 27px;
+  background: linear-gradient(to bottom, var(--paper) 0 22%, var(--gold) 22% 68%, var(--mud-yellow));
+  clip-path: polygon(20% 0, 80% 0, 100% 44%, 88% 100%, 12% 100%, 0 44%);
+  filter: drop-shadow(3px 3px 0 var(--ink));
+}
+
+
+/* ---- 4. 恭喜发财 · tap burst --------------------------------------------- */
+
+.chaos-burst {
+  position: absolute;
+  color: var(--gold);
+  font-family: var(--font-display);
+  font-size: 20px;
+  line-height: 1;
+  text-shadow: 2px 2px 0 var(--ink);
+  animation: chaos-burst-out 620ms steps(7, end) forwards;
+}
+
+@keyframes chaos-burst-out {
+  from { opacity: 1; transform: translate(-50%, -50%) translate3d(0, 0, 0) scale(.5); }
+  to   { opacity: 0; transform: translate(-50%, -50%) translate3d(var(--dx), var(--dy), 0) scale(1.3); }
+}
+
+.chaos-plaque {
+  position: absolute;
+  padding: 4px 10px;
+  color: var(--gold);
+  background: var(--lacquer);
+  border: var(--line) solid var(--ink);
+  box-shadow: 4px 4px 0 var(--ink);
+  font-family: var(--font-display);
+  font-size: 19px;
+  line-height: 1.2;
+  white-space: nowrap;
+  animation: chaos-plaque-out 900ms steps(6, end) forwards;
+}
+
+@keyframes chaos-plaque-out {
+  from { opacity: 1; transform: translate(-50%, -50%) scale(.55) rotate(-8deg); }
+  to   { opacity: 0; transform: translate(-50%, -160%) scale(1.25) rotate(6deg); }
+}
+
+
+/* ---- 5. 金光拖尾 · glitter trail ----------------------------------------- */
+
+.chaos-spark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  color: var(--gold);
+  font-family: var(--font-body);
+  line-height: 1;
+  text-shadow: 2px 2px 0 var(--ink);
+  animation: chaos-spark-fade 720ms steps(9, end) forwards;
+}
+
+@keyframes chaos-spark-fade {
+  from { opacity: 1; transform: translate3d(var(--x), var(--y), 0) scale(.4) rotate(0deg); }
+  to   { opacity: 0; transform: translate3d(var(--x), calc(var(--y) + 26px), 0) scale(1.15) rotate(150deg); }
+}
+
+
+/* ---- 6. 挂件 · the swinging 中国结 --------------------------------------- */
+
+.chaos-pendant {
+  position: absolute;
+  top: 24vh;
+  right: 6px;
+  width: 54px;
+  height: 190px;
+  transform-origin: 50% 0;
+  animation: chaos-swing 5.2s ease-in-out infinite alternate;
+}
+
+/* Any engine with scroll-driven animations: the knot swings because the page
+   moves, not because a clock ticks. The shorthand must come first — it resets
+   animation-timeline to auto. */
+@supports (animation-timeline: scroll()) {
+  .chaos-pendant {
+    animation: chaos-swing-scroll linear;
+    animation-timeline: scroll(root block);
+  }
+  @keyframes chaos-swing-scroll {
+    0%   { transform: rotate(-9deg); }
+    25%  { transform: rotate(7deg); }
+    50%  { transform: rotate(-6deg); }
+    75%  { transform: rotate(8deg); }
+    100% { transform: rotate(-5deg); }
+  }
+}
+
+@keyframes chaos-swing {
+  from { transform: rotate(-6deg); }
+  to   { transform: rotate(6deg); }
+}
+
+.chaos-pendant__cord {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 3px;
+  height: 34px;
+  background: var(--gold);
+  transform: translateX(-50%);
+}
+
+.chaos-pendant__knot {
+  position: absolute;
+  top: 30px;
+  left: 50%;
+  width: 34px;
+  height: 34px;
+  background:
+    linear-gradient(45deg, transparent 44%, var(--gold) 44% 56%, transparent 56%),
+    linear-gradient(-45deg, transparent 44%, var(--gold) 44% 56%, transparent 56%),
+    var(--lacquer);
+  border: var(--line) solid var(--ink);
+  transform: translateX(-50%) rotate(45deg);
+}
+
+.chaos-pendant__plaque {
+  position: absolute;
+  top: 74px;
+  left: 50%;
+  display: grid;
+  width: 46px;
+  height: 52px;
+  place-items: center;
+  color: var(--gold);
+  background: linear-gradient(160deg, var(--vermilion), var(--lacquer) 60%, var(--bark));
+  border: 3px ridge var(--gold);
+  box-shadow: 4px 4px 0 var(--ink);
+  font-family: var(--font-song);
+  font-size: 26px;
+  font-weight: 700;
+  transform: translateX(-50%);
+}
+
+.chaos-pendant__tassel {
+  position: absolute;
+  top: 128px;
+  left: 50%;
+  width: 16px;
+  height: 54px;
+  background: repeating-linear-gradient(90deg, var(--lacquer) 0 3px, var(--vermilion) 3px 6px);
+  border-bottom: 3px solid var(--gold);
+  transform: translateX(-50%);
+}
+
+@media (max-width: 700px) {
+  .chaos-pendant { top: 16vh; right: -6px; scale: .62; }
+}
+
+
+/* ---- 7. 闪字 + 艺术字 ---------------------------------------------------- */
+
+/* Recipe A — 闪字. drop-shadow() on gradient-clipped text is not
+   compositor-accelerated and this heading already carries a text-stroke that
+   keeps it legible. text-shadow must go, because a hard shadow shows THROUGH
+   a transparent text-fill. The stroke paints on top and survives. */
+html[data-chaos="on"] .chaos-shanzi {
+  background-image: repeating-linear-gradient(
+    92deg,
+    var(--gold) 0 14%,
+    var(--lotus) 14% 28%,
+    var(--toxic) 28% 42%,
+    var(--lake) 42% 56%,
+    var(--violet) 56% 70%,
+    var(--vermilion) 70% 84%,
+    var(--gold) 84% 100%);
+  background-size: 220% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: none;
+  animation: chaos-shanzi 3.6s steps(6, end) infinite;
+}
+
+/* 6 steps / 3.6 s = 1.67 transitions per second, and it is a hue march rather
+   than a luminance flash. Under the 3 Hz ceiling. */
+@keyframes chaos-shanzi {
+  from { background-position: 0 0; }
+  to   { background-position: 220% 0; }
+}
+
+/* Recipe B — 艺术字. Same era, different cheap trick. Transform only, and it
+   extends .daily h2's own static pose instead of fighting it. No
+   letter-spacing animation: that would relayout. */
+html[data-chaos="on"] .chaos-wordart {
+  transform-origin: left bottom;
+  animation: chaos-wordart 2.8s steps(7, end) infinite alternate;
+}
+
+@keyframes chaos-wordart {
+  from { transform: rotate(-4.5deg) scaleX(1.02); }
+  to   { transform: rotate(-1.5deg) scaleX(1.16); }
+}
+
+
+/* ---- 8. 三速跑马灯 ------------------------------------------------------- */
+
+.chaos-marquee {
+  overflow: hidden;
+  margin-bottom: var(--space-5);
+  color: var(--toxic);
+  background: var(--blue);
+  border-block: var(--line-heavy) solid var(--gold);
+}
+
+.chaos-marquee__track {
+  display: flex;
+  width: max-content;
+  padding: var(--space-2) 0;
+  font-family: var(--font-latin);
+  font-size: 13px;
+  font-weight: 900;
+  letter-spacing: .05em;
+  white-space: nowrap;
+  animation: chaos-marquee-back 13s linear infinite;
+}
+
+.chaos-marquee__track span { padding-right: var(--space-8); }
+
+@keyframes chaos-marquee-back {
+  from { transform: translate3d(-50%, 0, 0); }
+  to   { transform: translate3d(0, 0, 0); }
+}
+
+.chaos-board {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: var(--space-3);
+  align-items: center;
+  margin-bottom: var(--space-10);
+  padding: var(--space-2) var(--space-3);
+  color: var(--ink);
+  background: var(--gold);
+  border: var(--line) solid var(--ink);
+  box-shadow: 6px 6px 0 var(--lacquer);
+  transform: rotate(-.6deg);
+}
+
+.chaos-board__tag {
+  padding: var(--space-1) var(--space-2);
+  color: var(--gold);
+  background: var(--lacquer);
+  border: var(--line-thin) solid var(--ink);
+  font-family: var(--font-display);
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.chaos-board__window { overflow: hidden; height: 3.4em; }
+.chaos-board__reel { animation: chaos-board-roll 11s steps(3, end) infinite; }
+.chaos-board__reel p { margin: 0; font-size: 14px; line-height: 1.7; }
+
+@keyframes chaos-board-roll {
+  from { transform: translate3d(0, 0, 0); }
+  to   { transform: translate3d(0, -50%, 0); }
+}
+
+html.is-marquee-paused .chaos-marquee__track,
+html.is-marquee-paused .chaos-board__reel { animation-play-state: paused; }
+
+/* At 390px the 14px Chinese copy wraps inside a two-line window and the reel
+   would show half-lines. Below 700px the board is a plain static stack. */
+@media (max-width: 700px) {
+  .chaos-board { grid-template-columns: 1fr; }
+  .chaos-board__window { height: auto; }
+  .chaos-board__reel { animation: none; transform: none; }
+  .chaos-board__reel p[aria-hidden="true"] { display: none; }
+  .chaos-marquee__track { font-size: 11px; }
+}
+
+
+/* ---- 9. 站长挂件 · 访问量 ------------------------------------------------ */
+
+/* .footer__inner is display:flex above 940px with three children; a fourth
+   wide child could push the document wider, so wrap it explicitly. */
+.footer__inner { flex-wrap: wrap; }
+
+.chaos-counter {
+  flex: 1 0 100%;
+  margin-top: var(--space-4);
+  padding: var(--space-3) var(--space-4);
+  color: var(--chrome);
+  background: var(--ink);
+  border: var(--line) solid var(--gold);
+  box-shadow: 5px 5px 0 var(--lacquer);
+  font-size: 13px;
+  line-height: 1.9;
+  text-shadow: none;
+  transform: rotate(-1.5deg);
+}
+
+.chaos-counter__row { margin: 0; font-size: 13px; }
+
+.chaos-odo {
+  display: inline-flex;
+  gap: 2px;
+  vertical-align: -.2em;
+}
+
+.chaos-odo__box {
+  overflow: hidden;
+  width: .84em;
+  height: 1.25em;
+  background: var(--bark);
+  border: var(--line-thin) solid var(--gold);
+}
+
+/* the reel holds 0–9 then the target digit, so ten exact steps land on it */
+.chaos-odo__reel {
+  display: block;
+  animation: chaos-odo-roll 700ms steps(10, end) forwards;
+}
+
+.chaos-odo__reel b {
+  display: block;
+  height: 1.25em;
+  color: var(--toxic);
+  font-family: var(--font-mono);
+  font-size: 1em;
+  font-weight: 400;
+  line-height: 1.25em;
+  text-align: center;
+}
+
+@keyframes chaos-odo-roll {
+  from { transform: translateY(0); }
+  to   { transform: translateY(-12.5em); }
+}
+
+
+/* ==========================================================================
+   REDUCED MOTION — THIS MUST REMAIN THE LAST BLOCK IN THE FILE.
+   It ADDS the chaos layer's obligations; it does not modify the existing
+   reduce blocks above, which stay exactly as they are.
+
+   Belt and braces: under reduce, mode() already returns 'off' unconditionally,
+   mount() is never reached, and not one chaos node is constructed. This block
+   catches the case where the OS setting is flipped mid-session before the
+   matchMedia listener has re-run apply().
+
+   WHAT IT DELIBERATELY DOES NOT TOUCH:
+     .glint          — verify.mjs asserts exactly 2 nodes remain under reduce,
+                       and the existing rule freezes rather than hides them.
+     .ticker__track  — setting `animation: none` on it flips the computed
+                       animation-play-state back to 'running' and fails the
+                       ticker-pause assertion. Nothing here goes near it.
+     the audio       — reduced motion is a request about MOTION. The music
+                       never starts without a click, and silencing a feature
+                       someone explicitly asked for would be over-reach.
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  /* The layer does not exist. */
+  .chaos-layer { display: none; }
+
+  /* Killed, not frozen: petals and packets hanging motionless in mid-air read
+     as a rendering bug rather than as a decision, and they carry no static
+     meaning the way an ornament would. */
+  .chaos-sticker,
+  .chaos-danmu,
+  .chaos-fall,
+  .chaos-burst,
+  .chaos-plaque,
+  .chaos-spark,
+  .chaos-pendant {
+    display: none;
+    animation: none;
+    will-change: auto;
+  }
+
+  /* The controls stay fully visible, legible and operable — removing a control
+     is worse than a control that honestly reports a still page. They just stop
+     leaning and blinking. */
+  .chaos-switch,
+  .chaos-switch__lamp,
+  .bgm-btn {
+    animation: none;
+    transition: none;
+    transform: none;
+  }
+  .chaos-switch__lamp { background: var(--clay); }
+
+  /* Crawls park at their start position. No information is lost: the board's
+     three notices are the lines that say the page does not sell anything, so
+     the window opens up and simply lists all three. */
+  .chaos-marquee__track,
+  .chaos-board__reel,
+  .chaos-odo__reel { animation: none; }
+  .chaos-marquee__track { transform: none; }
+  .chaos-board__window { height: auto; }
+  .chaos-board__reel { transform: none; }
+  .chaos-board__reel p[aria-hidden="true"] { display: none; }
+
+  /* The odometer jumps to its landed position. The number is simply there. */
+  .chaos-odo__reel { transform: translateY(-12.5em); }
+
+  /* Headings keep their 土酷 treatment and lose only the travel — 闪字 parks
+     mid-march so it is still a rainbow, 艺术字 parks at .daily h2's own static
+     pose. Exactly what the page's existing motion contract already promises. */
+  html[data-chaos="on"] .chaos-shanzi {
+    animation: none;
+    background-position: 40% 0;
+  }
+  html[data-chaos="on"] .chaos-wordart {
+    animation: none;
+    transform: rotate(-3deg) scaleX(1.08);
+  }
+}
