@@ -1180,7 +1180,10 @@ body::after {
 }
 
 .ticker {
-  background: repeating-linear-gradient(90deg, var(--toxic) 0 52px, var(--blue) 52px 104px);
+  background: repeating-linear-gradient(90deg,
+    var(--toxic) 0 46px, var(--blue) 48px 85px,
+    var(--toxic) 85px 145px, var(--blue) 147px 190px,
+    var(--toxic) 190px 224px, var(--blue) 226px 293px);
   border-block: 6px ridge var(--chrome);
   box-shadow: 0 6px 8px var(--ink-46);
 }
@@ -1197,15 +1200,38 @@ body::after {
   color: var(--ink);
   background-color: var(--toxic);
   background-image:
-    linear-gradient(90deg, var(--blue) 50%, transparent 50%),
-    linear-gradient(var(--lake) 50%, transparent 50%);
-  background-size: 96px 96px;
+    linear-gradient(90deg,
+      var(--blue) 0 29px, transparent 31px 66px,
+      var(--blue) 66px 119px, transparent 121px 147px,
+      var(--blue) 147px 191px, transparent 193px 231px,
+      var(--blue) 231px 283px, transparent 285px 318px,
+      var(--blue) 318px 343px, transparent 345px 399px,
+      var(--blue) 399px 426px, transparent 428px 465px,
+      var(--blue) 465px 496px, transparent 498px 547px),
+    linear-gradient(180deg,
+      var(--lake) 0 43px, transparent 45px 77px,
+      var(--lake) 77px 114px, transparent 116px 145px,
+      var(--lake) 145px 190px, transparent 192px 243px,
+      var(--lake) 243px 271px, transparent 273px 308px,
+      var(--lake) 308px 357px, transparent 359px 389px);
+  background-size: 547px 6px, 6px 389px;
   overflow: hidden;
 }
 
 .definition::before {
   background:
-    repeating-linear-gradient(19deg, transparent 0 28px, var(--gold-36) 28px 33px),
+    repeating-linear-gradient(19deg,
+      transparent 0 40px, var(--gold-36) 41.4px 46.6px,
+      transparent 47px 75px, var(--gold-36) 76.4px 78.6px,
+      transparent 79px 114px, var(--gold-36) 115.4px 122.6px,
+      transparent 123px 170px, var(--gold-36) 171.4px 174.6px,
+      transparent 175px 205px, var(--gold-36) 206.4px 212.6px,
+      transparent 213px 257px, var(--gold-36) 258.4px 260.6px,
+      transparent 261px 287px, var(--gold-36) 288.4px 292.6px,
+      transparent 293px 331px, var(--gold-36) 332.4px 339.6px,
+      transparent 340px 372px, var(--gold-36) 373.4px 376.6px,
+      transparent 377px 414px, var(--gold-36) 415.4px 420.6px,
+      transparent 421px),
     radial-gradient(circle at 80% 20%, var(--lotus), transparent 42%);
   mask-image: none;
   opacity: .72;
@@ -1284,18 +1310,58 @@ body::after {
   transform: rotate(2deg);
 }
 
-.daily {
-  background: repeating-linear-gradient(45deg, var(--toxic) 0 45px, var(--blue) 45px 90px);
+/* 今日土酷 is 12px gold Arial Black painted straight onto the field with no
+   plate, no stroke and no shadow — 1.02:1 over green. Moving the stripe phase
+   reshuffles which glyphs disappear, so the plate ships in the same edit as
+   the stripes. Recipe copied from .culture-note; no new vocabulary. */
+.daily__heading .eyebrow--light {
+  width: max-content;
+  max-width: 100%;
+  padding: 5px 10px;
+  color: var(--gold);
+  background: var(--blue);
+  border: 3px outset var(--chrome);
+  transform: rotate(-2deg);
 }
 
+/* 14 hand-cut widths on a 619px prime unit: blue 58/52/62/36/60/34/37,
+   toxic 33/39/26/27/46/42/53 — 55.9% blue so the gold h2 lands on blue more
+   often than on green. Every blue->toxic boundary feathers 2px (wet ink pulled
+   forward by the squeegee) and every toxic->blue boundary is a knife cut, one
+   consistent direction across the whole page. 43.6deg because 45 is the CSS
+   default and a field sitting on it reads as generated. At 1440x1668 the
+   diagonal run drops from 23.9 identical periods to 3.47 units. */
+.daily {
+  background: repeating-linear-gradient(43.6deg,
+    var(--blue) 0 58px, var(--toxic) 60px 93px,
+    var(--blue) 93px 145px, var(--toxic) 147px 186px,
+    var(--blue) 186px 248px, var(--toxic) 250px 276px,
+    var(--blue) 276px 312px, var(--toxic) 314px 341px,
+    var(--blue) 341px 401px, var(--toxic) 403px 449px,
+    var(--blue) 449px 483px, var(--toxic) 485px 527px,
+    var(--blue) 527px 564px, var(--toxic) 566px 619px);
+}
+
+/* `aspect-ratio: 1` from the base rule is never reset here, so all four
+   insets over-constrain the box and the ratio wins: measured 1670x1670 at
+   1440 and 452x452 at 390 — on a 2561px mobile section the photo dies at
+   y=275 and 90% of the loudest field has no carrier at all. `aspect-ratio:
+   auto` frees it to 1620x1944 / 570x2981. The horizontal inset is -90px and
+   NOT -8%: a box rotated 3deg covers w x h only when W >= w*cos3 + h*sin3,
+   which at 390x2561 demands 523px; a percentage gives 437px and leaves a bare
+   wedge. Tiling at 720x540 keeps the JPEG's native 4:3 and gives the
+   rectangular seams DESIGN.md asks for by name. `filter: none` REMOVES cost:
+   the un-squared box would force a 1710x8943 device-px surface at DPR 3, past
+   the 8192px texture cap on many mid-range GPUs. */
 .daily::before {
-  inset: -8%;
+  inset: -8% -90px;
   width: auto;
   height: auto;
-  background: url("assets/tugou-blessing-park.jpg") center / cover;
-  filter: saturate(1.25) contrast(1.08);
-  opacity: .27;
-  transform: rotate(-3deg) scale(1.12);
+  aspect-ratio: auto;
+  background: url("assets/tugou-blessing-park.jpg") 0 0 / 720px 540px repeat;
+  filter: none;
+  opacity: .3;
+  transform: rotate(-3deg);
 }
 
 .daily h2 {
@@ -1369,10 +1435,22 @@ body::after {
 .maker__preview canvas { image-rendering: auto; filter: blur(.25px) saturate(1.25); }
 
 .launch {
-  background:
-    linear-gradient(90deg, var(--toxic) 50%, transparent 50%),
-    linear-gradient(var(--blue) 50%, var(--lake) 50%);
-  background-size: 70px 70px;
+  background-color: var(--lake);
+  background-image:
+    linear-gradient(90deg,
+      var(--toxic) 0 41px, transparent 43px 68px,
+      var(--toxic) 68px 97px, transparent 99px 122px,
+      var(--toxic) 122px 157px, transparent 159px 190px,
+      var(--toxic) 190px 214px, transparent 216px 244px,
+      var(--toxic) 244px 284px, transparent 286px 320px,
+      var(--toxic) 320px 359px, transparent 361px 383px),
+    linear-gradient(180deg,
+      var(--blue) 0 24px, var(--lake) 26px 45px,
+      var(--blue) 45px 79px, var(--lake) 81px 107px,
+      var(--blue) 107px 139px, var(--lake) 141px 162px,
+      var(--blue) 162px 203px, var(--lake) 205px 228px,
+      var(--blue) 228px 255px, var(--lake) 257px 293px);
+  background-size: 383px 6px, 6px 293px;
 }
 
 .launch__billboard {
@@ -1442,9 +1520,21 @@ body::after {
 .footer {
   position: relative;
   color: var(--gold);
-  background: repeating-linear-gradient(90deg, var(--blue) 0 70px, var(--toxic) 70px 140px);
+  background: repeating-linear-gradient(88.4deg,
+    var(--blue) 0 101px, var(--toxic) 104px 151px,
+    var(--blue) 151px 238px, var(--toxic) 241px 314px,
+    var(--blue) 314px 370px, var(--toxic) 373px 439px,
+    var(--blue) 439px 513px, var(--toxic) 516px 566px,
+    var(--blue) 566px 636px, var(--toxic) 639px 701px);
   border-top: 7px ridge var(--chrome);
-  text-shadow: 2px 2px 0 var(--ink);
+  /* the 1px ink keyline is added AROUND the existing hard offset, not instead
+     of it: gold on toxic green is 1.02:1, and moving the stripe phase
+     reshuffles which glyphs of the credits land on green. Keeps the page's
+     zero-blur offset grammar intact. */
+  text-shadow:
+    2px 2px 0 var(--ink),
+    1px 0 0 var(--ink), -1px 0 0 var(--ink),
+    0 1px 0 var(--ink), 0 -1px 0 var(--ink);
 }
 
 /* A landscape band the way a print shop ends a page — a strip of scenery above
